@@ -7,35 +7,35 @@ var connect = require('gulp-connect');
 var sass = require('gulp-sass');
 var haml = require('gulp-haml');
 var concat = require('gulp-concat');
+var clean = require('gulp-clean');
 
 // Sass compiling, concating, renaming and autoprefixing
 gulp.task('sass', function() {
   gulp.src('./src/sass/*.scss')
   .pipe(sass())
-  .pipe(concatCss())
   .pipe(autoPrefixer({
-    browsers: ['last 4 versions'],
+    browsers: ['last 10 versions'],
     cascade: false
   }))
   .pipe(rename('style.css'))
-  .pipe(gulp.dest('./build/css/'))
-  .pipe(connect.reload());
+  .pipe(gulp.dest('./build/css/'));
 });
 
 // Haml compiling
 gulp.task('haml', function() {
-  gulp.src('./src/*.haml')
+  gulp.src('./src/**/*.haml')
   .pipe(haml())
-  .pipe(gulp.src('./build/'))
+  .pipe(gulp.dest('./build/'))
   .pipe(connect.reload());
 });
+
 
 // Pages live-reload
 gulp.task('connect', function() {
   connect.server({
     root: 'build',
     livereload: true,
-    port: 8080
+    port: 8008
   });
 });
 
