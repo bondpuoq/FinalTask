@@ -1,0 +1,43 @@
+{
+  "name": "final-task",
+  "version": "1.0.0",
+  "description": "Final task with offerList",
+  "main": "index.haml",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bondpuoq/FinalTask.git"
+  },
+  "keywords": [
+    "offers",
+    "users"
+  ],
+  "author": "Alex Sh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bondpuoq/FinalTask/issues"
+  },
+  "homepage": "https://github.com/bondpuoq/FinalTask#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-concat-css": "^2.3.0",
+    "gulp-connect": "^5.0.0",
+    "gulp-haml": "^0.1.6",
+    "gulp-livereload": "^3.8.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-git": "^1.11.3",
+    "gulp-haml": "^0.1.6",
+    "gulp-handlebars": "^4.0.0",
+    "gulp-sass": "^2.3.2",
+    "webpack-stream": "^3.2.0"
+  }
+}
