@@ -14669,10 +14669,84 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 'use strict';
 (function (){
-  initializeStartData();
-  function initializeStartData()
-  {
-    alert('go crowds!');
+  var offerList, _hbOfferTemplate, _jsonUserData;
+  _hbOfferTemplate = $('#js-offer-list');
+
+
+  offerList = [];
+  
+  $(document).ready(createOfferList);
+
+  function createOfferList() {
+    var offer = new Offer();
+    offer.init();
   }
 })();
+function Feedback() {
+  var self;
+  self = this;
+  self = {
+    init : _init,
+    author,
+    text
+  }
 
+  function _init(user, text) {
+    self.author = user;
+    self.text = text;
+  }
+  return self;
+}
+function Offer() {
+  var self, _hbTemplate, _hbObject;
+  self = this;
+  self = {
+    init: _init,
+    render: _render,
+    offerImg,
+    caption,
+    category,
+    dateBegin,
+    dateEnd,
+    location,
+    feedbacks:[],
+    author
+
+  }
+  function _init(offerData, hbTemplate) {
+    self.offerImg = offerData.img;
+    self.caption = offerData.caption;
+    self.category = offerData.category;
+    self.dateBegin = offerData.dateBegin;
+    self.dateEnd = offerData.dateEnd;
+    self.location = offerData.location;
+    self.feedbacks = offerData.feedbacks;
+    self.author = offerData.author;
+    _hbTemplate = hbTemplate;
+    _hbObject = Handlebars.compile(_hbTemplate);
+  }
+  function _render($destinationObj) {
+    $destinationObj.html(_hbObject(self));
+  }
+  return self;
+}
+function User() {
+  var self;
+  self = this;
+  self = {
+    init: _init,
+    render: _render,
+    id,
+    fio,
+    avatar
+  }
+  function _init(userData) {
+    self.id = userData.id;
+    self.name = userData.name;
+    self.avatar = userData.avatarImg;
+  }
+  function _render() {
+
+  }
+  return self;
+}

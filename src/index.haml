@@ -5,7 +5,7 @@
     %link{ rel: "stylesheet", href: "css/style.css" }
   %body
     %div.offer-list
-      %script#js-offerList{type: "text/x-handlebars-template"}
+      %script#js-offer-list{type: "text/x-handlebars-template"}
         {{#each this}}
           %div.offer
             %div.offer-image
@@ -30,15 +30,16 @@
                 {{mentions.length}}
             %div.offer-author
               %div.avatar
-                %img{ src: "{{user.img}}" }
+                %img{ src: "{{user.avatar}}" }
               %div.ticket
-                %span.name {{user.name}}
+                %span.name {{user.fio}}
                 %br/
                 %span.label предлагает
             %div.offer-feedback-details
             {{#each comment}}
+              %div{data-user-id:"{{author.id}}"}
               %div.avatar
-                %img { src: "{{user.img}}"}
+                %img { src: "{{author.avatar}}"}
               %div.text
                 {{text}}
             {{/each}}
