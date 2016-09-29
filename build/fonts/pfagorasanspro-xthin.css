@@ -1,0 +1,12 @@
+@font-face {
+    font-family: "PF Agora Sans Pro XThin";
+    src: url("pfagorasanspro-xthin.eot"); /* IE9 */
+    src: url("pfagorasanspro-xthin.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("pfagorasanspro-xthin.woff") format("woff"), /* chrome, firefox */
+    url("pfagorasanspro-xthin.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url("pfagorasanspro-xthin.svg#PF Agora Sans Pro XThin") format("svg"); /* iOS 4.1- */
+    font-style: normal;
+    font-weight: normal;
+}
+
+
