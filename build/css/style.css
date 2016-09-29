@@ -1,207 +1,86 @@
-@charset "UTF-8";
-* {
-  font-size: 14px;
-  font-family: Verdana, Calibry, Helvetica, Arial; }
-
-div {
+body {
+  font-size: 12px;
+  font-family: Arial, Tahoma;
   -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0.5em;
-  margin: 0.5em; }
+  box-sizing: border-box; }
 
-.button {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0.5em;
-  margin: 0.4em;
-  display: inline-block;
-  cursor: pointer;
-  border: 1px solid gray;
-  background-color: #000;
-  width: 200px;
-  color: white;
-  margin-left: 15px;
-  width: 192px; }
-  .button:hover {
-    background-color: #333333; }
+@font-face {
+  font-family: PFAgoraSansPro-xthin;
+  src: url("../fonts/PFAgoraSansPro-xthin.ttf"); }
 
-.frame:after {
-  display: table;
-  content: "";
-  clear: both; }
+@font-face {
+  font-family: PFAgoraSansPro-regular;
+  src: url("../fonts/PFAgoraSansPro-reg.ttf"); }
 
-.inputUrl {
-  width: 400px;
-  height: 200px; }
+@font-face {
+  font-family: LigatureSymbols;
+  src: url("../fonts/LigatureSimbols.ttf"); }
 
-.preview.block {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 14px;
-  width: 514px;
-  height: 180px;
-  border: 1px solid black;
+.offer-list {
+  margin: 0 auto;
+  max-width: 951px;
+  width: 951px; }
+
+.offer {
+  max-height: 540px;
+  width: 220px;
+  border: solid 1px #ebebeb;
+  border-radius: 10px;
   float: left;
-  z-index: 12; }
-  .preview.block.disabled {
-    z-index: 20;
-    background-color: rgba(200, 200, 200, 0.9); }
-  .preview.block.disabled:after {
-    content: "удален";
-    color: red; }
+  padding: 0; }
 
-.preview.image-block {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  margin-top: 14px;
-  margin-left: 14px;
-  float: left;
-  z-index: 9; }
-
-.preview.image-wrap {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  z-index: 9; }
-
-.preview.image {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  width: 200px;
-  height: 120px;
-  display: block; }
-
-.preview.comment-block {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  padding-left: 228px;
-  margin-top: 14px; }
-  .preview.comment-block:after {
-    display: table;
-    content: "";
-    clear: both; }
-
-.preview.comment-caption {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  margin-bottom: 14px; }
-
-.preview.comment-input {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  z-index: 9;
-  width: 272px;
-  height: 89px;
-  resize: none; }
-
-.preview.slide-delete {
-  cursor: pointer;
-  z-index: 9;
-  border-bottom: 2px dashed blue;
-  margin-left: 14px;
-  margin-top: 0;
-  display: inline-block; }
-  .preview.slide-delete:hover {
-    background-color: #ddd; }
-
-.js-error {
-  color: red; }
-
-.hidden {
-  display: none; }
-
-.slider {
-  position: relative;
-  width: 600px;
-  height: 400px;
-  overflow: hidden;
-  padding: 0;
-  margin: 0; }
-  .slider .prev, .slider .next {
-    position: absolute;
-    top: 185px;
+.offer-image {
+  min-height: 110px;
+  width: 218px;
+  margin: 0 auto; }
+  .offer-image > img {
+    min-width: 218px;
+    min-height: 85px;
+    max-height: 289px;
     display: block;
-    width: 48px;
-    height: 48px;
-    cursor: pointer; }
-    .slider .prev:hover, .slider .next:hover {
-      border-radius: 25px;
-      background-color: rgba(255, 255, 255, 0.6); }
-  .slider .prev {
-    left: 15px;
-    background: url("../images/left.png") 0px -2px; }
-  .slider .next {
-    right: 10px;
-    background: url("../images/right.png") 0px -2px; }
-  .slider .slides {
-    position: relative;
-    width: 100000px;
-    height: 400px;
     padding: 0;
-    margin: 0;
-    margin-left: -600px;
-    -webkit-transition: margin-left 1s linear;
-    transition: margin-left 1s linear; }
-    .slider .slides div {
-      float: left;
-      width: 600px;
-      height: 400px;
-      margin: 0;
-      padding: 0; }
-      .slider .slides div img {
-        width: 600px;
-        height: 400px;
-        display: block;
-        margin: 0;
-        padding: 0; }
-      .slider .slides div div {
-        top: 0px;
-        padding: 10px 10px;
-        height: auto;
-        display: block;
-        position: absolute;
-        color: white;
-        font-weight: bold;
-        margin: 0;
-        background-color: rgba(30, 30, 30, 0.7); }
-  .slider .no-transition {
-    -webkit-transition: none !important;
-    transition: none !important; }
-  .slider .bullets {
-    position: absolute;
-    bottom: 10%;
-    text-align: center;
-    height: 15px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    width: 600px;
+    margin: 0; }
+
+.offer-caption {
+  font-weight: bold;
+  padding: 0;
+  margin: 10px 0 0 17px; }
+
+.offer-info {
+  color: #8d8d8d;
+  font-size: 10.86px;
+  margin: 12px 0 0 17px; }
+
+.offer-feedback {
+  color: #8d8d8d;
+  font-size: 10.86px;
+  margin-bottom: 10px;
+  margin: 19% 0 8px 16px; }
+  .offer-feedback div {
     display: inline-block; }
-    .slider .bullets li {
-      width: 15px;
-      height: 15px;
-      margin: 0;
-      padding: 0;
-      display: inline-block;
-      background: url(../images/bullet-grey.png) no-repeat;
-      background-color: rgba(10, 10, 10, 0.5);
-      background-size: 15px 15px; }
-      .slider .bullets li.active {
-        background: url(../images/bullet-yellow.png) no-repeat;
-        background-size: 15px 15px;
-        background-color: rgba(10, 10, 10, 0.5); }
-      .slider .bullets li:hover {
-        background-color: rgba(255, 255, 255, 0.6);
-        border-radius: 10px; }
+  .offer-feedback > .likes {
+    margin-right: 3px; }
+  .offer-feedback > .comments {
+    margin-left: 6px; }
+  .offer-feedback > .mentions {
+    margin-right: 12px; }
+  .offer-feedback > .adds {
+    margin-left: 9px; }
+
+.offer-author {
+  background-color: #f1f1f1;
+  border-radius: 0 0 9px 9px;
+  padding-left: 10px; }
+  .offer-author > .avatar {
+    display: inline-block;
+    margin: 4px 6px; }
+  .offer-author > .ticket {
+    display: inline-block; }
+    .offer-author > .ticket > .name {
+      font-size: 12px;
+      color: #5473ac; }
+    .offer-author > .ticket > .label {
+      color: #8d8d8d;
+      font-size: 10.86px;
+      font-style: italic;
+      font-size: 10.86px; }

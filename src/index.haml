@@ -1,8 +1,46 @@
 !!! 5
 %html
   %head
-    %meta{charset : "utf8"}
-    %link{rel: "stylesheet", href : "css/style.css"}
+    %meta{ charset: "utf8" }
+    %link{ rel: "stylesheet", href: "css/style.css" }
   %body
-    %div
-      Привет, мир!
+    %div.offer-list
+      %script#js-offerList{type: "text/x-handlebars-template"}
+        {{#each this}}
+          %div.offer
+            %div.offer-image
+              %img{ src: "{{offerImg}}" }
+            %div.offer-caption
+              {{caption}}
+            %div.offer-info
+              %div.category
+                {{category}}
+              %div.date
+                {{dateBegin}}-{{dateEnd}}
+              %div.location
+                {{location}}
+            %div.offer-feedback
+              %div.likes
+                {{likes.length}}
+              %div.adds
+                {{adds.length}}
+              %div.comments
+                {{comments.length}}
+              %div.mentions
+                {{mentions.length}}
+            %div.offer-author
+              %div.avatar
+                %img{ src: "{{user.img}}" }
+              %div.ticket
+                %span.name {{user.name}}
+                %br/
+                %span.label предлагает
+            %div.offer-feedback-details
+            {{#each comment}}
+              %div.avatar
+                %img { src: "{{user.img}}"}
+              %div.text
+                {{text}}
+            {{/each}}
+        {{/each}}
+    %script{src:"js/app.js"}

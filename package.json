@@ -27,10 +27,14 @@
     "gulp-concat": "^2.6.0",
     "gulp-concat-css": "^2.3.0",
     "gulp-connect": "^5.0.0",
+    "gulp-fontmin": "^0.7.4",
     "gulp-haml": "^0.1.6",
+    "gulp-imagemin": "^3.0.3",
     "gulp-livereload": "^3.8.1",
+    "gulp-pngquant": "^1.0.10",
     "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.3.2"
+    "gulp-sass": "^2.3.2",
+    "imagemin-pngquant": "^5.0.0"
   },
   "dependencies": {
     "gulp": "^3.9.1",
