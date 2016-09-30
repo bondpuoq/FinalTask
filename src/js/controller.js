@@ -11,8 +11,16 @@
     _demoOffers = _demo.offers;
     _hbOfferTemplate = $('#js-offer-list');
     _target = $('.offer-list')[0];
-    var offer = new Offer();
-    offer.init(_demoOffers, _hbOfferTemplate);
-    offer.render(_target);
+    offerList = new OfferList();
+    offerList.init(_demoOffers, _hbOfferTemplate);
+    offerList.render(_target);
+    $('body').off('click', '.offer');
+    $('body').on('click', '.offer', offerClick);
+  }
+
+  function offerClick() {
+    var currentIndex;
+    currentIndex = $(this).data('offer-index');
+    console.log(offerList.data[currentIndex]);
   }
 })();

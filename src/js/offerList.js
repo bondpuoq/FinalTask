@@ -1,4 +1,4 @@
-function Offer() {
+function OfferList() {
   var self, _hbTemplate, _hbObject;
   self = this;
   self = {

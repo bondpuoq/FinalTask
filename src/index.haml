@@ -7,7 +7,7 @@
     %div.offer-list
       %script#js-offer-list{type: "text/x-handlebars-template"}
         {{#each this}}
-          %div.offer
+          %div.offer{data-offer-index:"{{@index}}"}
             %div.actions
               %div.more-info
                 Ознакомиться с предложением
@@ -63,4 +63,7 @@
                     {{text}}
               {{/each}}
         {{/each}}
+    %div.blind.hidden
+    %div.popup
+    //ToDo: Написать шаблон попапа
     %script{src:"js/app.js"}
