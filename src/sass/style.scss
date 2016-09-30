@@ -60,14 +60,50 @@ body {
 .actions {
   position: absolute;
   width: $offer-width;
-  padding: 7px 0;
   z-index: 10;
   text-align: center;
-  color: rgba(255,255,255,1);
-  background-color:rgba(171,201,232,1);
-  font-family: "PFAgoraSansPro-regular", "Arial";
   visibility: hidden;
-
+  margin: 0;
+  padding: 0;
+  .more-info {
+    padding: 7px;
+    color: rgba(255,255,255,1);
+    background-color:rgba(171,201,232,1);
+    font-family: "PFAgoraSansPro-regular", "Arial";
+  }
+  .action-icons {
+    background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 40%, rgba(255,255,255,0) 100%  );
+    a {
+      width: 50px;
+      height: 50px;
+      display: inline-block;
+      margin: 2px;
+    }
+    & > a.feedback {
+      background: url('../img/feedback.png') 50% 50% no-repeat;
+      &:hover {
+        background: url('../img/feedback-hover.png') 50% 50% no-repeat;
+      }
+    }
+    & > a.add {
+      background: url('../img/add.png') 50% 50% no-repeat;
+      &:hover {
+        background: url('../img/add-hover.png') 50% 50% no-repeat;
+      }
+    }
+    & > a.comment {
+      background: url('../img/comment.png') 50% 50% no-repeat;
+      &:hover {
+        background: url('../img/comment-hover.png') 50% 50% no-repeat;
+      }
+    }
+    & > a.like {
+      background: url('../img/like.png') 50% 50% no-repeat;
+      &:hover {
+        background: url('../img/like-hover.png') 50% 50% no-repeat;
+      }
+    }
+  }
 }
 .offer-image {
   min-height: 110px;
@@ -108,7 +144,7 @@ body {
     margin-left: 6px;
   }
   & > .mentions {
-    margin-right: 12px;
+    margin-right: 0;
   }
   & > .adds {
     margin-left: 9px;

@@ -70,7 +70,7 @@ function demoData() {
     caption : "Оформление интерьера",
     category : "Недвижимость",
     location : "Москва",
-    feedbacks : [_comments[0], _comments[1], _comments[2]],
+    mentions : [_comments[0], _comments[1], _comments[2]],
     author : _users[0]
   }, {
     offerImg : "img/watch.png",
@@ -93,7 +93,7 @@ function demoData() {
     caption : "Новая 3-х комнатная квартира",
     category : "Недвижимость",
     location : "Москва",
-    feedbacks : [_comments[3]],
+    mentions : [_comments[3]],
     author : _users[5]
   }, {
     offerImg : "img/bag.png",
@@ -109,14 +109,12 @@ function demoData() {
     dateBegin : "12.01.13",
     dateEnd : "14.06.13",
     location : "Екатеринбург",
-    feedbacks : {},
     author : _users[4]
   }, {
     offerImg : "img/jeep.png",
     caption : "Стильная модная тачила",
     category : "Авто",
     location : "Ульяновск",
-    feedbacks : {},
     author : _users[6]
   }];
 

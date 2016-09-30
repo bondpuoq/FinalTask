@@ -11,10 +11,11 @@
             %div.actions
               %div.more-info
                 Ознакомиться с предложением
-              %div.feedback
-              %div.like
-              %div.add
-              %div.comment
+              %div.action-icons
+                %a.feedback{href:"#"}
+                %a.like{href:"#"}
+                %a.add{href:"#"}
+                %a.comment{href:"#"}
             %div.offer-image
               %img{ src: "{{offerImg}}" }
             %div.offer-caption
@@ -43,7 +44,9 @@
               %div.comments
                 {{comments.length}}
               %div.mentions
-                {{mentions.length}}
+                {{#if mentions}}
+                  {{mentions.length}} отзыва
+                {{/if}}
             %div.offer-author
               %div.avatar
                 %img{ src: "{{author.avatar}}" }
@@ -52,7 +55,7 @@
                 %br/
                 %span.label предлагает
             %div.offer-feedback-details
-              {{#each this.feedbacks}}
+              {{#each this.mentions}}
                 %div.container{data-user-id:"{{author.id}}"}
                   %div.avatar
                     %img{ src: "{{author.avatar}}"}
