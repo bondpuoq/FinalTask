@@ -3,10 +3,7 @@ function User() {
   self = this;
   self = {
     init: _init,
-    render: _render,
-    id,
-    fio,
-    avatar
+    render: _render
   }
   function _init(userData) {
     self.id = userData.id;

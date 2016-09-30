@@ -14669,26 +14669,156 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 'use strict';
 (function (){
-  var offerList, _hbOfferTemplate, _jsonUserData;
-  _hbOfferTemplate = $('#js-offer-list');
-
-
-  offerList = [];
+  var offerList, _hbOfferTemplate, _demo, _demoUsers, _demoComments;
   
   $(document).ready(createOfferList);
 
   function createOfferList() {
+    _demo = new demoData();
+    _demoUsers = _demo.users;
+    _demoComments = _demo.comments;
+    _demoOffers = _demo.offers;
+    _hbOfferTemplate = $('#js-offer-list');
+    _target = $('.offer-list')[0];
     var offer = new Offer();
-    offer.init();
+    offer.init(_demoOffers, _hbOfferTemplate);
+    offer.render(_target);
   }
 })();
+function demoData() {
+  var self, _users, _comments;
+  var self = this;
+  _users = [{
+    id : "0",
+    fio : "Василий Кожемякин",
+    avatar : "img/vasily.png"
+  }, {
+    id : "1",
+    fio : "Евгений Пологов",
+    avatar : "img/eugen.png"
+  }, {
+    id : "2",
+    fio : "Ксения Заболоцкая",
+    avatar : "img/ksenya.png"
+  }, {
+    id : "3",
+    fio : "Анастасия Кузнецова",
+    avatar : "img/nastya.png"
+  }, {
+    id : "4",
+    fio : "Алена Сафина",
+    avatar : "img/nastya.png"
+  }, {
+    id : "5",
+    fio : "Иван Стрельников",
+    avatar : "img/jeff.png"
+  }, {
+    id : "6",
+    fio : "Алексей Чуваков",
+    avatar : "img/vasily.png"
+  }, {
+    id : "7",
+    fio : "Вячеслав Путин",
+    avatar : "img/eugen.png"
+  }];
+
+  _comments = [{
+    author : _users[2],
+    text : "В Березовском можно в 3 раза дешевле взять"
+  }, {
+    author : _users[4],
+    text : "Приезжай к нам в Голливуд, есть приличная квартирка"
+  }, {
+    author : _users[5],
+    text : "WTF.."
+  }, {
+    author : _users[3],
+    text : "В Березовском можно в 3 раза дешевле взять"
+  }];
+
+  _offers= [{ 
+    offerImg : "img/vacation-offer.png",
+    caption : "Отпуск семьей на море",
+    category : "Путешествия",
+    dateBegin : "12.06.12",
+    dateEnd : "14.06.12",
+    location : "Тиват, Черногория",
+    author : _users[1]
+  }, {
+    offerImg : "img/hands.png",
+    caption : "Новый сайт-портфолио",
+    category : "Детские игрушки",
+    dateBegin : "12.01.13",
+    dateEnd : "14.06.13",
+    location : "Екатеринбург",
+    author : _users[7]
+  }, {
+    offerImg : "img/velo-dog.png",
+    caption : "Оформление интерьера",
+    category : "Недвижимость",
+    location : "Москва",
+    feedbacks : [_comments[0], _comments[1], _comments[2]],
+    author : _users[0]
+  }, {
+    offerImg : "img/watch.png",
+    caption : "Крутые часы Bell&rose",
+    category : "Детские игрушки",
+    dateBegin : "12.01.13",
+    dateEnd : "14.06.13",
+    location : "Екатеринбург",
+    author : _users[6]
+  }, {
+    offerImg : "img/ipad.png",
+    caption : "iPad 4th generation",
+    category : "Путешествия",
+    dateBegin : "12.06.12",
+    dateEnd : "14.06.12",
+    location : "Екатеринбург",
+    author : _users[2]
+  }, {
+    offerImg : "img/orange-room.png",
+    caption : "Новая 3-х комнатная квартира",
+    category : "Недвижимость",
+    location : "Москва",
+    feedbacks : [_comments[3]],
+    author : _users[5]
+  }, {
+    offerImg : "img/bag.png",
+    caption : "Стильная кожаная сумка",
+    category : "Одежда",
+    location : "Екатеринбург",
+    feedbacks : {},
+    author : _users[7]
+  }, {
+    offerImg : "img/visiting-card.png",
+    caption : "Новые корпоративные визитки",
+    category : "Полиграфия",
+    dateBegin : "12.01.13",
+    dateEnd : "14.06.13",
+    location : "Екатеринбург",
+    feedbacks : {},
+    author : _users[4]
+  }, {
+    offerImg : "img/jeep.png",
+    caption : "Стильная модная тачила",
+    category : "Авто",
+    location : "Ульяновск",
+    feedbacks : {},
+    author : _users[6]
+  }];
+
+  self = {
+    users : _users,
+    comments : _comments,
+    offers : _offers
+  }
+  return self;
+}
 function Feedback() {
   var self;
   self = this;
   self = {
-    init : _init,
-    author,
-    text
+    init : _init
   }
 
   function _init(user, text) {
@@ -14703,30 +14833,16 @@ function Offer() {
   self = {
     init: _init,
     render: _render,
-    offerImg,
-    caption,
-    category,
-    dateBegin,
-    dateEnd,
-    location,
-    feedbacks:[],
-    author
-
+    data : []
   }
   function _init(offerData, hbTemplate) {
-    self.offerImg = offerData.img;
-    self.caption = offerData.caption;
-    self.category = offerData.category;
-    self.dateBegin = offerData.dateBegin;
-    self.dateEnd = offerData.dateEnd;
-    self.location = offerData.location;
-    self.feedbacks = offerData.feedbacks;
-    self.author = offerData.author;
-    _hbTemplate = hbTemplate;
+    self.data = offerData;
+    _hbTemplate = hbTemplate.html();
     _hbObject = Handlebars.compile(_hbTemplate);
   }
-  function _render($destinationObj) {
-    $destinationObj.html(_hbObject(self));
+  function _render(destinationObj) {
+    console.log(self.data);
+    $(destinationObj).html(_hbObject(self.data));
   }
   return self;
 }
@@ -14735,10 +14851,7 @@ function User() {
   self = this;
   self = {
     init: _init,
-    render: _render,
-    id,
-    fio,
-    avatar
+    render: _render
   }
   function _init(userData) {
     self.id = userData.id;

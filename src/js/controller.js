@@ -10,8 +10,9 @@
     _demoComments = _demo.comments;
     _demoOffers = _demo.offers;
     _hbOfferTemplate = $('#js-offer-list');
+    _target = $('.offer-list')[0];
     var offer = new Offer();
     offer.init(_demoOffers, _hbOfferTemplate);
-    offer.render();
+    offer.render(_target);
   }
 })();

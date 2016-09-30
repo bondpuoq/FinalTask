@@ -8,6 +8,13 @@
       %script#js-offer-list{type: "text/x-handlebars-template"}
         {{#each this}}
           %div.offer
+            %div.actions
+              %div.more-info
+                Ознакомиться с предложением
+              %div.feedback
+              %div.like
+              %div.add
+              %div.comment
             %div.offer-image
               %img{ src: "{{offerImg}}" }
             %div.offer-caption
@@ -16,7 +23,16 @@
               %div.category
                 {{category}}
               %div.date
-                {{dateBegin}}-{{dateEnd}}
+                {{#if dateBegin}}
+                  {{dateBegin}}-
+                {{else}}
+                  Всегда&nbsp;
+                {{/if}}
+                {{#if dateEnd}}
+                  {{dateEnd}}
+                {{else}}
+                  актуально
+                {{/if}}
               %div.location
                 {{location}}
             %div.offer-feedback
@@ -30,18 +46,18 @@
                 {{mentions.length}}
             %div.offer-author
               %div.avatar
-                %img{ src: "{{user.avatar}}" }
+                %img{ src: "{{author.avatar}}" }
               %div.ticket
-                %span.name {{user.fio}}
+                %span.name {{author.fio}}
                 %br/
                 %span.label предлагает
             %div.offer-feedback-details
-            {{#each comment}}
-              %div{data-user-id:"{{author.id}}"}
-              %div.avatar
-                %img { src: "{{author.avatar}}"}
-              %div.text
-                {{text}}
-            {{/each}}
+              {{#each this.feedbacks}}
+                %div.container{data-user-id:"{{author.id}}"}
+                  %div.avatar
+                    %img{ src: "{{author.avatar}}"}
+                  %div.text
+                    {{text}}
+              {{/each}}
         {{/each}}
     %script{src:"js/app.js"}

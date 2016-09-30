@@ -2,9 +2,7 @@ function Feedback() {
   var self;
   self = this;
   self = {
-    init : _init,
-    author,
-    text
+    init : _init
   }
 
   function _init(user, text) {
