@@ -236,8 +236,105 @@ body {
   bottom:0;
   min-height: 100%;
   z-index: 1000;
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(0,0,0,0.5);
   &.hidden {
     display: none;
+  }
+  .popup {
+    margin-top: 50px;
+    top: 50px;
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    width: 810px;
+    margin: 0 auto;
+    position: relative;
+    .close {
+    position: absolute;
+    right: 10px;
+    }
+    .header {
+      padding: 10px 40px;
+      line-height: 10px;
+      .img {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .author {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 1em;
+        padding-left: 5px;
+        .fio {
+          font-family: PFAgoraSansPro-xthin;
+          font-size: 22px;
+          display: block;
+          color: rgba(84,115,172,1);
+        }
+        .label {
+          color: rgba(163,163,163,1);
+          font-style: italic;
+          font-size: 14px;
+          display: block;
+        }
+      }
+    }
+    .container {
+      padding: 10px 40px;
+      margin: 0;
+      box-sizing: border-box;
+      .info {
+        padding: 0;
+        margin: 0;
+        border-top: 1px solid rgba(230,230,230, 1);
+        float: left;
+        width: 70%;
+        h1 {
+          font-family: "PFAgoraSansPro-regular";
+          font-size: 24px;
+          font-weight: normal;
+          padding: 0;
+          margin: 0;
+        }
+        h3 {
+          font-family: "PFAgoraSansPro-regular";
+          font-size: 16px;
+          font-weight: normal;
+          color: rgba(163,163,163,1);
+          padding: 0;
+          margin: 0;
+        }
+        img {
+          display: block;
+          width: 100%;
+        }
+      }
+      .actions {
+        float: right;
+        width: 30%;
+        button {
+          display: block;
+        }
+      }
+      &:after {
+        display:table;
+        width: 100%;
+        clear:both;
+        content: "";
+      }
+    }
+  }
+}
+.button {
+  border-radius: 3px;
+  margin-left: 50px;
+  padding: 6px 13px;
+  display: inline-block;
+  color: white;
+  vertical-align: middle;
+  background: linear-gradient(to bottom, rgba(182,82,167,1) 0%, rgba(182,82,167,1) 50%, rgba(162,33,141,1) 50%);
+  &:hover {
+    cursor: pointer;
   }
 }
