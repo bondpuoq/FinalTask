@@ -21,6 +21,6 @@
   function offerClick() {
     var currentIndex;
     currentIndex = $(this).data('offer-index');
-    console.log(offerList.data[currentIndex]);
+    $('.js-blind').toggle();
   }
 })();

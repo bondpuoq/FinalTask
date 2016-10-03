@@ -8,6 +8,7 @@ body {
   font-size: $base-font-size;
   font-family: Arial, Tahoma;
   box-sizing: border-box;
+  position: relative;
 }
 
 @font-face {
@@ -33,170 +34,169 @@ body {
   max-width: 951px;
   width: 951px;
   column-gap: 1.5em;
-}
-.offer {
-  width: $offer-width;
-  box-sizing: border-box;
-  border: solid 1px $offer-border-color;
-  border-radius: 10px;
-  display: inline-block;
-  padding: 0;
-  overflow: hidden;
-  margin: 5px;
-  height: auto;
-  position: relative;
-  z-index: 5;
-  &:hover {
-    cursor: pointer;
-    border: solid 1px rgba(171,201,232,1);
-    box-shadow: 2px 2px 3px 0 rgba(204,204,204,1),
-                1px 0 1px 0 rgba(171,201,232,1),
-                0 1px 1px 0 rgba(171,201,232,1),
-                -1px 0 1px 0 rgba(171,201,232,1)
-  }
-  &:hover > .actions{
-    visibility: visible;
-  }
-}
-.actions {
-  position: absolute;
-  width: $offer-width;
-  z-index: 10;
-  text-align: center;
-  visibility: hidden;
-  margin: 0;
-  padding: 0;
-  .more-info {
-    padding: 5px;
-    color: rgba(255,255,255,1);
-    background-color:rgba(171,201,232,1);
-    font-family: "PFAgoraSansPro-regular", "Arial";
-  }
-  .action-icons {
-    background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 40%, rgba(255,255,255,0) 100%  );
-    a {
-      width: 50px;
-      height: 50px;
-      display: inline-block;
-      margin: 2px;
-    }
-    & > a.feedback {
-      background: url('../img/feedback.png') 50% 50% no-repeat;
-      &:hover {
-        background: url('../img/feedback-hover.png') 50% 50% no-repeat;
-      }
-    }
-    & > a.add {
-      background: url('../img/add.png') 50% 50% no-repeat;
-      &:hover {
-        background: url('../img/add-hover.png') 50% 50% no-repeat;
-      }
-    }
-    & > a.comment {
-      background: url('../img/comment.png') 50% 50% no-repeat;
-      &:hover {
-        background: url('../img/comment-hover.png') 50% 50% no-repeat;
-      }
-    }
-    & > a.like {
-      background: url('../img/like.png') 50% 50% no-repeat;
-      &:hover {
-        background: url('../img/like-hover.png') 50% 50% no-repeat;
-      }
-    }
-  }
-}
-.offer-image {
-  min-height: 110px;
-  width: $offer-width;
-  line-height: 130px;
-  text-align: center;
-  & > img {
-    min-width: 121px;
-    min-height: 85px;
-    max-width: $offer-width;
-    max-height: 289px;
+  .offer {
+    width: $offer-width;
+    box-sizing: border-box;
+    border: solid 1px $offer-border-color;
+    border-radius: 10px;
     display: inline-block;
     padding: 0;
-    vertical-align: bottom;
-    margin: 0 auto;
-  }
-}
-.offer-caption {
-  font-weight: bold;
-  padding: 0;
-  margin: 10px 0 0 17px;
-}
-.offer-info {
-  @include gray-text;
-  margin: 12px 0 0 17px;
-}
-.offer-feedback {
-  @include gray-text;
-  margin-bottom: 10px;
-  margin: 19% 0 8px 16px;
-  div {
-    display: inline-block;
-  }
-  & > .likes {
-    margin-right: 3px;
-  }
-  & > .comments {
-    margin-left: 6px;
-  }
-  & > .mentions {
-    margin-right: 0;
-  }
-  & > .adds {
-    margin-left: 9px;
-  }
-}
-.offer-author {
-  background-color: $offer-author-bg-color;
-  padding-bottom: 10px;
-  & > .avatar {
-    display: inline-block;
-    padding-left: 16px;
-    padding-top:6px;
-  }
-  & > .ticket {
-    padding-left: 6px;
-    display: inline-block;
-    & > .name {
-      font-size: $base-font-size;
-      color: rgba(84,115,172,1)
+    overflow: hidden;
+    margin: 5px;
+    height: auto;
+    position: relative;
+    z-index: 5;
+    &:hover {
+      cursor: pointer;
+      border: solid 1px rgba(171,201,232,1);
+      box-shadow: 2px 2px 3px 0 rgba(204,204,204,1),
+                  1px 0 1px 0 rgba(171,201,232,1),
+                  0 1px 1px 0 rgba(171,201,232,1),
+                  -1px 0 1px 0 rgba(171,201,232,1)
     }
-    & > .label {
-      @include gray-text;
-      font-style: italic;
-      font-size: 10.86px;
+    &:hover > .actions{
+      visibility: visible;
     }
   }
-}
-.offer-feedback-details {
-  background-color: $offer-author-bg-color;
-  & > .container {
-    width: 100%;
-    border-top: rgba(215,215,215,1) solid 1px;
-    font-size: 11px;
-    & .avatar {
-      display: inline-block; 
-      padding: 6px;
-      padding-left: 16px;
+  .actions {
+    position: absolute;
+    width: $offer-width;
+    z-index: 10;
+    text-align: center;
+    visibility: hidden;
+    margin: 0;
+    padding: 0;
+    .more-info {
+      padding: 5px;
+      color: rgba(255,255,255,1);
+      background-color:rgba(171,201,232,1);
+      font-family: "PFAgoraSansPro-regular", "Arial";
     }
-    & .text {
+    .action-icons {
+      background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 40%, rgba(255,255,255,0) 100%  );
+      a {
+        width: 50px;
+        height: 50px;
+        display: inline-block;
+        margin: 2px;
+      }
+      & > a.feedback {
+        background: url('../img/feedback.png') 50% 50% no-repeat;
+        &:hover {
+          background: url('../img/feedback-hover.png') 50% 50% no-repeat;
+        }
+      }
+      & > a.add {
+        background: url('../img/add.png') 50% 50% no-repeat;
+        &:hover {
+          background: url('../img/add-hover.png') 50% 50% no-repeat;
+        }
+      }
+      & > a.comment {
+        background: url('../img/comment.png') 50% 50% no-repeat;
+        &:hover {
+          background: url('../img/comment-hover.png') 50% 50% no-repeat;
+        }
+      }
+      & > a.like {
+        background: url('../img/like.png') 50% 50% no-repeat;
+        &:hover {
+          background: url('../img/like-hover.png') 50% 50% no-repeat;
+        }
+      }
+    }
+  }
+  .offer-image {
+    min-height: 110px;
+    width: $offer-width;
+    line-height: 130px;
+    text-align: center;
+    & > img {
+      min-width: 121px;
+      min-height: 85px;
+      max-width: $offer-width;
+      max-height: 289px;
       display: inline-block;
-      width: 70%;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      vertical-align: top;
+      padding: 0;
+      vertical-align: bottom;
+      margin: 0 auto;
     }
-    &:nth-child(odd) {
-      font-weight: bolder;
+  }
+  .offer-caption {
+    font-weight: bold;
+    padding: 0;
+    margin: 10px 0 0 17px;
+  }
+  .offer-info {
+    @include gray-text;
+    margin: 12px 0 0 17px;
+  }
+  .offer-feedback {
+    @include gray-text;
+    margin-bottom: 10px;
+    margin: 19% 0 8px 16px;
+    div {
+      display: inline-block;
+    }
+    & > .likes {
+      margin-right: 3px;
+    }
+    & > .comments {
+      margin-left: 6px;
+    }
+    & > .mentions {
+      margin-right: 0;
+    }
+    & > .adds {
+      margin-left: 9px;
+    }
+  }
+  .offer-author {
+    background-color: $offer-author-bg-color;
+    padding-bottom: 10px;
+    & > .avatar {
+      display: inline-block;
+      padding-left: 16px;
+      padding-top:6px;
+    }
+    & > .ticket {
+      padding-left: 6px;
+      display: inline-block;
+      & > .name {
+        font-size: $base-font-size;
+        color: rgba(84,115,172,1)
+      }
+      & > .label {
+        @include gray-text;
+        font-style: italic;
+        font-size: 10.86px;
+      }
+    }
+  }
+  .offer-feedback-details {
+    background-color: $offer-author-bg-color;
+    & > .container {
+      width: 100%;
+      border-top: rgba(215,215,215,1) solid 1px;
+      font-size: 11px;
+      & .avatar {
+        display: inline-block; 
+        padding: 6px;
+        padding-left: 16px;
+      }
+      & .text {
+        display: inline-block;
+        width: 70%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        vertical-align: top;
+      }
+      &:nth-child(odd) {
+        font-weight: bolder;
+      }
     }
   }
 }
-
 /* Медиа-запросы для различных размеров адаптивного макета */
 @media only screen and (min-width: 400px) {
   .offer-list {
@@ -225,5 +225,19 @@ body {
 @media only screen and (min-width: 1280px) {
   .wrapper {
     width: 1260px;
+  }
+}
+
+.blind {
+  position: absolute; 
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  min-height: 100%;
+  z-index: 1000;
+  background-color: rgba(255,255,255,0.5);
+  &.hidden {
+    display: none;
   }
 }

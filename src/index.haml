@@ -63,7 +63,61 @@
                     {{text}}
               {{/each}}
         {{/each}}
-    %div.blind.hidden
-    %div.popup
-    //ToDo: Написать шаблон попапа
+    %div.blind.hidden.js-blind
+      %div.popup
+        %div.close
+          Закрыть X
+        %div.header
+          %div
+            %img{src: "img/jeff.png"}
+          %div
+            %span
+              Иван Стрельцов
+            %br/
+            %span
+              нуждается в этом
+          %div
+            %button
+              Добавить в друзья
+        %div.title
+          %h1
+            Отпуск с семьей на море
+          %h3
+            Отдых и путешествия
+          %img
+          %div.description
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed feugiat ut augue quis convallis. Vestibulum fermentum laoreet tellus sit amet aliquet. Etiam ante lectus, mollis porttitor arcu ac, ultricies condimentum ex. Quisque sit amet velit sed turpis imperdiet convallis in id tortor. Sed semper pharetra sem, non dictum erat bibendum vitae. Suspendisse tristique mauris quis magna efficitur consequat.
+        %div.actions
+          %button
+            Добавить к себе
+          %button
+            Мне нравится
+          %button
+            Комментировать
+        %div.feedbacks
+          %div
+            %img{src: "img/ksenya.png"}
+          %div
+            %span
+              Отличное место! Мы там не раз отдыхали с детьми! Детишкам там отдыхать самое то!
+          %div
+            %img{src: "img/nastya.png"}
+          %div
+            %span
+              Прошедшим летом отдыхал в Черногории в Улцине, в отделе zlataoliva отель расположен в очень живописном месте в соснах. В номере у нас было две комнаты одна большая с двухспальной кроватью, в другой комнате жили дети, в номере также у нас была кухня, но мы ей даже не пользовались, так как при отеле есть семейное кафе с очень вкусной кухней.
+        %div.add-feedback
+          %div
+            %img
+          %div
+            %input{defaul-text:"Комментировать"}
+        %div.who-added
+          %div 8 добавили к себе
+          %img
+        %div.who-liked
+          %div 5 нравится
+          %img
+        %div.who-comment
+          %img
+
+    //ToDo: Написать шаблон попапа для любого выбранного элемента
     %script{src:"js/app.js"}

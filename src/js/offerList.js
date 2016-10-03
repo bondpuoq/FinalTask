@@ -15,5 +15,9 @@ function OfferList() {
     console.log(self.data);
     $(destinationObj).html(_hbObject(self.data));
   }
+  // ToDo: здесь мы сделаем чтобы он у нас заполнял выбранный попап
+  function _renderPopup(offerIndex) {
+
+  }
   return self;
 }

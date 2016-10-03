@@ -14690,7 +14690,7 @@ return /******/ (function(modules) { // webpackBootstrap
   function offerClick() {
     var currentIndex;
     currentIndex = $(this).data('offer-index');
-    console.log(offerList.data[currentIndex]);
+    $('.js-blind').toggle();
   }
 })();
 function demoData() {
@@ -14849,6 +14849,10 @@ function OfferList() {
   function _render(destinationObj) {
     console.log(self.data);
     $(destinationObj).html(_hbObject(self.data));
+  }
+  // ToDo: здесь мы сделаем чтобы он у нас заполнял выбранный попап
+  function _renderPopup(offerIndex) {
+
   }
   return self;
 }
