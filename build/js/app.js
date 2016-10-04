@@ -14670,7 +14670,7 @@ return /******/ (function(modules) { // webpackBootstrap
 'use strict';
 (function (){
   var offerList, _hbOfferTemplate, _demo, _demoUsers, _demoComments;
-  
+
   $(document).ready(createOfferList);
 
   function createOfferList() {
@@ -14683,14 +14683,16 @@ return /******/ (function(modules) { // webpackBootstrap
     offerList = new OfferList();
     offerList.init(_demoOffers, _hbOfferTemplate);
     offerList.render(_target);
-    $('body').off('click', '.offer');
-    $('body').on('click', '.offer', offerClick);
   }
 
-  function offerClick() {
+  this._offerClick = function offerClick() {
     var currentIndex;
     currentIndex = $(this).data('offer-index');
     $('.js-blind').toggle();
+  }
+
+  this._togglePopup = function togglePopup() {
+    $('.blind').toggle();
   }
 })();
 function demoData() {
@@ -14845,6 +14847,8 @@ function OfferList() {
     self.data = offerData;
     _hbTemplate = hbTemplate.html();
     _hbObject = Handlebars.compile(_hbTemplate);
+    $('body').on('click', '.offer', function() { _offerClick(); });
+    $('.popup').on('click', '.close-link', function() { _togglePopup(); });
   }
   function _render(destinationObj) {
     console.log(self.data);

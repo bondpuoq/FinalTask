@@ -7,8 +7,9 @@ $base-font-size: 12px;
 body {
   font-size: $base-font-size;
   font-family: Arial, Tahoma;
-  box-sizing: border-box;
   position: relative;
+  padding: 0;
+  margin: 0;
 }
 
 @font-face {
@@ -233,10 +234,16 @@ body {
   left:0;
   right:0;
   top:0;
-  bottom:0;
-  min-height: 100%;
+  margin: 0;
+  padding: 0;
   z-index: 1000;
   background-color: rgba(0,0,0,0.5);
+  &:after {
+    content: "";
+    display: table;
+    height: auto;
+    clear: both;
+  }
   &.hidden {
     display: none;
   }
@@ -249,13 +256,17 @@ body {
     box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
     width: 810px;
     margin: 0 auto;
-    position: relative;
-    .close {
-    position: absolute;
-    right: 10px;
+    .close-link {
+      text-align: right;
+      margin-right: 10px;
+      margin-top: 10px;
+      color: rgba(141,141,141,1);
+      cursor: pointer;
+      display: block;
     }
     .header {
       padding: 10px 40px;
+      margin-top: -10px;
       line-height: 10px;
       .img {
         display: inline-block;
@@ -281,15 +292,18 @@ body {
       }
     }
     .container {
-      padding: 10px 40px;
+      padding: 0 0 0 40px;
       margin: 0;
       box-sizing: border-box;
+      border-top: 1px solid rgba(230,230,230, 1);
       .info {
         padding: 0;
+        padding-top: 20px;
+        padding-right: 15px;
         margin: 0;
-        border-top: 1px solid rgba(230,230,230, 1);
         float: left;
-        width: 70%;
+        width: 75%;
+        border-right: 1px solid rgba(230,230,230, 1);
         h1 {
           font-family: "PFAgoraSansPro-regular";
           font-size: 24px;
@@ -304,15 +318,22 @@ body {
           color: rgba(163,163,163,1);
           padding: 0;
           margin: 0;
+          padding-bottom: 7px;
         }
         img {
           display: block;
-          width: 100%;
+          max-width: 570px;
+        }
+        .description {
+          font-size: 14px;
+          padding-top: 27px;
         }
       }
       .actions {
         float: right;
-        width: 30%;
+        width: 170px;
+        text-align:center;
+        padding-top: 70px;
         button {
           display: block;
         }
@@ -324,17 +345,68 @@ body {
         content: "";
       }
     }
+    .feedbacks {
+      margin-top: 34px;
+      .fb-item {
+        background-color: rgba(241,241,241,1);
+        border: 1px solid rgba(217,217,217,1);
+        padding: 17px 40px;
+        overflow: auto;
+      }
+    }
+    .add-feedback {
+      padding-top:20px;
+      background-color: rgba(241,241,241,1);
+      overflow: hidden;
+      padding-left: 40px;
+      padding-bottom: 20px;
+    }
+    .fb-image {
+      float: left;
+    }
+    .fb-text {
+      float: left;
+      margin-left: 32px;
+      font-size: 12px;
+      display: block;
+      width: 76%;
+      color: rgba(109,109,109,1);
+      input {
+        height: 54px;
+        width: 100%;
+      }
+    }
+    .counter-block {
+      font-size: 16px;
+      font-family: "PFAgoraSansPro-regular";
+      display: block;
+      padding: 10px 40px;
+      border-bottom: 2px solid rgba(217,217,217,1);
+      img {
+        padding: 5px 5px;
+      }
+    }
   }
 }
 .button {
   border-radius: 3px;
-  margin-left: 50px;
   padding: 6px 13px;
   display: inline-block;
-  color: white;
   vertical-align: middle;
-  background: linear-gradient(to bottom, rgba(182,82,167,1) 0%, rgba(182,82,167,1) 50%, rgba(162,33,141,1) 50%);
+  width: 123px;
+
   &:hover {
     cursor: pointer;
+  }
+  &.violet {
+    background: linear-gradient(to bottom, rgba(182,82,167,1) 0%, rgba(182,82,167,1) 50%, rgba(162,33,141,1) 50%);
+    color: white;
+    margin-left: 50px;
+  }
+  &.gray {
+    border: 1px solid rgba(203,203,203,1);
+    background: linear-gradient(to bottom, rgba(212,212,212,1) 0%, rgba(242,242,242,1) 50%);
+    color: rgba(130,132,138,1);
+    margin-bottom: 16px;
   }
 }
