@@ -4,7 +4,7 @@
     %meta{ charset: "utf8" }
     %link{ rel: "stylesheet", href: "css/style.css" }
   %body
-    %div.offer-list
+    %div.offer-list.js-offer-list
       %script#js-offer-list{type: "text/x-handlebars-template"}
         {{#each this}}
           %div.offer{data-offer-index:"{{@index}}"}
@@ -17,7 +17,7 @@
                 %a.add{href:"#"}
                 %a.comment{href:"#"}
             %div.offer-image
-              %img{ src: "{{offerImg}}" }
+              %img{ src: "{{offerImg}}.png" }
             %div.offer-caption
               {{caption}}
             %div.offer-info
@@ -42,97 +42,87 @@
               %div.adds
                 {{adds.length}}
               %div.comments
-                {{comments.length}}
+                {{comments.length}} комментария
               %div.mentions
                 {{#if mentions}}
                   {{mentions.length}} отзыва
                 {{/if}}
             %div.offer-author
               %div.avatar
-                %img{ src: "{{author.avatar}}" }
+                %img{ src: "{{author.avatar}}.png" }
               %div.ticket
                 %span.name {{author.fio}}
                 %br/
                 %span.label предлагает
             %div.offer-feedback-details
-              {{#each this.mentions}}
+              {{#each this.comments}}
                 %div.container{data-user-id:"{{author.id}}"}
                   %div.avatar
-                    %img{ src: "{{author.avatar}}"}
+                    %img{ src: "{{author.avatar}}.png"}
                   %div.text
                     {{text}}
               {{/each}}
         {{/each}}
     %div.blind.hidden.js-blind
-      %div.popup
-        %div.close-link
-          Закрыть X
-        %div.header
-          %div.img
-            %img{src: "img/jeff-big.png"}
-          %div.author
-            %div.fio
-                Иван Стрельцов
-            %br/
-            %div.label
-                нуждается в этом
-          %div.button.violet
-              Добавить в друзья
-        %div.container
-          %div.info
-            %h1
-              Отпуск с семьей на море
-            %h3
-              Отдых и путешествия
-            %img{src:"img/vacation-offer-big.png"}
-            %div.description
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed feugiat ut augue quis convallis. Vestibulum fermentum laoreet tellus sit amet aliquet. Etiam ante lectus, mollis porttitor arcu ac, ultricies condimentum ex. Quisque sit amet velit sed turpis imperdiet convallis in id tortor. Sed semper pharetra sem, non dictum erat bibendum vitae. Suspendisse tristique mauris quis magna efficitur consequat.
-          %div.actions
-            %div.button.gray
-              Добавить к себе
-            %div.button.gray
-              Мне нравится
-            %div.button.gray
-              Комментировать
-        %div.feedbacks
-          %div.fb-item
+      %div.popup.js-popup
+        %script#js-popup{type: "text/x-handlebars-template"}
+          %div.close-link
+            Закрыть X
+          %div.header
+            %div.img
+              %img{src: "{{data.author.avatar}}-big.png"}
+            %div.author
+              %div.fio
+                  {{data.author.fio}}
+              %br/
+              %div.label
+                  нуждается в этом
+            %div.button.violet
+                Добавить в друзья
+          %div.container
+            %div.info
+              %h1
+                {{data.caption}}
+              %h3
+                {{data.category}}
+              %img{src:"{{data.offerImg}}.png"}
+              %div.description
+                {{data.description}}
+            %div.actions
+              %div.button.gray
+                Добавить к себе
+              %div.button.gray
+                Мне нравится
+              %div.button.gray
+                Комментировать
+          %div.feedbacks
+            {{#each data.mentions}}
+              %div.fb-item
+                %div.fb-image
+                  %img{src: "{{author.avatar}}-big.png"}
+                %div.fb-text
+                  %span
+                    {{text}}
+            {{/each}}
+          %div.add-feedback
             %div.fb-image
-              %img{src: "img/ksenya-big.png"}
+              %img{src:"{{currentUser.avatar}}.png"}
             %div.fb-text
-              %span
-                Отличное место! Мы там не раз отдыхали с детьми! Детишкам там отдыхать самое то!
-          %div.fb-item
-            %div.fb-image
-              %img{src: "img/nastya-big.png"}
-            %div.fb-text
-              %span
-                Прошедшим летом отдыхал в Черногории в Улцине в отеле zlataoliva отель расположен в очень живописном месте в соснах. В номере у нас было две комнаты одна большая с двухспальной кроватью, в другой комнате жили дети, в номере также у нас была кухня но мы ей даже не пользовались так как при отеле есть семейное кафе с очень вкусной кухней. Отдых на пляжах возможен как на галечных так и на песчаных. Погода у нас была хорошая и теплое лазурное море. для любителей по изучать местные достопримечательности хозяева отеля проводят экскурсии по местным храмам, пещерам, а также могут орг...
-        %div.add-feedback
-          %div.fb-image
-            %img{src:"img/eugen-big.png"}
-          %div.fb-text
-            %input{defaul-text:"Комментировать"}
-        %div.counter-block
-          %div 
-            8 добавили к себе
-            %br/
-            %img{src:"img/ksenya-big.png"}
-            %img{src:"img/jeff-big.png"}
-            %img{src:"img/rayan-big.png"}
-            %img{src:"img/hanks-big.png"}
-            %img{src:"img/labeof-big.png"}
-            %img{src:"img/nastya-big.png"}
-            %img{src:"img/vasily-big.png"}
-            %img{src:"img/jeff-big.png"}
-        %div.counter-block
-          %div 
-            5 нравится
-            %br/
-            %img{src:"img/ksenya-big.png"}
-            %img{src:"img/jeff-big.png"}
-            %img{src:"img/rayan-big.png"}
-            %img{src:"img/hanks-big.png"}
-            %img{src:"img/labeof-big.png"}
+              %input{default-text:"Комментировать"}
+          %div.counter-block
+            %div 
+              {{data.adds.length}} добавили к себе
+              %br/
+              {{#each data.adds}}
+              %img{src:"{{avatar}}-big.png"}
+              {{/each}}
+          %div.counter-block
+            %div 
+              {{data.likes.length}} нравится
+              %br/
+              {{#each data.likes}}
+              %img{src:"{{avatar}}-big.png"}
+              {{/each}}
 
     //ToDo: Написать шаблон попапа для любого выбранного элемента
     %script{src:"js/app.js"}
