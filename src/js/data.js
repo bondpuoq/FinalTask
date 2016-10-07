@@ -57,6 +57,9 @@ function demoData() {
   }, {
     author : _users[6],
     text : "Конечно фигня, а нищебродом быть круто, да?"
+  }, {
+    author : _users[2],
+    text : "Крутое место"
   }];
 
   _mentions = [{
@@ -103,6 +106,7 @@ function demoData() {
                   "more.radovici@gmail.com, maki-apartaments. com Zorica I Dragan Sestovic .",
     author : _users[1],
     mentions : [_mentions[0], _mentions[1], _mentions[2]],
+    comments: [_comments[6]],
     adds: [_users[0], _users[3], _users[4], _users[5]],
     likes: [_users[0], _users[2], _users[5]]
   }, {
@@ -119,9 +123,6 @@ function demoData() {
     category : "Недвижимость",
     location : "Москва",
     comments : [_comments[0], _comments[1], _comments[2]],
-    feedbacks : {},
-    adds : {},
-    likes : {},
     author : _users[0]
   }, {
     offerImg : "img/watch",
@@ -130,6 +131,7 @@ function demoData() {
     dateBegin : "12.01.13",
     dateEnd : "14.06.13",
     location : "Екатеринбург",
+    likes: [_users[1], _users[5]],
     author : _users[6]
   }, {
     offerImg : "img/ipad",
@@ -138,7 +140,8 @@ function demoData() {
     dateBegin : "12.06.12",
     dateEnd : "14.06.12",
     location : "Екатеринбург",
-    author : _users[2]
+    author : _users[2],
+    comments : [_comments[4], _comments[5]]
   }, {
     offerImg : "img/orange-room",
     caption : "Новая 3-х комнатная квартира",

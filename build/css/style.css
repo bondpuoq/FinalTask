@@ -62,27 +62,29 @@ body {
       background: -webkit-gradient(linear, left top, left bottom, from(white), color-stop(40%, white), to(rgba(255, 255, 255, 0)));
       background: -webkit-linear-gradient(top, white 0%, white 40%, rgba(255, 255, 255, 0) 100%);
       background: linear-gradient(to bottom, white 0%, white 40%, rgba(255, 255, 255, 0) 100%); }
-      .offer-list .actions .action-icons a {
+      .offer-list .actions .action-icons div {
         width: 50px;
         height: 50px;
         display: inline-block;
         margin: 2px; }
-      .offer-list .actions .action-icons > a.feedback {
+      .offer-list .actions .action-icons > .to-feedback {
         background: url("../img/feedback.png") 50% 50% no-repeat; }
-        .offer-list .actions .action-icons > a.feedback:hover {
+        .offer-list .actions .action-icons > .to-feedback:hover {
           background: url("../img/feedback-hover.png") 50% 50% no-repeat; }
-      .offer-list .actions .action-icons > a.add {
+      .offer-list .actions .action-icons > .to-add {
         background: url("../img/add.png") 50% 50% no-repeat; }
-        .offer-list .actions .action-icons > a.add:hover {
+        .offer-list .actions .action-icons > .to-add:hover {
           background: url("../img/add-hover.png") 50% 50% no-repeat; }
-      .offer-list .actions .action-icons > a.comment {
+      .offer-list .actions .action-icons > .to-comment {
         background: url("../img/comment.png") 50% 50% no-repeat; }
-        .offer-list .actions .action-icons > a.comment:hover {
+        .offer-list .actions .action-icons > .to-comment:hover {
           background: url("../img/comment-hover.png") 50% 50% no-repeat; }
-      .offer-list .actions .action-icons > a.like {
+      .offer-list .actions .action-icons > .to-like {
         background: url("../img/like.png") 50% 50% no-repeat; }
-        .offer-list .actions .action-icons > a.like:hover {
+        .offer-list .actions .action-icons > .to-like:hover {
           background: url("../img/like-hover.png") 50% 50% no-repeat; }
+      .offer-list .actions .action-icons > .liked {
+        background: url("../img/like-hover.png") 50% 50% no-repeat; }
   .offer-list .offer-image {
     min-height: 110px;
     width: 220px;
@@ -111,15 +113,8 @@ body {
     margin-bottom: 10px;
     margin: 19% 0 8px 16px; }
     .offer-list .offer-feedback div {
-      display: inline-block; }
-    .offer-list .offer-feedback > .likes {
-      margin-right: 3px; }
-    .offer-list .offer-feedback > .comments {
-      margin-left: 6px; }
-    .offer-list .offer-feedback > .mentions {
-      margin-right: 0; }
-    .offer-list .offer-feedback > .adds {
-      margin-left: 9px; }
+      display: inline-block;
+      margin-right: 8px; }
   .offer-list .offer-author {
     background-color: #f1f1f1;
     padding-bottom: 10px; }
@@ -154,6 +149,9 @@ body {
         margin-top: 10px;
         margin-bottom: 10px;
         vertical-align: top; }
+        .offer-list .offer-feedback-details > .container .text input {
+          width: 100%;
+          vertical-align: top; }
       .offer-list .offer-feedback-details > .container:nth-child(odd) {
         font-weight: bolder; }
 
@@ -194,8 +192,6 @@ body {
     display: table;
     height: auto;
     clear: both; }
-  .blind.hidden {
-    display: none; }
   .blind .popup {
     margin-top: 50px;
     top: 50px;
@@ -303,9 +299,10 @@ body {
       display: block;
       width: 76%;
       color: #6d6d6d; }
-      .blind .popup .fb-text input {
+      .blind .popup .fb-text textarea {
         height: 54px;
-        width: 100%; }
+        width: 100%;
+        vertical-align: top; }
     .blind .popup .counter-block {
       font-size: 16px;
       font-family: "PFAgoraSansPro-regular";
@@ -319,8 +316,7 @@ body {
   border-radius: 3px;
   padding: 6px 13px;
   display: inline-block;
-  vertical-align: middle;
-  width: 123px; }
+  vertical-align: middle; }
   .button:hover {
     cursor: pointer; }
   .button.violet {
@@ -328,11 +324,16 @@ body {
     background: -webkit-linear-gradient(top, #b652a7 0%, #b652a7 50%, #a2218d 50%);
     background: linear-gradient(to bottom, #b652a7 0%, #b652a7 50%, #a2218d 50%);
     color: white;
-    margin-left: 50px; }
+    margin-left: 50px;
+    width: 130px; }
   .button.gray {
     border: 1px solid #cbcbcb;
     background: -webkit-gradient(linear, left top, left bottom, from(#d4d4d4), color-stop(50%, #f2f2f2));
     background: -webkit-linear-gradient(top, #d4d4d4 0%, #f2f2f2 50%);
     background: linear-gradient(to bottom, #d4d4d4 0%, #f2f2f2 50%);
     color: #82848a;
-    margin-bottom: 16px; }
+    margin-bottom: 16px;
+    width: 123px; }
+
+.hidden {
+  display: none; }

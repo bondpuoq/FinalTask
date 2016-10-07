@@ -1,32 +1,28 @@
 'use strict';
-(function (){
-  var offerList, _hbOfferTemplate, _demo, _demoUsers, _demoComments, _currentUser;
+(function () {
+  var offerList, offerCard, _hbOfferTemplate, _demo, _demoUsers, _demoComments, _currentUser;
 
   $(document).ready(createOfferList);
-
   function createOfferList() {
+    var jOfferList, offerListCache;
     _demo = new demoData();
-    _demoUsers = _demo.users;
-    _demoComments = _demo.comments;
-    _demoOffers = _demo.offers;
+    offerListCache = sessionStorage.getItem('offerList');
+    if (offerListCache && !offerList) {
+      offers = JSON.parse(offerListCache);
+    }
+    else {
+      offers = _demo.offers;
+    }
+    console.log(offers);
     _currentUser = _demo.currentUser;
-    _hbOfferTemplate = $('#js-offer-list');
-    _target = $('.js-offer-list')[0];
-    offerList = new OfferList();
-    offerList.init(_demoOffers, _hbOfferTemplate);
-    offerList.render(_target);
-    console.log(this);
-  }
-
-  _offerClick = function offerClick() {
-    var currentIndex;
-    currentIndex = $(this).data('offer-index');
-    offerList.initPopup($('#js-popup')); 
-    offerList.renderPopup(currentIndex, $('.js-popup'), _currentUser);
-    $('.js-blind').toggle();
-  }
-
-  _togglePopup = function togglePopup() {
-    $('.blind').toggle();
+    _hbOfferTemplate = $('#js-offer-list-template');
+    _target = $('#js-offer-list-placeholder');
+    if (!offerList) {
+      offerList = new OfferList();
+      offerList.init(offers, _hbOfferTemplate, _currentUser);
+    }
+    offerList.render(_target, _currentUser);
+    
+    sessionStorage.setItem('offerList', JSON.stringify(offerList.offers));
   }
 })();

@@ -4,18 +4,18 @@
     %meta{ charset: "utf8" }
     %link{ rel: "stylesheet", href: "css/style.css" }
   %body
-    %div.offer-list.js-offer-list
-      %script#js-offer-list{type: "text/x-handlebars-template"}
-        {{#each this}}
+    %div#js-offer-list-placeholder.offer-list
+      %script#js-offer-list-template{type: "text/x-handlebars-template"}
+        {{#each offers}}
           %div.offer{data-offer-index:"{{@index}}"}
             %div.actions
-              %div.more-info
+              %div.more-info.js-more-info{data-offer-index:"{{@index}}"}
                 Ознакомиться с предложением
               %div.action-icons
-                %a.feedback{href:"#"}
-                %a.like{href:"#"}
-                %a.add{href:"#"}
-                %a.comment{href:"#"}
+                %div.to-feedback.js-feedback-link
+                %div.to-like.js-like-link
+                %div.to-add.js-add-link
+                %div.to-comment.js-comment-link
             %div.offer-image
               %img{ src: "{{offerImg}}.png" }
             %div.offer-caption
@@ -37,16 +37,27 @@
               %div.location
                 {{location}}
             %div.offer-feedback
+              
+              {{#if likes}}
               %div.likes
-                {{likes.length}}
+                {{likes.length}} нравится
+              {{/if}}
+            
+              {{#if adds}}
               %div.adds
-                {{adds.length}}
+                {{adds.length}} добавили
+              {{/if}}
+              %br/
+              
+              {{#if comments}}
               %div.comments
                 {{comments.length}} комментария
+              {{/if}}
+            
+              {{#if mentions}}
               %div.mentions
-                {{#if mentions}}
-                  {{mentions.length}} отзыва
-                {{/if}}
+                {{mentions.length}} отзыва
+              {{/if}}
             %div.offer-author
               %div.avatar
                 %img{ src: "{{author.avatar}}.png" }
@@ -55,17 +66,22 @@
                 %br/
                 %span.label предлагает
             %div.offer-feedback-details
-              {{#each this.comments}}
+              {{#each comments}}
                 %div.container{data-user-id:"{{author.id}}"}
                   %div.avatar
-                    %img{ src: "{{author.avatar}}.png"}
+                    %img{src: "{{author.avatar}}.png"}
                   %div.text
                     {{text}}
               {{/each}}
+                %div.container.js-comment.hidden
+                  %div.avatar
+                    %img{src:"{{../currentUser.avatar}}.png"}
+                  %div.text
+                    %input.comment-input{placeholder:"Комментировать"}
         {{/each}}
     %div.blind.hidden.js-blind
-      %div.popup.js-popup
-        %script#js-popup{type: "text/x-handlebars-template"}
+      %div#js-popup-placeholder.popup
+        %script#js-popup-template{type: "text/x-handlebars-template"}
           %div.close-link
             Закрыть X
           %div.header
@@ -73,12 +89,12 @@
               %img{src: "{{data.author.avatar}}-big.png"}
             %div.author
               %div.fio
-                  {{data.author.fio}}
+                {{data.author.fio}}
               %br/
               %div.label
-                  нуждается в этом
+                нуждается в этом
             %div.button.violet
-                Добавить в друзья
+              удалить предложение
           %div.container
             %div.info
               %h1
@@ -108,7 +124,7 @@
             %div.fb-image
               %img{src:"{{currentUser.avatar}}.png"}
             %div.fb-text
-              %input{default-text:"Комментировать"}
+              %textarea{placeholder:"Оставить отзыв"}
           %div.counter-block
             %div 
               {{data.adds.length}} добавили к себе

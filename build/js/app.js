@@ -14668,35 +14668,31 @@ return /******/ (function(modules) { // webpackBootstrap
 });
 ;
 'use strict';
-(function (){
-  var offerList, _hbOfferTemplate, _demo, _demoUsers, _demoComments, _currentUser;
+(function () {
+  var offerList, offerCard, _hbOfferTemplate, _demo, _demoUsers, _demoComments, _currentUser;
 
   $(document).ready(createOfferList);
-
   function createOfferList() {
+    var jOfferList, offerListCache;
     _demo = new demoData();
-    _demoUsers = _demo.users;
-    _demoComments = _demo.comments;
-    _demoOffers = _demo.offers;
+    offerListCache = sessionStorage.getItem('offerList');
+    if (offerListCache && !offerList) {
+      offers = JSON.parse(offerListCache);
+    }
+    else {
+      offers = _demo.offers;
+    }
+    console.log(offers);
     _currentUser = _demo.currentUser;
-    _hbOfferTemplate = $('#js-offer-list');
-    _target = $('.js-offer-list')[0];
-    offerList = new OfferList();
-    offerList.init(_demoOffers, _hbOfferTemplate);
-    offerList.render(_target);
-    console.log(this);
-  }
-
-  _offerClick = function offerClick() {
-    var currentIndex;
-    currentIndex = $(this).data('offer-index');
-    offerList.initPopup($('#js-popup')); 
-    offerList.renderPopup(currentIndex, $('.js-popup'), _currentUser);
-    $('.js-blind').toggle();
-  }
-
-  _togglePopup = function togglePopup() {
-    $('.blind').toggle();
+    _hbOfferTemplate = $('#js-offer-list-template');
+    _target = $('#js-offer-list-placeholder');
+    if (!offerList) {
+      offerList = new OfferList();
+      offerList.init(offers, _hbOfferTemplate, _currentUser);
+    }
+    offerList.render(_target, _currentUser);
+    
+    sessionStorage.setItem('offerList', JSON.stringify(offerList.offers));
   }
 })();
 function demoData() {
@@ -14758,6 +14754,9 @@ function demoData() {
   }, {
     author : _users[6],
     text : "Конечно фигня, а нищебродом быть круто, да?"
+  }, {
+    author : _users[2],
+    text : "Крутое место"
   }];
 
   _mentions = [{
@@ -14804,6 +14803,7 @@ function demoData() {
                   "more.radovici@gmail.com, maki-apartaments. com Zorica I Dragan Sestovic .",
     author : _users[1],
     mentions : [_mentions[0], _mentions[1], _mentions[2]],
+    comments: [_comments[6]],
     adds: [_users[0], _users[3], _users[4], _users[5]],
     likes: [_users[0], _users[2], _users[5]]
   }, {
@@ -14820,9 +14820,6 @@ function demoData() {
     category : "Недвижимость",
     location : "Москва",
     comments : [_comments[0], _comments[1], _comments[2]],
-    feedbacks : {},
-    adds : {},
-    likes : {},
     author : _users[0]
   }, {
     offerImg : "img/watch",
@@ -14831,6 +14828,7 @@ function demoData() {
     dateBegin : "12.01.13",
     dateEnd : "14.06.13",
     location : "Екатеринбург",
+    likes: [_users[1], _users[5]],
     author : _users[6]
   }, {
     offerImg : "img/ipad",
@@ -14839,7 +14837,8 @@ function demoData() {
     dateBegin : "12.06.12",
     dateEnd : "14.06.12",
     location : "Екатеринбург",
-    author : _users[2]
+    author : _users[2],
+    comments : [_comments[4], _comments[5]]
   }, {
     offerImg : "img/orange-room",
     caption : "Новая 3-х комнатная квартира",
@@ -14877,49 +14876,120 @@ function demoData() {
   }
   return self;
 }
-function Feedback() {
-  var self;
+function OfferCard() {
+  var self, _cardHbTemplate, _cardHbObject;
   self = this;
   self = {
-    init : _init
+    init : _init,
+    render : _render
   }
 
-  function _init(user, text) {
-    self.author = user;
-    self.text = text;
+    // ToDo: засовываем в инит шаблон Handlebars и данные выбранного оффера
+  function _init(hbTemplate) {
+    _cardHbTemplate = _cardHbTemplate || hbTemplate.html();
+    _cardHbObject = Handlebars.compile(_cardHbTemplate);
+    $('#js-popup-placeholder').on('click', '.close-link', _togglePopup);
+  }
+
+  // ToDo: здесь мы сделаем чтобы он у нас заполнял выбранный попап
+  function _render(offer, destinationObj, currentUser) {
+    $(destinationObj).html(_cardHbObject( { data: offer, currentUser: currentUser }));
+  }
+
+  function _togglePopup() {
+    $('.blind').toggle();
   }
   return self;
 }
 function OfferList() {
-  var self, _offerHbTemplate, _popupHbTemplate, _offerHbObject, _popupHbObject;
+  var self, _offerHbTemplate, _offerHbObject, _currentUser, _destinationObj, offerCard;
   self = this;
   self = {
     init: _init,
     render: _render,
-    initPopup: _initPopup,
-    renderPopup: _renderPopup,
-    data : []
+    offerClick : _offerClick,
+    openComment : _openComment,
+    saveComment : _saveComment,
+    likeIt : _likeIt,
+    offers : []
   }
-  function _init(offerData, hbTemplate) {
-    self.data = offerData;
+  function _init(offerData, hbTemplate, currentUser) {
+    self.offers = offerData;
+    _currentUser = currentUser;
     _offerHbTemplate = _offerHbTemplate || hbTemplate.html();
     _offerHbObject = Handlebars.compile(_offerHbTemplate);
-    $('body').on('click', '.offer', _offerClick);
-    $('.popup').on('click', '.close-link', _togglePopup);
+    $('#js-offer-list-placeholder').on('click', '.js-more-info', self.offerClick);
+    $('#js-offer-list-placeholder').on('click', '.js-comment-link', self.openComment);
+    $('#js-offer-list-placeholder').on('click', '.js-like-link', self.likeIt);
+    $('#js-offer-list-placeholder').on('keypress', '.comment-input', self.saveComment);
   }
-  function _render(destinationObj) {
-    $(destinationObj).html(_offerHbObject(self.data));
-  }
-
-  // ToDo: засовываем в инит шаблон Handlebars и данные выбранного оффера
-  function _initPopup(hbTemplate) {
-    _popupHbTemplate = _popupHbTemplate || hbTemplate.html();
-    _popupHbObject = Handlebars.compile(_popupHbTemplate);
+  function _render(destinationObj, currentUserParam) {
+    _destinationObj = destinationObj || _destinationObj;
+    _currentUser = currentUserParam || _currentUser;
+    $(_destinationObj).html(_offerHbObject({offers: self.offers, currentUser: _currentUser}));
   }
 
-  // ToDo: здесь мы сделаем чтобы он у нас заполнял выбранный попап
-  function _renderPopup(offerIndex, destinationObj, currentUser) {
-    $(destinationObj).html(_popupHbObject( { data: self.data[offerIndex], currentUser: currentUser }));
+  function _openComment() {
+    $(this).parents().closest('.offer').find('.js-comment').toggle();
+  }
+
+  function _saveComment(e) {  
+    if (e.keyCode == 13)
+    {
+      var offerIndex, currentInput, currentOffer;
+      offerIndex = $(this).parents().closest('.offer').data('offer-index');
+      currentOffer = self.offers[offerIndex];
+      currentInput = e.target;
+      if (!currentOffer.comments) {
+        currentOffer.comments = [];
+      }
+      currentOffer.comments.splice(currentOffer.comments.length,0,{ author: _currentUser, text: $(currentInput).val() });
+      $(currentInput).val('');
+      $(currentInput).blur();
+      _save();
+      _render();
+    }
+  }
+
+  function _offerClick() {
+    var currentIndex, $cardTemplate, $cardPlaceHolder;
+    currentIndex = $(this).data('offer-index');
+    $cardTemplate = $('#js-popup-template');
+    $cardPlaceHolder =  $('#js-popup-placeholder');
+    if (!offerCard) {
+      offerCard = new OfferCard();
+      offerCard.init($cardTemplate); 
+    }
+    offerCard.render(self.offers[currentIndex],  $cardPlaceHolder, _currentUser);
+    $('.js-blind').toggle();
+  }
+
+  function _likeIt() {
+    var offerIndex, currentOffer;
+    offerIndex = $(this).parents().closest('.offer').data('offer-index');
+    currentOffer = self.offers[offerIndex];
+    if (_isAlreadyLiked(_currentUser, currentOffer)) {
+      return;
+    }
+    if (!currentOffer.likes) {
+      currentOffer.likes = [];
+    }
+    currentOffer.likes.splice(currentOffer.likes.length,0, _currentUser);
+    _save();
+    _render();
+  }
+
+  function _isAlreadyLiked(user, currentOffer)
+  {
+    if (!currentOffer.likes || $.inArray(user, currentOffer.likes) == -1) {
+      return false;
+    }
+    return true;
+  }
+
+  function _save(){
+    sessionStorage.removeItem('offerList');
+    sessionStorage.setItem('offerList', JSON.stringify(self.offers));
   }
   return self;
 }
