@@ -18,7 +18,7 @@ function OfferCard() {
 
   // ToDo: здесь мы сделаем чтобы он у нас заполнял выбранный попап
   function _render(offer, destinationObj, currentUser) {
-    _offer = _offer || offer;
+    _offer = offer;
     _currentUser = currentUser;
     _destinationObject = _destinationObject || destinationObj;
     $(_destinationObject).html(_cardHbObject( { data: offer, currentUser: currentUser }));
