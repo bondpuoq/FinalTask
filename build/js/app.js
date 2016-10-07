@@ -15003,6 +15003,7 @@ function OfferList() {
       offerIndex = $(this).parents().closest('.offer').data('offer-index');
       commentIndex = $(this).data('comment-index');
       self.offers[offerIndex].comments[commentIndex].deleted = true;
+      self.offers[offerIndex].comments.length--;
       _save();
       _render();
   }
