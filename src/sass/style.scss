@@ -179,13 +179,13 @@ body {
       border-top: rgba(215,215,215,1) solid 1px;
       font-size: 11px;
       position: relative;
-      &:hover:before {
+      &:hover .delete-comment{
         position: absolute;
-        content: 'x';
         top: 5px;
         right: 5px;
-        font-weight: bold;
         font-size: 14px;
+        display: block;
+        font-weight: normal;
       }
       & .avatar {
         display: inline-block; 

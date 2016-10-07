@@ -14967,6 +14967,7 @@ function OfferList() {
     $('#js-offer-list-placeholder').on('click', '.js-comments', self.openComment);
     $('#js-offer-list-placeholder').on('click', '.js-like-link', self.likeIt);
     $('#js-offer-list-placeholder').on('click', '.js-add-link', self.addIt);
+    $('#js-offer-list-placeholder').on('click', '.js-delete-comment', self.deleteComment);
     $('#js-offer-list-placeholder').on('keypress', '.comment-input', self.createComment);
   }
   function _render(destinationObj, currentUserParam) {
@@ -15000,6 +15001,10 @@ function OfferList() {
   function _deleteComment() {
     var offerIndex, currentInput, currentOffer;
       offerIndex = $(this).parents().closest('.offer').data('offer-index');
+      commentIndex = $(this).data('comment-index');
+      self.offers[offerIndex].comments[commentIndex].deleted = true;
+      _save();
+      _render();
   }
 
   function _offerClick() {

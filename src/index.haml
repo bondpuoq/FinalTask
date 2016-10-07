@@ -75,11 +75,16 @@
                 %span.label предлагает
             %div.offer-feedback-details
               {{#each comments}}
+                {{#if deleted}}
+                {{else}}
                 %div.container{data-user-id:"{{author.id}}"}
+                  %div.delete-comment.hidden.js-delete-comment{data-comment-index:"{{@index}}"}
+                    [х]
                   %div.avatar
                     %img{src: "{{author.avatar}}.png"}
                   %div.text
                     {{text}}
+                {{/if}}
               {{/each}}
                 %div.container.js-comment.hidden
                   %div.avatar
