@@ -13,8 +13,16 @@
                 Ознакомиться с предложением
               %div.action-icons
                 %div.to-feedback.js-feedback-link
+                {{#if likedByCurrentUser}}
+                %div.liked.js-like-link
+                {{else}}
                 %div.to-like.js-like-link
+                {{/if}}
+                {{#if addedByCurrentUser}}
+                %div.added.js-add-link
+                {{else}}
                 %div.to-add.js-add-link
+                {{/if}}
                 %div.to-comment.js-comment-link
             %div.offer-image
               %img{ src: "{{offerImg}}.png" }
@@ -50,7 +58,7 @@
               %br/
               
               {{#if comments}}
-              %div.comments
+              %div.comments.js-comments
                 {{comments.length}} комментария
               {{/if}}
             
@@ -76,8 +84,8 @@
                 %div.container.js-comment.hidden
                   %div.avatar
                     %img{src:"{{../currentUser.avatar}}.png"}
-                  %div.text
-                    %input.comment-input{placeholder:"Комментировать"}
+                  %div.textinput
+                    %textarea.comment-input{placeholder:"Комментировать"}
         {{/each}}
     %div.blind.hidden.js-blind
       %div#js-popup-placeholder.popup
@@ -124,7 +132,7 @@
             %div.fb-image
               %img{src:"{{currentUser.avatar}}.png"}
             %div.fb-text
-              %textarea{placeholder:"Оставить отзыв"}
+              %textarea.js-mention-text{placeholder:"Оставить отзыв"}
           %div.counter-block
             %div 
               {{data.adds.length}} добавили к себе

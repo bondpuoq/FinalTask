@@ -7,13 +7,13 @@
     var jOfferList, offerListCache;
     _demo = new demoData();
     offerListCache = sessionStorage.getItem('offerList');
+    console.log(offerListCache);
     if (offerListCache && !offerList) {
       offers = JSON.parse(offerListCache);
     }
     else {
       offers = _demo.offers;
     }
-    console.log(offers);
     _currentUser = _demo.currentUser;
     _hbOfferTemplate = $('#js-offer-list-template');
     _target = $('#js-offer-list-placeholder');

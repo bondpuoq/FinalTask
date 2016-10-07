@@ -6,8 +6,10 @@ function OfferList() {
     render: _render,
     offerClick : _offerClick,
     openComment : _openComment,
-    saveComment : _saveComment,
+    createComment : _createComment,
+    deleteComment : _deleteComment,
     likeIt : _likeIt,
+    addIt : _addIt,
     offers : []
   }
   function _init(offerData, hbTemplate, currentUser) {
@@ -17,20 +19,22 @@ function OfferList() {
     _offerHbObject = Handlebars.compile(_offerHbTemplate);
     $('#js-offer-list-placeholder').on('click', '.js-more-info', self.offerClick);
     $('#js-offer-list-placeholder').on('click', '.js-comment-link', self.openComment);
+    $('#js-offer-list-placeholder').on('click', '.js-comments', self.openComment);
     $('#js-offer-list-placeholder').on('click', '.js-like-link', self.likeIt);
-    $('#js-offer-list-placeholder').on('keypress', '.comment-input', self.saveComment);
+    $('#js-offer-list-placeholder').on('click', '.js-add-link', self.addIt);
+    $('#js-offer-list-placeholder').on('keypress', '.comment-input', self.createComment);
   }
   function _render(destinationObj, currentUserParam) {
     _destinationObj = destinationObj || _destinationObj;
     _currentUser = currentUserParam || _currentUser;
-    $(_destinationObj).html(_offerHbObject({offers: self.offers, currentUser: _currentUser}));
+    $(_destinationObj).html(_offerHbObject({offers: self.offers, currentUser: _currentUser }));
   }
 
   function _openComment() {
     $(this).parents().closest('.offer').find('.js-comment').toggle();
   }
 
-  function _saveComment(e) {  
+  function _createComment(e) {  
     if (e.keyCode == 13)
     {
       var offerIndex, currentInput, currentOffer;
@@ -48,6 +52,11 @@ function OfferList() {
     }
   }
 
+  function _deleteComment() {
+    var offerIndex, currentInput, currentOffer;
+      offerIndex = $(this).parents().closest('.offer').data('offer-index');
+  }
+
   function _offerClick() {
     var currentIndex, $cardTemplate, $cardPlaceHolder;
     currentIndex = $(this).data('offer-index');
@@ -55,7 +64,7 @@ function OfferList() {
     $cardPlaceHolder =  $('#js-popup-placeholder');
     if (!offerCard) {
       offerCard = new OfferCard();
-      offerCard.init($cardTemplate); 
+      offerCard.init($cardTemplate, self); 
     }
     offerCard.render(self.offers[currentIndex],  $cardPlaceHolder, _currentUser);
     $('.js-blind').toggle();
@@ -72,6 +81,23 @@ function OfferList() {
       currentOffer.likes = [];
     }
     currentOffer.likes.splice(currentOffer.likes.length,0, _currentUser);
+    currentOffer.likedByCurrentUser = true;
+    _save();
+    _render();
+  }
+
+  function _addIt() {
+    var offerIndex, currentOffer;
+    offerIndex = $(this).parents().closest('.offer').data('offer-index');
+    currentOffer = self.offers[offerIndex];
+    if (_isAlreadyAdded(_currentUser, currentOffer)) {
+      return;
+    }
+    if (!currentOffer.adds) {
+      currentOffer.adds = [];
+    }
+    currentOffer.adds.splice(currentOffer.adds.length,0, _currentUser);
+    currentOffer.addedByCurrentUser = true;
     _save();
     _render();
   }
@@ -79,6 +105,14 @@ function OfferList() {
   function _isAlreadyLiked(user, currentOffer)
   {
     if (!currentOffer.likes || $.inArray(user, currentOffer.likes) == -1) {
+      return false;
+    }
+    return true;
+  }
+
+  function _isAlreadyAdded(user, currentOffer)
+  {
+    if (!currentOffer.adds || $.inArray(user, currentOffer.adds) == -1) {
       return false;
     }
     return true;

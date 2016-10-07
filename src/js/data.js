@@ -86,6 +86,7 @@ function demoData() {
   ];
 
   _offers= [{ 
+    index: 0,
     offerImg : "img/vacation-offer",
     caption : "Отпуск семьей на море",
     category : "Путешествия",
@@ -110,6 +111,7 @@ function demoData() {
     adds: [_users[0], _users[3], _users[4], _users[5]],
     likes: [_users[0], _users[2], _users[5]]
   }, {
+    index: 1,
     offerImg : "img/hands",
     caption : "Новый сайт-портфолио",
     category : "Детские игрушки",
@@ -118,6 +120,7 @@ function demoData() {
     location : "Екатеринбург",
     author : _users[7]
   }, {
+    index: 2,
     offerImg : "img/velo-dog",
     caption : "Оформление интерьера",
     category : "Недвижимость",
@@ -125,6 +128,7 @@ function demoData() {
     comments : [_comments[0], _comments[1], _comments[2]],
     author : _users[0]
   }, {
+    index: 3,
     offerImg : "img/watch",
     caption : "Крутые часы Bell&rose",
     category : "Детские игрушки",
@@ -134,6 +138,7 @@ function demoData() {
     likes: [_users[1], _users[5]],
     author : _users[6]
   }, {
+    index: 4,
     offerImg : "img/ipad",
     caption : "iPad 4th generation",
     category : "Путешествия",
@@ -143,6 +148,7 @@ function demoData() {
     author : _users[2],
     comments : [_comments[4], _comments[5]]
   }, {
+    index: 5,
     offerImg : "img/orange-room",
     caption : "Новая 3-х комнатная квартира",
     category : "Недвижимость",
@@ -150,12 +156,14 @@ function demoData() {
     comments : [_comments[3]],
     author : _users[5]
   }, {
+    index: 6,
     offerImg : "img/bag",
     caption : "Стильная кожаная сумка",
     category : "Одежда",
     location : "Екатеринбург",
     author : _users[7]
   }, {
+    index: 7,
     offerImg : "img/visiting-card",
     caption : "Новые корпоративные визитки",
     category : "Полиграфия",
@@ -164,6 +172,7 @@ function demoData() {
     location : "Екатеринбург",
     author : _users[4]
   }, {
+    index: 8,
     offerImg : "img/jeep",
     caption : "Стильная модная тачила",
     category : "Авто",

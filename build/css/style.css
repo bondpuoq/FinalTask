@@ -75,6 +75,8 @@ body {
         background: url("../img/add.png") 50% 50% no-repeat; }
         .offer-list .actions .action-icons > .to-add:hover {
           background: url("../img/add-hover.png") 50% 50% no-repeat; }
+      .offer-list .actions .action-icons > .added {
+        background: url("../img/add-hover.png") 50% 50% no-repeat; }
       .offer-list .actions .action-icons > .to-comment {
         background: url("../img/comment.png") 50% 50% no-repeat; }
         .offer-list .actions .action-icons > .to-comment:hover {
@@ -115,6 +117,8 @@ body {
     .offer-list .offer-feedback div {
       display: inline-block;
       margin-right: 8px; }
+      .offer-list .offer-feedback div:hover {
+        text-decoration: underline; }
   .offer-list .offer-author {
     background-color: #f1f1f1;
     padding-bottom: 10px; }
@@ -138,7 +142,15 @@ body {
     .offer-list .offer-feedback-details > .container {
       width: 100%;
       border-top: #d7d7d7 solid 1px;
-      font-size: 11px; }
+      font-size: 11px;
+      position: relative; }
+      .offer-list .offer-feedback-details > .container:hover:before {
+        position: absolute;
+        content: 'x';
+        top: 5px;
+        right: 5px;
+        font-weight: bold;
+        font-size: 14px; }
       .offer-list .offer-feedback-details > .container .avatar {
         display: inline-block;
         padding: 6px;
@@ -148,10 +160,16 @@ body {
         width: 70%;
         margin-top: 10px;
         margin-bottom: 10px;
-        vertical-align: top; }
-        .offer-list .offer-feedback-details > .container .text input {
-          width: 100%;
-          vertical-align: top; }
+        vertical-align: top;
+        max-height: 24px;
+        overflow: hidden;
+        word-wrap: break-word; }
+      .offer-list .offer-feedback-details > .container .textinput {
+        display: inline-block;
+        margin: 10px 0; }
+        .offer-list .offer-feedback-details > .container .textinput textarea {
+          width: 90%;
+          height: 30px; }
       .offer-list .offer-feedback-details > .container:nth-child(odd) {
         font-weight: bolder; }
 

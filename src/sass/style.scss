@@ -93,6 +93,9 @@ body {
           background: url('../img/add-hover.png') 50% 50% no-repeat;
         }
       }
+      & > .added {
+        background: url('../img/add-hover.png') 50% 50% no-repeat;
+      }
       & > .to-comment {
         background: url('../img/comment.png') 50% 50% no-repeat;
         &:hover {
@@ -142,6 +145,9 @@ body {
     div {
       display: inline-block;
       margin-right: 8px;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
   .offer-author {
@@ -172,6 +178,15 @@ body {
       width: 100%;
       border-top: rgba(215,215,215,1) solid 1px;
       font-size: 11px;
+      position: relative;
+      &:hover:before {
+        position: absolute;
+        content: 'x';
+        top: 5px;
+        right: 5px;
+        font-weight: bold;
+        font-size: 14px;
+      }
       & .avatar {
         display: inline-block; 
         padding: 6px;
@@ -183,9 +198,16 @@ body {
         margin-top: 10px;
         margin-bottom: 10px;
         vertical-align: top;
-        input {
-          width: 100%;
-          vertical-align: top;
+        max-height: 24px;
+        overflow: hidden;
+        word-wrap: break-word;
+      }
+      .textinput {
+        display: inline-block;
+        margin: 10px 0;
+        textarea {
+          width: 90%;
+          height: 30px;
         }
       }
       &:nth-child(odd) {
