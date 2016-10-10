@@ -8,6 +8,7 @@ function OfferList() {
     openComment : _openComment,
     createComment : _createComment,
     deleteComment : _deleteComment,
+    save: _save,
     likeIt : _likeIt,
     addIt : _addIt,
     offers : []
@@ -32,14 +33,14 @@ function OfferList() {
   }
 
   function _openComment() {
-    $(this).parents().closest('.offer').find('.js-comment').toggle();
+    $(this).parents().closest('.js-offer').find('.js-comment').toggle();
   }
 
   function _createComment(e) {  
     if (e.keyCode == 13)
     {
       var offerIndex, currentInput, currentOffer;
-      offerIndex = $(this).parents().closest('.offer').data('offer-index');
+      offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
       currentOffer = self.offers[offerIndex];
       currentInput = e.target;
       if (!currentOffer.comments) {
@@ -55,10 +56,13 @@ function OfferList() {
 
   function _deleteComment() {
     var offerIndex, currentInput, currentOffer;
-      offerIndex = $(this).parents().closest('.offer').data('offer-index');
+      offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
       commentIndex = $(this).data('comment-index');
+      console.log(commentIndex);
+      console.log(self.offers[offerIndex]);
       self.offers[offerIndex].comments[commentIndex].deleted = true;
-      self.offers[offerIndex].comments.length--;
+      self.offers[offerIndex].commentsCount--;
+      console.log(self.offers[offerIndex]);
       _save();
       _render();
   }
@@ -78,7 +82,7 @@ function OfferList() {
 
   function _likeIt() {
     var offerIndex, currentOffer;
-    offerIndex = $(this).parents().closest('.offer').data('offer-index');
+    offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
     currentOffer = self.offers[offerIndex];
     if (_isAlreadyLiked(_currentUser, currentOffer)) {
       return;
@@ -94,7 +98,7 @@ function OfferList() {
 
   function _addIt() {
     var offerIndex, currentOffer;
-    offerIndex = $(this).parents().closest('.offer').data('offer-index');
+    offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
     currentOffer = self.offers[offerIndex];
     if (_isAlreadyAdded(_currentUser, currentOffer)) {
       return;
@@ -110,7 +114,7 @@ function OfferList() {
 
   function _isAlreadyLiked(user, currentOffer)
   {
-    if (!currentOffer.likes || $.inArray(user, currentOffer.likes) == -1) {
+    if (!currentOffer.likes || !currentOffer.likedByCurrentUser) {
       return false;
     }
     return true;
@@ -118,7 +122,7 @@ function OfferList() {
 
   function _isAlreadyAdded(user, currentOffer)
   {
-    if (!currentOffer.adds || $.inArray(user, currentOffer.adds) == -1) {
+    if (!currentOffer.adds || !currentOffer.addedByCurrentUser) {
       return false;
     }
     return true;

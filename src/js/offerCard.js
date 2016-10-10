@@ -13,15 +13,22 @@ function OfferCard() {
     _cardHbTemplate = _cardHbTemplate || hbTemplate.html();
     _cardHbObject = Handlebars.compile(_cardHbTemplate);
     $('#js-popup-placeholder').on('click', '.close-link', _togglePopup);
+    $('#js-popup-placeholder').on('click', '.js-add', _addIt);
+    $('#js-popup-placeholder').on('click', '.js-like', _likeIt);
+    $('#js-popup-placeholder').on('click', '.js-mention', _toggleMention);
     $('#js-popup-placeholder').on('keypress', '.js-mention-text', _addMention);
   }
 
   // ToDo: здесь мы сделаем чтобы он у нас заполнял выбранный попап
   function _render(offer, destinationObj, currentUser) {
-    _offer = offer;
-    _currentUser = currentUser;
+    _offer = offer || _offer;
+    _currentUser = _currentUser || currentUser;
     _destinationObject = _destinationObject || destinationObj;
-    $(_destinationObject).html(_cardHbObject( { data: offer, currentUser: currentUser }));
+    $(_destinationObject).html(_cardHbObject( { data: _offer, currentUser: _currentUser }));
+  }
+
+  function _toggleMention() {
+    s = $(this).parents('#js-popup-placeholder').children('.js-add-mention').toggle();
   }
 
   function _addMention(e) { 
@@ -38,9 +45,8 @@ function OfferCard() {
       currentOffer.mentions.splice(currentOffer.mentions.length,0,{ author: _currentUser, text: $(currentInput).val() });
       $(currentInput).val('');
       $(currentInput).blur();
-      console.log(currentOffer);
       _offerList.offers[currentOffer.index] = currentOffer;
-      _save();
+      _offerList.save();
       _render(currentOffer, undefined, _currentUser);
       _offerList.render();
     }
@@ -50,9 +56,54 @@ function OfferCard() {
     $('.blind').toggle();
   }
 
-  function _save(){
-    sessionStorage.removeItem('offerList');
-    sessionStorage.setItem('offerList', JSON.stringify(_offerList.offers));
+  function _addIt() {
+    var offerIndex;
+    offerIndex = $.inArray(_offer, _offerList.offers);
+    if (_isAlreadyAdded()) {
+      return;
+    }
+    if (!_offer.adds) {
+      _offer.adds = [];
+    }
+    _offer.addedByCurrentUser = true;
+    _offer.adds.splice(_offer.adds.length, 0, _currentUser);
+    _offerList.offers.splice(offerIndex, 1, _offer);
+    _offerList.save();
+    _render();
+    _offerList.render();
+  }
+
+  function _likeIt() {
+    var offerIndex;
+    offerIndex = $.inArray(_offer, _offerList.offers);
+    if (_isAlreadyLiked()) {
+      return;
+    }
+    if (!_offer.likes) {
+      _offer.likes = [];
+    }
+    _offer.likedByCurrentUser = true;
+    _offer.likes.splice(_offer.likes.length, 0, _currentUser);
+    _offerList.offers.splice(offerIndex, 1, _offer);
+    _offerList.save();
+    _render();
+    _offerList.render();
+  }
+
+   function _isAlreadyLiked()
+  {
+    if (!_offer.likes || !_offer.likedByCurrentUser) {  
+      return false;
+    }
+    return true;
+  }
+
+  function _isAlreadyAdded()
+  {
+    if (!_offer.adds || !_offer.addedByCurrentUser) {
+      return false;
+    }
+    return true;
   }
   return self;
 }

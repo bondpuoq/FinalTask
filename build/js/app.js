@@ -14672,11 +14672,32 @@ return /******/ (function(modules) { // webpackBootstrap
   var offerList, offerCard, _hbOfferTemplate, _demo, _demoUsers, _demoComments, _currentUser;
 
   $(document).ready(createOfferList);
+
+  Handlebars.registerHelper('take', function(num, context, options){
+    var ret = '', takeCount;
+    console.log(context);
+    if (!context) {
+      return;
+    }
+    if (num > context.length) {
+      takeCount = context.length-1;
+    }
+    else {
+      takeCount = num;
+    }
+    
+    while(takeCount != 0) {
+      ret = ret + options.fn(context[takeCount]);
+      takeCount--;
+    }
+
+    return ret;
+  });
+
   function createOfferList() {
     var jOfferList, offerListCache;
     _demo = new demoData();
     offerListCache = sessionStorage.getItem('offerList');
-    console.log(offerListCache);
     if (offerListCache && !offerList) {
       offers = JSON.parse(offerListCache);
     }
@@ -14691,7 +14712,6 @@ return /******/ (function(modules) { // webpackBootstrap
       offerList.init(offers, _hbOfferTemplate, _currentUser);
     }
     offerList.render(_target, _currentUser);
-    
     sessionStorage.setItem('offerList', JSON.stringify(offerList.offers));
   }
 })();
@@ -14750,10 +14770,10 @@ function demoData() {
     text : "В Березовском можно в 3 раза дешевле взять"
   }, {
     author : _users[0],
-    text : "Да фигня этот Apple"
+    text : "4 поколение, а начинка все еще как в смартах на 2ом андроиде"
   }, {
     author : _users[6],
-    text : "Конечно фигня, а нищебродом быть круто, да?"
+    text : "Зато дизаин красивый, имиджевая вещь"
   }, {
     author : _users[2],
     text : "Крутое место"
@@ -14805,6 +14825,7 @@ function demoData() {
     author : _users[1],
     mentions : [_mentions[0], _mentions[1], _mentions[2]],
     comments: [_comments[6]],
+    commentsCount: 1,
     adds: [_users[0], _users[3], _users[4], _users[5]],
     likes: [_users[0], _users[2], _users[5]]
   }, {
@@ -14823,6 +14844,7 @@ function demoData() {
     category : "Недвижимость",
     location : "Москва",
     comments : [_comments[0], _comments[1], _comments[2]],
+    commentsCount: 3,
     author : _users[0]
   }, {
     index: 3,
@@ -14843,7 +14865,8 @@ function demoData() {
     dateEnd : "14.06.12",
     location : "Екатеринбург",
     author : _users[2],
-    comments : [_comments[4], _comments[5]]
+    comments : [_comments[4], _comments[5]],
+    commentsCount: 2
   }, {
     index: 5,
     offerImg : "img/orange-room",
@@ -14851,6 +14874,7 @@ function demoData() {
     category : "Недвижимость",
     location : "Москва",
     comments : [_comments[3]],
+    commentsCount: 1,
     author : _users[5]
   }, {
     index: 6,
@@ -14900,15 +14924,22 @@ function OfferCard() {
     _cardHbTemplate = _cardHbTemplate || hbTemplate.html();
     _cardHbObject = Handlebars.compile(_cardHbTemplate);
     $('#js-popup-placeholder').on('click', '.close-link', _togglePopup);
+    $('#js-popup-placeholder').on('click', '.js-add', _addIt);
+    $('#js-popup-placeholder').on('click', '.js-like', _likeIt);
+    $('#js-popup-placeholder').on('click', '.js-mention', _toggleMention);
     $('#js-popup-placeholder').on('keypress', '.js-mention-text', _addMention);
   }
 
   // ToDo: здесь мы сделаем чтобы он у нас заполнял выбранный попап
   function _render(offer, destinationObj, currentUser) {
-    _offer = offer;
-    _currentUser = currentUser;
+    _offer = offer || _offer;
+    _currentUser = _currentUser || currentUser;
     _destinationObject = _destinationObject || destinationObj;
-    $(_destinationObject).html(_cardHbObject( { data: offer, currentUser: currentUser }));
+    $(_destinationObject).html(_cardHbObject( { data: _offer, currentUser: _currentUser }));
+  }
+
+  function _toggleMention() {
+    s = $(this).parents('#js-popup-placeholder').children('.js-add-mention').toggle();
   }
 
   function _addMention(e) { 
@@ -14925,9 +14956,8 @@ function OfferCard() {
       currentOffer.mentions.splice(currentOffer.mentions.length,0,{ author: _currentUser, text: $(currentInput).val() });
       $(currentInput).val('');
       $(currentInput).blur();
-      console.log(currentOffer);
       _offerList.offers[currentOffer.index] = currentOffer;
-      _save();
+      _offerList.save();
       _render(currentOffer, undefined, _currentUser);
       _offerList.render();
     }
@@ -14937,9 +14967,54 @@ function OfferCard() {
     $('.blind').toggle();
   }
 
-  function _save(){
-    sessionStorage.removeItem('offerList');
-    sessionStorage.setItem('offerList', JSON.stringify(_offerList.offers));
+  function _addIt() {
+    var offerIndex;
+    offerIndex = $.inArray(_offer, _offerList.offers);
+    if (_isAlreadyAdded()) {
+      return;
+    }
+    if (!_offer.adds) {
+      _offer.adds = [];
+    }
+    _offer.addedByCurrentUser = true;
+    _offer.adds.splice(_offer.adds.length, 0, _currentUser);
+    _offerList.offers.splice(offerIndex, 1, _offer);
+    _offerList.save();
+    _render();
+    _offerList.render();
+  }
+
+  function _likeIt() {
+    var offerIndex;
+    offerIndex = $.inArray(_offer, _offerList.offers);
+    if (_isAlreadyLiked()) {
+      return;
+    }
+    if (!_offer.likes) {
+      _offer.likes = [];
+    }
+    _offer.likedByCurrentUser = true;
+    _offer.likes.splice(_offer.likes.length, 0, _currentUser);
+    _offerList.offers.splice(offerIndex, 1, _offer);
+    _offerList.save();
+    _render();
+    _offerList.render();
+  }
+
+   function _isAlreadyLiked()
+  {
+    if (!_offer.likes || !_offer.likedByCurrentUser) {  
+      return false;
+    }
+    return true;
+  }
+
+  function _isAlreadyAdded()
+  {
+    if (!_offer.adds || !_offer.addedByCurrentUser) {
+      return false;
+    }
+    return true;
   }
   return self;
 }
@@ -14953,6 +15028,7 @@ function OfferList() {
     openComment : _openComment,
     createComment : _createComment,
     deleteComment : _deleteComment,
+    save: _save,
     likeIt : _likeIt,
     addIt : _addIt,
     offers : []
@@ -14977,14 +15053,14 @@ function OfferList() {
   }
 
   function _openComment() {
-    $(this).parents().closest('.offer').find('.js-comment').toggle();
+    $(this).parents().closest('.js-offer').find('.js-comment').toggle();
   }
 
   function _createComment(e) {  
     if (e.keyCode == 13)
     {
       var offerIndex, currentInput, currentOffer;
-      offerIndex = $(this).parents().closest('.offer').data('offer-index');
+      offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
       currentOffer = self.offers[offerIndex];
       currentInput = e.target;
       if (!currentOffer.comments) {
@@ -15000,10 +15076,13 @@ function OfferList() {
 
   function _deleteComment() {
     var offerIndex, currentInput, currentOffer;
-      offerIndex = $(this).parents().closest('.offer').data('offer-index');
+      offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
       commentIndex = $(this).data('comment-index');
+      console.log(commentIndex);
+      console.log(self.offers[offerIndex]);
       self.offers[offerIndex].comments[commentIndex].deleted = true;
-      self.offers[offerIndex].comments.length--;
+      self.offers[offerIndex].commentsCount--;
+      console.log(self.offers[offerIndex]);
       _save();
       _render();
   }
@@ -15023,7 +15102,7 @@ function OfferList() {
 
   function _likeIt() {
     var offerIndex, currentOffer;
-    offerIndex = $(this).parents().closest('.offer').data('offer-index');
+    offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
     currentOffer = self.offers[offerIndex];
     if (_isAlreadyLiked(_currentUser, currentOffer)) {
       return;
@@ -15039,7 +15118,7 @@ function OfferList() {
 
   function _addIt() {
     var offerIndex, currentOffer;
-    offerIndex = $(this).parents().closest('.offer').data('offer-index');
+    offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
     currentOffer = self.offers[offerIndex];
     if (_isAlreadyAdded(_currentUser, currentOffer)) {
       return;
@@ -15055,7 +15134,7 @@ function OfferList() {
 
   function _isAlreadyLiked(user, currentOffer)
   {
-    if (!currentOffer.likes || $.inArray(user, currentOffer.likes) == -1) {
+    if (!currentOffer.likes || !currentOffer.likedByCurrentUser) {
       return false;
     }
     return true;
@@ -15063,7 +15142,7 @@ function OfferList() {
 
   function _isAlreadyAdded(user, currentOffer)
   {
-    if (!currentOffer.adds || $.inArray(user, currentOffer.adds) == -1) {
+    if (!currentOffer.adds || !currentOffer.addedByCurrentUser) {
       return false;
     }
     return true;

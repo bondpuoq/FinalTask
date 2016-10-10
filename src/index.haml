@@ -7,7 +7,7 @@
     %div#js-offer-list-placeholder.offer-list
       %script#js-offer-list-template{type: "text/x-handlebars-template"}
         {{#each offers}}
-          %div.offer{data-offer-index:"{{@index}}"}
+          %div.offer.js-offer{data-offer-index:"{{@index}}"}
             %div.actions
               %div.more-info.js-more-info{data-offer-index:"{{@index}}"}
                 Ознакомиться с предложением
@@ -59,7 +59,7 @@
               
               {{#if comments}}
               %div.comments.js-comments
-                {{comments.length}} комментария
+                {{commentsCount}} комментария
               {{/if}}
             
               {{#if mentions}}
@@ -79,7 +79,7 @@
                 {{else}}
                 %div.container{data-user-id:"{{author.id}}"}
                   %div.delete-comment.hidden.js-delete-comment{data-comment-index:"{{@index}}"}
-                    [х]
+                    х
                   %div.avatar
                     %img{src: "{{author.avatar}}.png"}
                   %div.text
@@ -90,7 +90,7 @@
                   %div.avatar
                     %img{src:"{{../currentUser.avatar}}.png"}
                   %div.textinput
-                    %textarea.comment-input{placeholder:"Комментировать"}
+                    %textarea.comment-input{placeholder:"Комментировать", maxlength: "500"}
         {{/each}}
     %div.blind.hidden.js-blind
       %div#js-popup-placeholder.popup
@@ -118,26 +118,37 @@
               %div.description
                 {{data.description}}
             %div.actions
-              %div.button.gray
+              {{#if data.addedByCurrentUser}}
+              %div.button.gray.added.js-add
                 Добавить к себе
-              %div.button.gray
+              {{else}}
+              %div.button.gray.add.js-add
+                Добавить к себе
+              {{/if}}
+
+              {{#if data.likedByCurrentUser}}
+              %div.button.gray.liked.js-like
                 Мне нравится
-              %div.button.gray
-                Комментировать
+              {{else}}
+              %div.button.gray.like.js-like
+                Мне нравится
+              {{/if}}  
+              %div.button.gray.mention.js-mention
+                Добавить отзыв
           %div.feedbacks
-            {{#each data.mentions}}
+            {{#take 5 data.mentions}}
               %div.fb-item
                 %div.fb-image
                   %img{src: "{{author.avatar}}-big.png"}
                 %div.fb-text
                   %span
                     {{text}}
-            {{/each}}
-          %div.add-feedback
+            {{/take}}
+          %div.add-feedback.js-add-mention.hidden
             %div.fb-image
-              %img{src:"{{currentUser.avatar}}.png"}
+              %img{src:"{{currentUser.avatar}}-big.png"}
             %div.fb-text
-              %textarea.js-mention-text{placeholder:"Оставить отзыв"}
+              %textarea.js-mention-text{placeholder:"Оставить отзыв", maxlength: "500"}
           %div.counter-block
             %div 
               {{data.adds.length}} добавили к себе

@@ -53,10 +53,10 @@ function demoData() {
     text : "В Березовском можно в 3 раза дешевле взять"
   }, {
     author : _users[0],
-    text : "Да фигня этот Apple"
+    text : "4 поколение, а начинка все еще как в смартах на 2ом андроиде"
   }, {
     author : _users[6],
-    text : "Конечно фигня, а нищебродом быть круто, да?"
+    text : "Зато дизаин красивый, имиджевая вещь"
   }, {
     author : _users[2],
     text : "Крутое место"
@@ -108,6 +108,7 @@ function demoData() {
     author : _users[1],
     mentions : [_mentions[0], _mentions[1], _mentions[2]],
     comments: [_comments[6]],
+    commentsCount: 1,
     adds: [_users[0], _users[3], _users[4], _users[5]],
     likes: [_users[0], _users[2], _users[5]]
   }, {
@@ -126,6 +127,7 @@ function demoData() {
     category : "Недвижимость",
     location : "Москва",
     comments : [_comments[0], _comments[1], _comments[2]],
+    commentsCount: 3,
     author : _users[0]
   }, {
     index: 3,
@@ -146,7 +148,8 @@ function demoData() {
     dateEnd : "14.06.12",
     location : "Екатеринбург",
     author : _users[2],
-    comments : [_comments[4], _comments[5]]
+    comments : [_comments[4], _comments[5]],
+    commentsCount: 2
   }, {
     index: 5,
     offerImg : "img/orange-room",
@@ -154,6 +157,7 @@ function demoData() {
     category : "Недвижимость",
     location : "Москва",
     comments : [_comments[3]],
+    commentsCount: 1,
     author : _users[5]
   }, {
     index: 6,
