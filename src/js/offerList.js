@@ -47,6 +47,7 @@ function OfferList() {
         currentOffer.comments = [];
       }
       currentOffer.comments.splice(currentOffer.comments.length,0,{ author: _currentUser, text: $(currentInput).val() });
+      currentOffer.commentsCount++;
       $(currentInput).val('');
       $(currentInput).blur();
       _save();
@@ -58,11 +59,11 @@ function OfferList() {
     var offerIndex, currentInput, currentOffer;
       offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
       commentIndex = $(this).data('comment-index');
-      console.log(commentIndex);
       console.log(self.offers[offerIndex]);
       self.offers[offerIndex].comments[commentIndex].deleted = true;
+      if (self.offers[offerIndex].commentsCount == 0)
+        return;
       self.offers[offerIndex].commentsCount--;
-      console.log(self.offers[offerIndex]);
       _save();
       _render();
   }

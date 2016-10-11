@@ -14674,23 +14674,21 @@ return /******/ (function(modules) { // webpackBootstrap
   $(document).ready(createOfferList);
 
   Handlebars.registerHelper('take', function(num, context, options){
-    var ret = '', takeCount;
-    console.log(context);
+    var ret = '', takeCount, startIndex;
     if (!context) {
       return;
     }
     if (num > context.length) {
-      takeCount = context.length-1;
+      startIndex = 0;
     }
     else {
-      takeCount = num;
+      startIndex = context.length - num;
     }
     
-    while(takeCount != 0) {
-      ret = ret + options.fn(context[takeCount]);
-      takeCount--;
+    while(startIndex <= context.length-1) {
+      ret = ret + options.fn(context[startIndex]);
+      startIndex++;
     }
-
     return ret;
   });
 
@@ -14947,18 +14945,17 @@ function OfferCard() {
     //offerList = JSON.parse(sessionStorage.getItem('offerList')); 
     if (e.keyCode == 13)
     {
-      var offerIndex, currentInput, currentOffer;
-      currentOffer = _offer;
+      var offerIndex, currentInput;
       currentInput = e.target;
-      if (!currentOffer.mentions) {
-        currentOffer.mentions = [];
+      if (!_offer.mentions) {
+        _offer.mentions = [];
       }
-      currentOffer.mentions.splice(currentOffer.mentions.length,0,{ author: _currentUser, text: $(currentInput).val() });
+      _offer.mentions.splice(_offer.mentions.length,0,{ author: _currentUser, text: $(currentInput).val() });
       $(currentInput).val('');
       $(currentInput).blur();
-      _offerList.offers[currentOffer.index] = currentOffer;
+      _offerList.offers[_offer.index] = _offer;
       _offerList.save();
-      _render(currentOffer, undefined, _currentUser);
+      _render(_offer, undefined, _currentUser);
       _offerList.render();
     }
   }
@@ -15067,6 +15064,7 @@ function OfferList() {
         currentOffer.comments = [];
       }
       currentOffer.comments.splice(currentOffer.comments.length,0,{ author: _currentUser, text: $(currentInput).val() });
+      currentOffer.commentsCount++;
       $(currentInput).val('');
       $(currentInput).blur();
       _save();
@@ -15078,11 +15076,11 @@ function OfferList() {
     var offerIndex, currentInput, currentOffer;
       offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
       commentIndex = $(this).data('comment-index');
-      console.log(commentIndex);
       console.log(self.offers[offerIndex]);
       self.offers[offerIndex].comments[commentIndex].deleted = true;
+      if (self.offers[offerIndex].commentsCount == 0)
+        return;
       self.offers[offerIndex].commentsCount--;
-      console.log(self.offers[offerIndex]);
       _save();
       _render();
   }

@@ -5,23 +5,21 @@
   $(document).ready(createOfferList);
 
   Handlebars.registerHelper('take', function(num, context, options){
-    var ret = '', takeCount;
-    console.log(context);
+    var ret = '', takeCount, startIndex;
     if (!context) {
       return;
     }
     if (num > context.length) {
-      takeCount = context.length-1;
+      startIndex = 0;
     }
     else {
-      takeCount = num;
+      startIndex = context.length - num;
     }
     
-    while(takeCount != 0) {
-      ret = ret + options.fn(context[takeCount]);
-      takeCount--;
+    while(startIndex <= context.length-1) {
+      ret = ret + options.fn(context[startIndex]);
+      startIndex++;
     }
-
     return ret;
   });
 

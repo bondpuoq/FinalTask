@@ -36,18 +36,17 @@ function OfferCard() {
     //offerList = JSON.parse(sessionStorage.getItem('offerList')); 
     if (e.keyCode == 13)
     {
-      var offerIndex, currentInput, currentOffer;
-      currentOffer = _offer;
+      var offerIndex, currentInput;
       currentInput = e.target;
-      if (!currentOffer.mentions) {
-        currentOffer.mentions = [];
+      if (!_offer.mentions) {
+        _offer.mentions = [];
       }
-      currentOffer.mentions.splice(currentOffer.mentions.length,0,{ author: _currentUser, text: $(currentInput).val() });
+      _offer.mentions.splice(_offer.mentions.length,0,{ author: _currentUser, text: $(currentInput).val() });
       $(currentInput).val('');
       $(currentInput).blur();
-      _offerList.offers[currentOffer.index] = currentOffer;
+      _offerList.offers[_offer.index] = _offer;
       _offerList.save();
-      _render(currentOffer, undefined, _currentUser);
+      _render(_offer, undefined, _currentUser);
       _offerList.render();
     }
   }

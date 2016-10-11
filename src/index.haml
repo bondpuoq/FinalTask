@@ -74,18 +74,18 @@
                 %br/
                 %span.label предлагает
             %div.offer-feedback-details
-              {{#each comments}}
+              {{#take 5 comments}}
                 {{#if deleted}}
                 {{else}}
                 %div.container{data-user-id:"{{author.id}}"}
-                  %div.delete-comment.hidden.js-delete-comment{data-comment-index:"{{@index}}"}
+                  %div.delete-comment.hidden.js-delete-comment{data-comment-index:"{{this.index}}"}
                     х
                   %div.avatar
                     %img{src: "{{author.avatar}}.png"}
                   %div.text
                     {{text}}
                 {{/if}}
-              {{/each}}
+              {{/take}}
                 %div.container.js-comment.hidden
                   %div.avatar
                     %img{src:"{{../currentUser.avatar}}.png"}
@@ -136,7 +136,7 @@
               %div.button.gray.mention.js-mention
                 Добавить отзыв
           %div.feedbacks
-            {{#take 5 data.mentions}}
+            {{#take 3 data.mentions}}
               %div.fb-item
                 %div.fb-image
                   %img{src: "{{author.avatar}}-big.png"}
