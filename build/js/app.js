@@ -15093,7 +15093,9 @@ function OfferList() {
       currentInput = e.target;
       if (!currentOffer.comments) {
         currentOffer.comments = [];
+        currentOffer.commentsCount = 0;
       }
+      
       currentOffer.comments.splice(currentOffer.comments.length,0,{ author: _currentUser, text: $(currentInput).val() });
       currentOffer.commentsCount++;
       $(currentInput).val('');
