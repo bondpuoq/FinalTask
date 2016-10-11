@@ -8,6 +8,7 @@
   // Если в массиве меньше элементов, чем мы указали взять, берет соответственно только имеющиеся
   Handlebars.registerHelper('take', function(num, visibleOnly, context, options){
     var ret = '', takeCount, startIndex, shift;
+    shift = 0;
     // Если нет массива для отображения - выходим из хелпера
     if (!context) {
       return;
@@ -19,7 +20,7 @@
         return !!item.deleted;
       }).length;
     }
-    if (!num) {
+    if (!num || num == -1) {
       startIndex = 0;
     }
     if (num > context.length) {

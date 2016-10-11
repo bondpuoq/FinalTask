@@ -17,6 +17,7 @@ function OfferCard() {
     $('#js-popup-placeholder').on('click', '.js-like', _likeIt);
     $('#js-popup-placeholder').on('click', '.js-mention', _toggleMention);
     $('#js-popup-placeholder').on('keypress', '.js-mention-text', _addMention);
+    $('#js-popup-placeholder').on('click', '.js-delete-offer', _deleteOffer);
   }
 
   // ToDo: здесь мы сделаем чтобы он у нас заполнял выбранный попап
@@ -89,20 +90,25 @@ function OfferCard() {
     _offerList.render();
   }
 
-   function _isAlreadyLiked()
-  {
+   function _isAlreadyLiked() {
     if (!_offer.likes || !_offer.likedByCurrentUser) {  
       return false;
     }
     return true;
   }
 
-  function _isAlreadyAdded()
-  {
+  function _isAlreadyAdded() {
     if (!_offer.adds || !_offer.addedByCurrentUser) {
       return false;
     }
     return true;
+  }
+
+  function _deleteOffer() {
+    _offer.deleted = true;
+    _offerList.save();
+    _render();
+    _offerList.render();
   }
   return self;
 }

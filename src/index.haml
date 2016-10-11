@@ -7,6 +7,8 @@
     %div#js-offer-list-placeholder.offer-list
       %script#js-offer-list-template{type: "text/x-handlebars-template"}
         {{#each offers}}
+          {{#if deleted}}
+          {{else}}
           %div.offer.js-offer{data-offer-index:"{{@index}}"}
             %div.actions
               %div.more-info.js-more-info{data-offer-index:"{{@index}}"}
@@ -75,8 +77,6 @@
                 %span.label предлагает
             %div.offer-feedback-details
               {{#take 5 1 comments}}
-                {{#if deleted}}
-                {{else}}
                 %div.container{data-user-id:"{{author.id}}"}
                   %div.delete-comment.hidden.js-delete-comment{data-comment-index:"{{index}}"}
                     х
@@ -84,13 +84,13 @@
                     %img{src: "{{author.avatar}}.png"}
                   %div.text
                     {{text}}
-                {{/if}}
               {{/take}}
                 %div.container.js-comment.hidden
                   %div.avatar
                     %img{src:"{{../currentUser.avatar}}.png"}
                   %div.textinput
                     %textarea.comment-input{placeholder:"Комментировать", maxlength: "500"}
+          {{/if}}
         {{/each}}
     %div.blind.hidden.js-blind
       %div#js-popup-placeholder.popup
@@ -106,7 +106,7 @@
               %br/
               %div.label
                 нуждается в этом
-            %div.button.violet
+            %div.button.violet.js-delete-offer{data-offer-index: "{{data.index}}"}
               удалить предложение
           %div.container
             %div.info
@@ -136,7 +136,7 @@
               %div.button.gray.mention.js-mention
                 Добавить отзыв
           %div.feedbacks
-            {{#take 3 data.mentions}}
+            {{#take 3 1 data.mentions}}
               %div.fb-item
                 %div.fb-image
                   %img{src: "{{author.avatar}}-big.png"}
