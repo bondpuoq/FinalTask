@@ -14673,8 +14673,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
   $(document).ready(createOfferList);
 
+  // Хелпер берет нужное нам количество элементов из массива, 
+  // Если в массиве меньше элементов, чем мы указали взять, берет соответственно только имеющиеся
   Handlebars.registerHelper('take', function(num, context, options){
-    var ret = '', takeCount, startIndex;
+    var ret = '', takeCount, startIndex, index;
     if (!context) {
       return;
     }
@@ -14685,10 +14687,14 @@ return /******/ (function(modules) { // webpackBootstrap
       startIndex = context.length - num;
     }
     
+    // Приделываем правильный index к элементу
     while(startIndex <= context.length-1) {
-      ret = ret + options.fn(context[startIndex]);
+      var item = context[startIndex];
+      item.index = startIndex;
+      ret += options.fn(item);
       startIndex++;
     }
+    console.log(ret);
     return ret;
   });
 
@@ -15075,11 +15081,10 @@ function OfferList() {
   function _deleteComment() {
     var offerIndex, currentInput, currentOffer;
       offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
-      commentIndex = $(this).data('comment-index');
-      console.log(self.offers[offerIndex]);
-      self.offers[offerIndex].comments[commentIndex].deleted = true;
       if (self.offers[offerIndex].commentsCount == 0)
         return;
+      commentIndex = $(this).data('comment-index');
+      self.offers[offerIndex].comments[commentIndex].deleted = true;
       self.offers[offerIndex].commentsCount--;
       _save();
       _render();

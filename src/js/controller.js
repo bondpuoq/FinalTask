@@ -4,8 +4,10 @@
 
   $(document).ready(createOfferList);
 
+  // Хелпер берет нужное нам количество элементов из массива, 
+  // Если в массиве меньше элементов, чем мы указали взять, берет соответственно только имеющиеся
   Handlebars.registerHelper('take', function(num, context, options){
-    var ret = '', takeCount, startIndex;
+    var ret = '', takeCount, startIndex, index;
     if (!context) {
       return;
     }
@@ -16,10 +18,14 @@
       startIndex = context.length - num;
     }
     
+    // Приделываем правильный index к элементу
     while(startIndex <= context.length-1) {
-      ret = ret + options.fn(context[startIndex]);
+      var item = context[startIndex];
+      item.index = startIndex;
+      ret += options.fn(item);
       startIndex++;
     }
+    console.log(ret);
     return ret;
   });
 
