@@ -107,7 +107,7 @@ function OfferCard() {
   function _deleteOffer() {
     _offer.deleted = true;
     _offerList.save();
-    _render();
+    _togglePopup();
     _offerList.render();
   }
   return self;
