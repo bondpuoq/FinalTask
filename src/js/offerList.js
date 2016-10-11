@@ -49,7 +49,7 @@ function OfferList() {
       currentOffer.comments.splice(currentOffer.comments.length,0,{ author: _currentUser, text: $(currentInput).val() });
       currentOffer.commentsCount++;
       $(currentInput).val('');
-      $(currentInput).blur();
+      //$(currentInput).blur();
       _save();
       _render();
     }

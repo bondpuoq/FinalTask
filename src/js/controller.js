@@ -6,26 +6,44 @@
 
   // Хелпер берет нужное нам количество элементов из массива, 
   // Если в массиве меньше элементов, чем мы указали взять, берет соответственно только имеющиеся
-  Handlebars.registerHelper('take', function(num, context, options){
-    var ret = '', takeCount, startIndex, index;
+  Handlebars.registerHelper('take', function(num, visibleOnly, context, options){
+    var ret = '', takeCount, startIndex, shift;
+    // Если нет массива для отображения - выходим из хелпера
     if (!context) {
       return;
+    }
+    // Определим, сколько у нас удаленных элементов в массиве и сместим начало поиска на нужное количество элементов
+    if (visibleOnly) {
+      // Считаем сдвиг
+      shift = $.grep(context, function(item) {
+        return !!item.deleted;
+      }).length;
+    }
+    if (!num) {
+      startIndex = 0;
     }
     if (num > context.length) {
       startIndex = 0;
     }
     else {
-      startIndex = context.length - num;
+      startIndex = context.length - num - shift;
     }
-    
+    // Может так получиться, что начало поиска станет < 0 
+    if (startIndex < 0)
+    {
+      startIndex = 0;
+    }
     // Приделываем правильный index к элементу
     while(startIndex <= context.length-1) {
+      if (visibleOnly && context[startIndex].deleted) {
+        startIndex++;
+        continue;
+      }
       var item = context[startIndex];
       item.index = startIndex;
       ret += options.fn(item);
       startIndex++;
     }
-    console.log(ret);
     return ret;
   });
 
