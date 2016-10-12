@@ -119,13 +119,16 @@ function demoData() {
     dateBegin : "12.01.13",
     dateEnd : "14.06.13",
     location : "Екатеринбург",
+    description : "Мелкий дурацкий сайт с хреновым дизайном за гроши, - вы же такое любите, да?",
     author : _users[7]
   }, {
     index: 2,
     offerImg : "img/velo-dog",
-    caption : "Оформление интерьера",
+    caption : "Новая 3-х комнатная квартира",
     category : "Недвижимость",
     location : "Москва",
+    description : "Вы спросите: \"А почему на картинке велосипед, продается же квартира?!\"." +
+                  "А мы ответим: \"А почему бы по такой охренененно большой квартире не раскатывать на велике?",
     comments : [_comments[0], _comments[1], _comments[2]],
     commentsCount: 3,
     author : _users[0]
@@ -133,10 +136,12 @@ function demoData() {
     index: 3,
     offerImg : "img/watch",
     caption : "Крутые часы Bell&rose",
-    category : "Детские игрушки",
+    category : "Аксессуары",
     dateBegin : "12.01.13",
     dateEnd : "14.06.13",
     location : "Екатеринбург",
+    description: "Счастливые часы не наблюдают, а еще их не наблюдают бедные и скупердяи, ибо нечего наблюдать."+ 
+                 "Чтобы вас случайно не приняли за скупердяя, приобретайте наши часы и не мучайте наш мозг. ",
     likes: [_users[1], _users[5]],
     author : _users[6]
   }, {
@@ -147,15 +152,20 @@ function demoData() {
     dateBegin : "12.06.12",
     dateEnd : "14.06.12",
     location : "Екатеринбург",
+    description: "Мы вам гарантируем, когда вы почувствуете разницу между айпадом и НЕайпадом - " + 
+                 "губы в трубочку у вас свернуться автоматически",
     author : _users[2],
     comments : [_comments[4], _comments[5]],
     commentsCount: 2
   }, {
     index: 5,
     offerImg : "img/orange-room",
-    caption : "Новая 3-х комнатная квартира",
+    caption : "Оформление интерьера",
     category : "Недвижимость",
     location : "Москва",
+    description : "Наши дизайнеры по интерьеру покрасят вашу квартиру в оранжевый цвет, " +
+                  "потому что они любят группу Чайф и у них оранжевое настроение и все такое прочее..."+
+                  " Сопротивленние бесполезно. Вы тоже полюбите группу Чайф.",
     comments : [_comments[3]],
     commentsCount: 1,
     author : _users[5]
@@ -165,6 +175,7 @@ function demoData() {
     caption : "Стильная кожаная сумка",
     category : "Одежда",
     location : "Екатеринбург",
+    description : "Если вы хотите быть похожи на младшего сержанта, - эта сумка - ваш выбор.",
     author : _users[7]
   }, {
     index: 7,
@@ -174,6 +185,7 @@ function demoData() {
     dateBegin : "12.01.13",
     dateEnd : "14.06.13",
     location : "Екатеринбург",
+    description : "Визитки вам - чего же боле, что я могу еще сказать?",
     author : _users[4]
   }, {
     index: 8,
@@ -181,6 +193,7 @@ function demoData() {
     caption : "Стильная модная тачила",
     category : "Авто",
     location : "Ульяновск",
+    description : "Будь рыцарем, купи Knight б..я!",
     author : _users[6]
   }];
 

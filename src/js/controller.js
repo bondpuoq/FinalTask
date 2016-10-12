@@ -30,8 +30,7 @@
       startIndex = context.length - num - shift;
     }
     // Может так получиться, что начало поиска станет < 0 
-    if (startIndex < 0)
-    {
+    if (startIndex < 0) {
       startIndex = 0;
     }
     // Приделываем правильный index к элементу

@@ -3,6 +3,7 @@ $offer-max-height: 540px;
 $offer-border-color: rgba(235,235,235,1);
 $offer-author-bg-color: rgba(241,241,241,1);
 $base-font-size: 12px;
+$popup-width: 810px;
 
 body {
   font-size: $base-font-size;
@@ -28,6 +29,37 @@ body {
 @mixin gray-text {
   color: rgba(141,141,141,1);
   font-size: 10.86px;
+}
+
+/* Медиа-запросы для различных размеров адаптивного макета */
+@media only screen and (min-width: 400px) {
+  .offer-list {
+    -moz-column-count: 2;
+    -webkit-column-count: 2;
+    column-count: 2;
+  }
+}
+ 
+@media only screen and (min-width: 700px) {
+  .offer-list {
+    -moz-column-count: 3;
+    -webkit-column-count: 3;
+    column-count: 3;
+  }
+}
+ 
+@media only screen and (min-width: 1000px) {
+  .offer-list {
+    -moz-column-count: 4;
+    -webkit-column-count: 4;
+    column-count: 4;
+  }
+}
+ 
+@media only screen and (min-width: 1280px) {
+  .wrapper {
+    width: 1260px;
+  }
 }
 
 .offer-list {
@@ -219,61 +251,25 @@ body {
     }
   }
 }
-/* Медиа-запросы для различных размеров адаптивного макета */
-@media only screen and (min-width: 400px) {
-  .offer-list {
-    -moz-column-count: 2;
-    -webkit-column-count: 2;
-    column-count: 2;
-  }
-}
- 
-@media only screen and (min-width: 700px) {
-  .offer-list {
-    -moz-column-count: 3;
-    -webkit-column-count: 3;
-    column-count: 3;
-  }
-}
- 
-@media only screen and (min-width: 1100px) {
-  .offer-list {
-    -moz-column-count: 4;
-    -webkit-column-count: 4;
-    column-count: 4;
-  }
-}
- 
-@media only screen and (min-width: 1280px) {
-  .wrapper {
-    width: 1260px;
-  }
-}
 
 .blind {
-  position: absolute; 
+  position: absolute;
   left:0;
   right:0;
   top:0;
   margin: 0;
   padding: 0;
   z-index: 1000;
+  min-height: 100%;
   background-color: rgba(0,0,0,0.5);
-  &:after {
-    content: "";
-    display: table;
-    height: auto;
-    clear: both;
-  }
   .popup {
-    margin-top: 50px;
     top: 50px;
     border: 1px solid black;
     background-color: white;
     border-radius: 5px;
     box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    width: 810px;
-    margin: 0 auto;
+    width: $popup-width;
+    margin: 50px auto;
     .close-link {
       text-align: right;
       margin-right: 10px;

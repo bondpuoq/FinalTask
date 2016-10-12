@@ -24,7 +24,7 @@ function OfferList() {
     $('#js-offer-list-placeholder').on('click', '.js-like-link', self.likeIt);
     $('#js-offer-list-placeholder').on('click', '.js-add-link', self.addIt);
     $('#js-offer-list-placeholder').on('click', '.js-delete-comment', self.deleteComment);
-    $('#js-offer-list-placeholder').on('keypress', '.comment-input', self.createComment);
+    $('#js-offer-list-placeholder').on('keypress', '.js-comment-input', self.createComment);
   }
   function _render(destinationObj, currentUserParam) {
     _destinationObj = destinationObj || _destinationObj;
@@ -34,11 +34,11 @@ function OfferList() {
 
   function _openComment() {
     $(this).parents().closest('.js-offer').find('.js-comment').toggle();
+    $(this).parents().closest('.js-offer').find('.js-comment-input').focus();
   }
 
   function _createComment(e) {  
-    if (e.keyCode == 13)
-    {
+    if (e.keyCode == 13) {
       var offerIndex, currentInput, currentOffer;
       offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
       currentOffer = self.offers[offerIndex];
@@ -47,11 +47,9 @@ function OfferList() {
         currentOffer.comments = [];
         currentOffer.commentsCount = 0;
       }
-      
       currentOffer.comments.splice(currentOffer.comments.length,0,{ author: _currentUser, text: $(currentInput).val() });
       currentOffer.commentsCount++;
       $(currentInput).val('');
-      //$(currentInput).blur();
       _save();
       _render();
     }
@@ -114,23 +112,21 @@ function OfferList() {
     _render();
   }
 
-  function _isAlreadyLiked(user, currentOffer)
-  {
+  function _isAlreadyLiked(user, currentOffer) {
     if (!currentOffer.likes || !currentOffer.likedByCurrentUser) {
       return false;
     }
     return true;
   }
 
-  function _isAlreadyAdded(user, currentOffer)
-  {
+  function _isAlreadyAdded(user, currentOffer) {
     if (!currentOffer.adds || !currentOffer.addedByCurrentUser) {
       return false;
     }
     return true;
   }
 
-  function _save(){
+  function _save() {
     sessionStorage.removeItem('offerList');
     sessionStorage.setItem('offerList', JSON.stringify(self.offers));
   }

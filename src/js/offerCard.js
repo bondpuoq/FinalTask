@@ -7,7 +7,6 @@ function OfferCard() {
     addMention : _addMention
   }
 
-    // ToDo: засовываем в инит шаблон Handlebars и данные выбранного оффера
   function _init(hbTemplate, offerList) {
     _offerList = _offerList || offerList;
     _cardHbTemplate = _cardHbTemplate || hbTemplate.html();
@@ -20,7 +19,6 @@ function OfferCard() {
     $('#js-popup-placeholder').on('click', '.js-delete-offer', _deleteOffer);
   }
 
-  // ToDo: здесь мы сделаем чтобы он у нас заполнял выбранный попап
   function _render(offer, destinationObj, currentUser) {
     _offer = offer || _offer;
     _currentUser = _currentUser || currentUser;
@@ -29,14 +27,12 @@ function OfferCard() {
   }
 
   function _toggleMention() {
-    s = $(this).parents('#js-popup-placeholder').children('.js-add-mention').toggle();
+    $(this).parents('#js-popup-placeholder').children('.js-add-mention').toggle();
+    $(this).parents('#js-popup-placeholder').children('.js-add-mention').find('.js-mention-text').focus();
   }
 
   function _addMention(e) { 
-    //var offerList;
-    //offerList = JSON.parse(sessionStorage.getItem('offerList')); 
-    if (e.keyCode == 13)
-    {
+    if (e.keyCode == 13) {
       var offerIndex, currentInput;
       currentInput = e.target;
       if (!_offer.mentions) {

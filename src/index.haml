@@ -89,7 +89,7 @@
                   %div.avatar
                     %img{src:"{{../currentUser.avatar}}.png"}
                   %div.textinput
-                    %textarea.comment-input{placeholder:"Комментировать", maxlength: "500"}
+                    %textarea.comment-input.js-comment-input{placeholder:"Комментировать", maxlength: "500"}
           {{/if}}
         {{/each}}
     %div.blind.hidden.js-blind
@@ -114,7 +114,7 @@
                 {{data.caption}}
               %h3
                 {{data.category}}
-              %img{src:"{{data.offerImg}}.png"}
+              %img{src:"{{data.offerImg}}-big.png"}
               %div.description
                 {{data.description}}
             %div.actions
@@ -163,6 +163,4 @@
               {{#each data.likes}}
               %img{src:"{{avatar}}-big.png"}
               {{/each}}
-
-    //ToDo: Написать шаблон попапа для любого выбранного элемента
     %script{src:"js/app.js"}
