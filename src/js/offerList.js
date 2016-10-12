@@ -56,7 +56,7 @@ function OfferList() {
   }
 
   function _deleteComment() {
-    var offerIndex, currentInput, currentOffer;
+    var offerIndex;
       offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
       if (self.offers[offerIndex].commentsCount == 0)
         return;

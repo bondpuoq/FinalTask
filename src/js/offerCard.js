@@ -33,7 +33,7 @@ function OfferCard() {
 
   function _addMention(e) { 
     if (e.keyCode == 13) {
-      var offerIndex, currentInput;
+      var currentInput;
       currentInput = e.target;
       if (!_offer.mentions) {
         _offer.mentions = [];

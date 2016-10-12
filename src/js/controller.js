@@ -1,13 +1,13 @@
 'use strict';
 (function () {
-  var offerList, offerCard, _hbOfferTemplate, _demo, _demoUsers, _demoComments, _currentUser;
+  var offerList, _hbOfferTemplate, _demo, _currentUser;
 
   $(document).ready(createOfferList);
 
   // Хелпер берет нужное нам количество элементов из массива, 
   // Если в массиве меньше элементов, чем мы указали взять, берет соответственно только имеющиеся
   Handlebars.registerHelper('take', function(num, visibleOnly, context, options){
-    var ret = '', takeCount, startIndex, shift;
+    var ret = '', startIndex, shift;
     shift = 0;
     // Если нет массива для отображения - выходим из хелпера
     if (!context) {
@@ -48,7 +48,7 @@
   });
 
   function createOfferList() {
-    var jOfferList, offerListCache;
+    var offerListCache, _target;
     _demo = new demoData();
     offerListCache = sessionStorage.getItem('offerList');
     if (offerListCache && !offerList) {
