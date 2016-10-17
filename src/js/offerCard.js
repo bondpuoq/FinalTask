@@ -33,7 +33,8 @@ function OfferCard() {
 
   function _addMention(e) { 
     if (e.keyCode == 13) {
-      var currentInput;
+      var currentInput, offerIndex;
+      offerIndex = $.inArray(_offer, _offerList.offers);
       currentInput = e.target;
       if (!_offer.mentions) {
         _offer.mentions = [];
@@ -41,7 +42,7 @@ function OfferCard() {
       _offer.mentions.splice(_offer.mentions.length,0,{ author: _currentUser, text: $(currentInput).val() });
       $(currentInput).val('');
       $(currentInput).blur();
-      _offerList.offers[_offer.index] = _offer;
+      _offerList.offers[offerIndex] = _offer;
       _offerList.save();
       _render(_offer, undefined, _currentUser);
       _offerList.render();

@@ -14741,39 +14741,39 @@ function demoData() {
   var self, _users, _comments;
   var self = this;
   _users = [{
-    id : "0",
+    id : 0,
     fio : "Василий Кожемякин",
     avatar : "img/vasily"
   }, {
-    id : "1",
+    id : 1,
     fio : "Евгений Пологов",
     avatar : "img/eugen"
   }, {
-    id : "2",
+    id : 2,
     fio : "Ксения Заболоцкая",
     avatar : "img/ksenya"
   }, {
-    id : "3",
+    id : 3,
     fio : "Анастасия Кузнецова",
     avatar : "img/nastya"
   }, {
-    id : "4",
+    id : 4,
     fio : "Алена Сафина",
     avatar : "img/nastya"
   }, {
-    id : "5",
+    id : 5,
     fio : "Иван Стрельников",
     avatar : "img/jeff"
   }, {
-    id : "6",
+    id : 6,
     fio : "Алексей Чуваков",
     avatar : "img/vasily"
   }, {
-    id : "7",
+    id : 7,
     fio : "Вячеслав Путин",
     avatar : "img/eugen"
   }, {
-    id : "8",
+    id : 8,
     fio : "Current User",
     avatar : "img/vasily"
   }];
@@ -14825,7 +14825,6 @@ function demoData() {
   ];
 
   _offers= [{ 
-    index: 0,
     offerImg : "img/vacation-offer",
     caption : "Отпуск семьей на море",
     category : "Путешествия",
@@ -14851,7 +14850,6 @@ function demoData() {
     adds: [_users[0], _users[3], _users[4], _users[5]],
     likes: [_users[0], _users[2], _users[5]]
   }, {
-    index: 1,
     offerImg : "img/hands",
     caption : "Новый сайт-портфолио",
     category : "Детские игрушки",
@@ -14861,7 +14859,6 @@ function demoData() {
     description : "Мелкий дурацкий сайт с хреновым дизайном за гроши, - вы же такое любите, да?",
     author : _users[7]
   }, {
-    index: 2,
     offerImg : "img/velo-dog",
     caption : "Новая 3-х комнатная квартира",
     category : "Недвижимость",
@@ -14872,7 +14869,6 @@ function demoData() {
     commentsCount: 3,
     author : _users[0]
   }, {
-    index: 3,
     offerImg : "img/watch",
     caption : "Крутые часы Bell&rose",
     category : "Аксессуары",
@@ -14884,7 +14880,6 @@ function demoData() {
     likes: [_users[1], _users[5]],
     author : _users[6]
   }, {
-    index: 4,
     offerImg : "img/ipad",
     caption : "iPad 4th generation",
     category : "Путешествия",
@@ -14897,7 +14892,6 @@ function demoData() {
     comments : [_comments[4], _comments[5]],
     commentsCount: 2
   }, {
-    index: 5,
     offerImg : "img/orange-room",
     caption : "Оформление интерьера",
     category : "Недвижимость",
@@ -14909,7 +14903,6 @@ function demoData() {
     commentsCount: 1,
     author : _users[5]
   }, {
-    index: 6,
     offerImg : "img/bag",
     caption : "Стильная кожаная сумка",
     category : "Одежда",
@@ -14917,7 +14910,6 @@ function demoData() {
     description : "Если вы хотите быть похожи на младшего сержанта, - эта сумка - ваш выбор.",
     author : _users[7]
   }, {
-    index: 7,
     offerImg : "img/visiting-card",
     caption : "Новые корпоративные визитки",
     category : "Полиграфия",
@@ -14927,7 +14919,6 @@ function demoData() {
     description : "Визитки вам - чего же боле, что я могу еще сказать?",
     author : _users[4]
   }, {
-    index: 8,
     offerImg : "img/jeep",
     caption : "Стильная модная тачила",
     category : "Авто",
@@ -14935,7 +14926,6 @@ function demoData() {
     description : "Будь рыцарем, купи Knight б..я!",
     author : _users[6]
   }, { 
-    index: 0,
     offerImg : "img/vacation-offer",
     caption : "Отпуск семьей на море",
     category : "Путешествия",
@@ -14961,7 +14951,6 @@ function demoData() {
     adds: [_users[0], _users[3], _users[4], _users[5]],
     likes: [_users[0], _users[2], _users[5]]
   }, {
-    index: 1,
     offerImg : "img/hands",
     caption : "Новый сайт-портфолио",
     category : "Детские игрушки",
@@ -14971,7 +14960,6 @@ function demoData() {
     description : "Мелкий дурацкий сайт с хреновым дизайном за гроши, - вы же такое любите, да?",
     author : _users[7]
   }, {
-    index: 2,
     offerImg : "img/velo-dog",
     caption : "Новая 3-х комнатная квартира",
     category : "Недвижимость",
@@ -14982,7 +14970,6 @@ function demoData() {
     commentsCount: 3,
     author : _users[0]
   }, {
-    index: 3,
     offerImg : "img/watch",
     caption : "Крутые часы Bell&rose",
     category : "Аксессуары",
@@ -14994,7 +14981,6 @@ function demoData() {
     likes: [_users[1], _users[5]],
     author : _users[6]
   }, {
-    index: 4,
     offerImg : "img/ipad",
     caption : "iPad 4th generation",
     category : "Путешествия",
@@ -15007,7 +14993,6 @@ function demoData() {
     comments : [_comments[4], _comments[5]],
     commentsCount: 2
   }, {
-    index: 5,
     offerImg : "img/orange-room",
     caption : "Оформление интерьера",
     category : "Недвижимость",
@@ -15019,7 +15004,6 @@ function demoData() {
     commentsCount: 1,
     author : _users[5]
   }, {
-    index: 6,
     offerImg : "img/bag",
     caption : "Стильная кожаная сумка",
     category : "Одежда",
@@ -15027,7 +15011,6 @@ function demoData() {
     description : "Если вы хотите быть похожи на младшего сержанта, - эта сумка - ваш выбор.",
     author : _users[7]
   }, {
-    index: 7,
     offerImg : "img/visiting-card",
     caption : "Новые корпоративные визитки",
     category : "Полиграфия",
@@ -15037,7 +15020,6 @@ function demoData() {
     description : "Визитки вам - чего же боле, что я могу еще сказать?",
     author : _users[4]
   }, {
-    index: 8,
     offerImg : "img/jeep",
     caption : "Стильная модная тачила",
     category : "Авто",
@@ -15089,7 +15071,8 @@ function OfferCard() {
 
   function _addMention(e) { 
     if (e.keyCode == 13) {
-      var currentInput;
+      var currentInput, offerIndex;
+      offerIndex = $.inArray(_offer, _offerList.offers);
       currentInput = e.target;
       if (!_offer.mentions) {
         _offer.mentions = [];
@@ -15097,7 +15080,7 @@ function OfferCard() {
       _offer.mentions.splice(_offer.mentions.length,0,{ author: _currentUser, text: $(currentInput).val() });
       $(currentInput).val('');
       $(currentInput).blur();
-      _offerList.offers[_offer.index] = _offer;
+      _offerList.offers[offerIndex] = _offer;
       _offerList.save();
       _render(_offer, undefined, _currentUser);
       _offerList.render();
