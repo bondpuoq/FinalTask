@@ -78,6 +78,7 @@ function OfferList() {
     }
     offerCard.render(self.offers[currentIndex],  $cardPlaceHolder, _currentUser);
     $('.js-blind').toggle();
+    $('.popup').css({marginTop: 50 + $(document).scrollTop()});
   }
 
   function _likeIt() {
