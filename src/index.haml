@@ -9,23 +9,23 @@
         {{#each offers}}
           {{#if deleted}}
           {{else}}
-          %div.offer.js-offer{data-offer-index:"{{@index}}"}
+          %div.offer.js-offer{data-offer-id:"{{id}}"}
             %div.actions
-              %div.more-info.js-more-info{data-offer-index:"{{@index}}"}
+              %div.more-info.js-more-info{data-offer-id:"{{id}}"}
                 Ознакомиться с предложением
               %div.action-icons
                 %div.to-feedback.js-feedback-link
                 {{#if likedByCurrentUser}}
-                %div.liked.js-like-link
+                %div.liked.js-like-link{data-offer-id:"{{id}}"}
                 {{else}}
-                %div.to-like.js-like-link
+                %div.to-like.js-like-link{data-offer-id:"{{id}}"}
                 {{/if}}
                 {{#if addedByCurrentUser}}
-                %div.added.js-add-link
+                %div.added.js-add-link{data-offer-id:"{{id}}"}
                 {{else}}
-                %div.to-add.js-add-link
+                %div.to-add.js-add-link{data-offer-id:"{{id}}"}
                 {{/if}}
-                %div.to-comment.js-comment-link
+                %div.to-comment.js-comment-link{data-offer-id:"{{id}}"}
             %div.offer-image
               %img{ src: "{{offerImg}}.png" }
             %div.offer-caption
@@ -78,14 +78,14 @@
             %div.offer-feedback-details
               {{#take 5 1 comments}}
                 %div.container{data-user-id:"{{author.id}}"}
-                  %div.delete-comment.hidden.js-delete-comment{data-comment-index:"{{index}}"}
+                  %div.delete-comment.hidden.js-delete-comment{data-comment-id:"{{id}}", data-offer-id:"{{../id}}"}
                     х
                   %div.avatar
                     %img{src: "{{author.avatar}}.png"}
                   %div.text
                     {{text}}
               {{/take}}
-                %div.container.js-comment.hidden
+                %div.container.js-comment.hidden{data-offer-id: "{{id}}"}
                   %div.avatar
                     %img{src:"{{../currentUser.avatar}}.png"}
                   %div.textinput
@@ -95,7 +95,7 @@
     %div.blind.hidden.js-blind
       %div#js-popup-placeholder.popup
         %script#js-popup-template{type: "text/x-handlebars-template"}
-          %div.close-link
+          %div.close-link.js-close-link{data-offer-id:"{{id}}"}
             Закрыть X
           %div.header
             %div.img
@@ -106,7 +106,7 @@
               %br/
               %div.label
                 нуждается в этом
-            %div.button.violet.js-delete-offer{data-offer-index: "{{data.index}}"}
+            %div.button.violet.js-delete-offer{data-offer-id: "{{data.id}}"}
               удалить предложение
           %div.container
             %div.info
@@ -119,21 +119,21 @@
                 {{data.description}}
             %div.actions
               {{#if data.addedByCurrentUser}}
-              %div.button.gray.added.js-add
+              %div.button.gray.added.js-add{data-offer-id: "{{data.id}}"}
                 Добавить к себе
               {{else}}
-              %div.button.gray.add.js-add
+              %div.button.gray.add.js-add{data-offer-id: "{{data.id}}"}
                 Добавить к себе
               {{/if}}
 
               {{#if data.likedByCurrentUser}}
-              %div.button.gray.liked.js-like
+              %div.button.gray.liked.js-like{data-offer-id: "{{data.id}}"}
                 Мне нравится
               {{else}}
-              %div.button.gray.like.js-like
+              %div.button.gray.like.js-like{data-offer-id: "{{data.id}}"}
                 Мне нравится
               {{/if}}  
-              %div.button.gray.mention.js-mention
+              %div.button.gray.mention.js-mention{data-offer-id: "{data.id}}"}
                 Добавить отзыв
           %div.feedbacks
             {{#take 3 1 data.mentions}}
@@ -148,7 +148,7 @@
             %div.fb-image
               %img{src:"{{currentUser.avatar}}-big.png"}
             %div.fb-text
-              %textarea.js-mention-text{placeholder:"Оставить отзыв", maxlength: "500"}
+              %textarea.js-mention-text{placeholder:"Оставить отзыв", maxlength: "500", data-offer-id: "{{data.id}}"}
           %div.counter-block
             %div 
               {{data.adds.length}} добавили к себе

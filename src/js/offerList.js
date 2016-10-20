@@ -18,13 +18,14 @@ function OfferList() {
     _currentUser = currentUser;
     _offerHbTemplate = _offerHbTemplate || hbTemplate.html();
     _offerHbObject = Handlebars.compile(_offerHbTemplate);
-    $('#js-offer-list-placeholder').on('click', '.js-more-info', self.offerClick);
-    $('#js-offer-list-placeholder').on('click', '.js-comment-link', self.openComment);
-    $('#js-offer-list-placeholder').on('click', '.js-comments', self.openComment);
-    $('#js-offer-list-placeholder').on('click', '.js-like-link', self.likeIt);
-    $('#js-offer-list-placeholder').on('click', '.js-add-link', self.addIt);
-    $('#js-offer-list-placeholder').on('click', '.js-delete-comment', self.deleteComment);
-    $('#js-offer-list-placeholder').on('keypress', '.js-comment-input', self.createComment);
+    $('#js-offer-list-placeholder')
+      .on('click', '.js-more-info', self.offerClick)
+      .on('click', '.js-comment-link', self.openComment)
+      .on('click', '.js-comments', self.openComment)
+      .on('click', '.js-like-link', self.likeIt)
+      .on('click', '.js-add-link', self.addIt)
+      .on('click', '.js-delete-comment', self.deleteComment)
+      .on('keypress', '.js-comment-input', self.createComment);
   }
   function _render(destinationObj, currentUserParam) {
     _destinationObj = destinationObj || _destinationObj;
@@ -39,9 +40,9 @@ function OfferList() {
 
   function _createComment(e) {  
     if (e.keyCode == 13) {
-      var offerIndex, currentInput, currentOffer;
-      offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
-      currentOffer = self.offers[offerIndex];
+      var offerId, currentInput, currentOffer;
+      offerId = $(this).parents().closest('.js-offer').data('offer-id');
+      currentOffer = self.offers[offerId];
       currentInput = e.target;
       if (!currentOffer.comments) {
         currentOffer.comments = [];
@@ -56,20 +57,22 @@ function OfferList() {
   }
 
   function _deleteComment() {
-    var offerIndex;
-      offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
-      if (self.offers[offerIndex].commentsCount == 0)
+    var offerId, currentOffer, currentComment;
+      offerId = $(this).data('offer-id');
+      currentOffer = _getFirstItemById(self.offers, offerId);
+      if (currentOffer.commentsCount == 0)
         return;
-      commentIndex = $(this).data('comment-index');
-      self.offers[offerIndex].comments[commentIndex].deleted = true;
-      self.offers[offerIndex].commentsCount--;
+      commentId = $(this).data('comment-id');
+      currentComment = _getFirstItemById(currentOffer.comments, commentId);
+      currentComment.deleted = true;
+      currentOffer.commentsCount--;
       _save();
       _render();
   }
 
   function _offerClick() {
     var currentIndex, $cardTemplate, $cardPlaceHolder;
-    currentIndex = $(this).data('offer-index');
+    currentIndex = $(this).data('offer-id');
     $cardTemplate = $('#js-popup-template');
     $cardPlaceHolder =  $('#js-popup-placeholder');
     if (!offerCard) {
@@ -82,9 +85,9 @@ function OfferList() {
   }
 
   function _likeIt() {
-    var offerIndex, currentOffer;
-    offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
-    currentOffer = self.offers[offerIndex];
+    var offerId, currentOffer;
+    offerId = $(this).parents().closest('.js-offer').data('offer-id');
+    currentOffer = self.offers[offerId];
     if (_isAlreadyLiked(_currentUser, currentOffer)) {
       return;
     }
@@ -98,9 +101,9 @@ function OfferList() {
   }
 
   function _addIt() {
-    var offerIndex, currentOffer;
-    offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
-    currentOffer = self.offers[offerIndex];
+    var offerId, currentOffer;
+    offerId = $(this).parents().closest('.js-offer').data('offer-id');
+    currentOffer = self.offers[offerId];
     if (_isAlreadyAdded(_currentUser, currentOffer)) {
       return;
     }
@@ -126,7 +129,14 @@ function OfferList() {
     }
     return true;
   }
-
+  function _getFirstItemById(arr, itemId) {
+    if (!arr) return;
+    var result;
+    result = $.grep(arr, function(item) {
+      return (item.id == itemId);
+    });
+    return result[0];
+  }
   function _save() {
     sessionStorage.removeItem('offerList');
     sessionStorage.setItem('offerList', JSON.stringify(self.offers));

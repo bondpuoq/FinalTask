@@ -14669,73 +14669,118 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 'use strict';
 (function () {
-  var offerList, _hbOfferTemplate, _demo, _currentUser;
+  var offerArray, offer, currentUser, offerListing;
 
-  $(document).ready(createOfferList);
+  $(document).ready(function() { start(); initializeHandlers(); });
 
   // Хелпер берет нужное нам количество элементов из массива, 
   // Если в массиве меньше элементов, чем мы указали взять, берет соответственно только имеющиеся
   Handlebars.registerHelper('take', function(num, visibleOnly, context, options){
-    var ret = '', startIndex, shift;
-    shift = 0;
+    var ret = '';
     // Если нет массива для отображения - выходим из хелпера
     if (!context) {
       return;
     }
-    // Определим, сколько у нас удаленных элементов в массиве и сместим начало поиска на нужное количество элементов
     if (visibleOnly) {
       // Считаем сдвиг
-      shift = $.grep(context, function(item) {
-        return !!item.deleted;
-      }).length;
-    }
-    if (!num || num == -1) {
-      startIndex = 0;
-    }
-    if (num > context.length) {
-      startIndex = 0;
+      arr = $.grep(context, function(item) {
+        return !item.deleted;
+      })
+      arr.reverse().slice(0,num);
+      $.each(arr,function() { ret+= options.fn(this)});
     }
     else {
-      startIndex = context.length - num - shift;
+      $.each(context,function(){ ret+= options.fn(this)});
     }
-    // Может так получиться, что начало поиска станет < 0 
-    if (startIndex < 0) {
-      startIndex = 0;
-    }
-    // Приделываем правильный index к элементу
-    while(startIndex <= context.length-1) {
-      if (visibleOnly && context[startIndex].deleted) {
-        startIndex++;
-        continue;
-      }
-      var item = context[startIndex];
-      item.index = startIndex;
-      ret += options.fn(item);
-      startIndex++;
-    }
+    
     return ret;
   });
 
-  function createOfferList() {
-    var offerListCache, _target;
-    _demo = new demoData();
-    offerListCache = sessionStorage.getItem('offerList');
-    if (offerListCache && !offerList) {
-      offers = JSON.parse(offerListCache);
-    }
-    else {
-      offers = _demo.offers;
-    }
-    _currentUser = _demo.currentUser;
-    _hbOfferTemplate = $('#js-offer-list-template');
-    _target = $('#js-offer-list-placeholder');
-    if (!offerList) {
-      offerList = new OfferList();
-      offerList.init(offers, _hbOfferTemplate, _currentUser);
-    }
-    offerList.render(_target, _currentUser);
-    sessionStorage.setItem('offerList', JSON.stringify(offerList.offers));
+  // function createOfferList() {
+  //   var offerListCache, _target;
+  //   _demo = new demoData();
+  //   offerListCache = sessionStorage.getItem('offerList');
+  //   if (offerListCache && !offerList) {
+  //     offers = JSON.parse(offerListCache);
+  //   }
+  //   else {
+  //     offers = _demo.offers;
+  //   }
+  //   _currentUser = _demo.currentUser;
+  //   _hbOfferTemplate = $('#js-offer-list-template');
+  //   _target = $('#js-offer-list-placeholder');
+  //   if (!offerList) {
+  //     offerList = new OfferList();
+  //     offerList.init(offers, _hbOfferTemplate, _currentUser);
+  //   }
+  //   offerList.render(_target, _currentUser);
+  //   sessionStorage.setItem('offerList', JSON.stringify(offerList.offers));
+  // }
+
+  // !!!!!!!!!!!! Добавить сюда, чтобы он данные брал из SessionStorage, когда перезагружает страницу !!!!!!!!!!!!!!!!
+  function start() {
+    var demo;
+    demo = new demoData();
+    // Задаем от лица кого мы сидим на сайте
+    currentUser = demo.currentUser;
+    offerArray = demo.offers;
+    // Начинаем генерировать плитку офферов
+    offerListing = new OfferListing();
+    offerListing.init('#js-offer-list-template');
+    offerListing.render('#js-offer-list-placeholder', offerArray, currentUser);
+
+    offer = new Offer();
   }
+
+  function initializeHandlers() {
+    $('#js-popup-placeholder')
+      .on('click', '.js-close-link', function() { toggleVisibility('.js-blind', true); })
+      //.on('click', '.js-add', _addIt)
+      //.on('click', '.js-like', _likeIt)
+      .on('click', '.js-mention', function() { toggleVisibility('.js-add-mention'); });
+      //.on('keypress', '.js-mention-text', _addMention)
+      //.on('click', '.js-delete-offer', _deleteOffer);
+    $('#js-offer-list-placeholder')
+      //.on('click', '.js-more-info', _renderPopup)
+      .on('click', '.js-comment-link', function() { toggleVisibility('.js-comment'); })
+      //.on('click', '.js-comments', self.openComment)
+      .on('click', '.js-like-link', function() { addFeedback('like'); })
+      .on('click', '.js-add-link', function() { addFeedback('add'); });
+      //.on('click', '.js-delete-comment', self.deleteComment)
+      //.on('keypress', '.js-comment-input', self.createComment);
+  }
+
+  function toggleVisibility(whatToggle, isPopup) {
+    var offerId = getOfferId(event);
+    offer.toggleVisibility(whatToggle, offerId, isPopup);
+  }
+
+  function addFeedback(whatAdd) {
+    var currentOffer, offerId;
+    offerId = getOfferId(event);
+    currentOffer = getFirstItemById(offerArray, offerId);
+    offer.addFeedback(whatAdd, offerArray, currentOffer, currentUser);
+    offerListing.render('#js-offer-list-placeholder', offerArray, currentUser);
+  }
+
+  // Получаем определенный оффер по его id
+  function getFirstItemById(arr, itemId) {
+    if (!arr) return;
+    var result;
+    result = $.grep(arr, function(item) {
+      return (item.id == itemId);
+    });
+    return result[0];
+  }
+
+  // Получаем id оффера с разметки через event
+  function getOfferId(event) {
+    return $(event.target).data('offer-id');
+  }
+  function saveOfferArray() {
+    sessionStorage.setItem('offerArray',  JSON.stringify(offerArray));
+  }
+
 })();
 function demoData() {
   var self, _users, _comments;
@@ -14779,52 +14824,71 @@ function demoData() {
   }];
 
   _comments = [{
+    id : 0,
     author : _users[2],
     text : "В Березовском можно в 3 раза дешевле взять"
   }, {
+    id : 1,
     author : _users[4],
     text : "Приезжай к нам в Голливуд, есть приличная квартирка"
   }, {
+    id : 2,
     author : _users[5],
     text : "WTF.."
   }, {
+    id : 3,
     author : _users[3],
     text : "В Березовском можно в 3 раза дешевле взять"
   }, {
+    id : 4,
     author : _users[0],
     text : "4 поколение, а начинка все еще как в смартах на 2ом андроиде"
   }, {
+    id : 5,
     author : _users[6],
     text : "Зато дизаин красивый, имиджевая вещь"
   }, {
+    id : 6,
     author : _users[2],
     text : "Крутое место"
+  }, {
+    id : 7,
+    author: _users[3],
+    text : "Да как это можно пить вообще"
+  }, {
+    id : 8,
+    author: _users[5],
+    text : "Молча, и закусывая огурчиком"
   }];
 
   _mentions = [{
+    id : 0,
     author : _users[1],
     text: "Хорошее место, вернемся еще"
   }, {
+    id : 1,
     author : _users[5],
     text: "Были там всей семьей, вкусная пища, чистый воздух. Есть отдельные спальные для детей и стариков и собак и кошек. До моря идти минут 5-10"
   }, {
+    id : 2,
     author : _users[2],
     text: "Никогда туда не поеду...денег просто нет"
   }, {
+    id : 3,
     author : _users[3],
     text: "Хорошая штука, приобрел недавно, вроде пока все устраивает"
   }, {
+    id : 4,
     author : _users[4],
     text: "Недавно случайно сел на него, все, теперь надо покупать новую версию"
   }, {
+    id : 5,
     author : _users[7],
     text: "Такая сумка называется в армейке планшет, контрабасы сержики с ним гоняют"
   }];
-  _adds = [
-    _users[2], _users[6], _users[3]
-  ];
 
   _offers= [{ 
+    id: 0,
     offerImg : "img/vacation-offer",
     caption : "Отпуск семьей на море",
     category : "Путешествия",
@@ -14850,6 +14914,7 @@ function demoData() {
     adds: [_users[0], _users[3], _users[4], _users[5]],
     likes: [_users[0], _users[2], _users[5]]
   }, {
+    id : 1,
     offerImg : "img/hands",
     caption : "Новый сайт-портфолио",
     category : "Детские игрушки",
@@ -14859,6 +14924,7 @@ function demoData() {
     description : "Мелкий дурацкий сайт с хреновым дизайном за гроши, - вы же такое любите, да?",
     author : _users[7]
   }, {
+    id : 2, 
     offerImg : "img/velo-dog",
     caption : "Новая 3-х комнатная квартира",
     category : "Недвижимость",
@@ -14869,6 +14935,7 @@ function demoData() {
     commentsCount: 3,
     author : _users[0]
   }, {
+    id :  3,
     offerImg : "img/watch",
     caption : "Крутые часы Bell&rose",
     category : "Аксессуары",
@@ -14880,6 +14947,7 @@ function demoData() {
     likes: [_users[1], _users[5]],
     author : _users[6]
   }, {
+    id : 4,
     offerImg : "img/ipad",
     caption : "iPad 4th generation",
     category : "Путешествия",
@@ -14892,6 +14960,7 @@ function demoData() {
     comments : [_comments[4], _comments[5]],
     commentsCount: 2
   }, {
+    id : 5,
     offerImg : "img/orange-room",
     caption : "Оформление интерьера",
     category : "Недвижимость",
@@ -14903,6 +14972,7 @@ function demoData() {
     commentsCount: 1,
     author : _users[5]
   }, {
+    id : 6,
     offerImg : "img/bag",
     caption : "Стильная кожаная сумка",
     category : "Одежда",
@@ -14910,6 +14980,7 @@ function demoData() {
     description : "Если вы хотите быть похожи на младшего сержанта, - эта сумка - ваш выбор.",
     author : _users[7]
   }, {
+    id : 7,
     offerImg : "img/visiting-card",
     caption : "Новые корпоративные визитки",
     category : "Полиграфия",
@@ -14919,6 +14990,7 @@ function demoData() {
     description : "Визитки вам - чего же боле, что я могу еще сказать?",
     author : _users[4]
   }, {
+    id : 8,
     offerImg : "img/jeep",
     caption : "Стильная модная тачила",
     category : "Авто",
@@ -14926,24 +14998,15 @@ function demoData() {
     description : "Будь рыцарем, купи Knight б..я!",
     author : _users[6]
   }, { 
-    offerImg : "img/vacation-offer",
-    caption : "Отпуск семьей на море",
-    category : "Путешествия",
+    id : 9,
+    offerImg : "img/cheese",
+    caption : "Сыр Emandhoff",
+    category : "Еда",
     dateBegin : "12.06.12",
     dateEnd : "14.06.12",
-    location : "Тиват, Черногория",
-    description : "Разместиться можно по своему вкусу в Тивате," + 
-                  "в  Которе, в Будве или в местности под названием Радовичи "+
-                  "( это что-то типа дерев... ...на побережье моря, "+
-                  "с пляжем «Плави Горизонт», и с целой кучей туристических отелей). \n \n "+
-                  "От Тивата и Котора на такси вам обойдется примерно в 10-15 евро \ "+
-                  "до пляжа «Плави Горизонт». Так  же, там есть возможность взять машину "+
-                  "на прокат  на время своего отпуска. "+
-                  "В Радовичах есть отель «Маки апартамент», с кухней, где можно готовить " +
-                  "свою еду и с номерами на 2их, 4рех , 6рых персон. " + 
-                  "Хозяйку отеля зовут Зорика.  Вот тел, и координаты этого отеля: " +
-                  "Maki apartaments +381606326060 ( in English ) +38268288772" +
-                  "more.radovici@gmail.com, maki-apartaments. com Zorica I Dragan Sestovic .",
+    location : "Прованс, Италия",
+    description : "Очень вкусный сыр. Вы будете непременно рады если попробуете его." + 
+                  "Хотя вообще сыр - он и в Африке сыр.",
     author : _users[1],
     mentions : [_mentions[0], _mentions[1], _mentions[2]],
     comments: [_comments[6]],
@@ -14951,80 +15014,38 @@ function demoData() {
     adds: [_users[0], _users[3], _users[4], _users[5]],
     likes: [_users[0], _users[2], _users[5]]
   }, {
-    offerImg : "img/hands",
-    caption : "Новый сайт-портфолио",
-    category : "Детские игрушки",
-    dateBegin : "12.01.13",
-    dateEnd : "14.06.13",
-    location : "Екатеринбург",
-    description : "Мелкий дурацкий сайт с хреновым дизайном за гроши, - вы же такое любите, да?",
-    author : _users[7]
+    id : 10,
+    offerImg : "img/samogon",
+    caption : "Самогон",
+    category : "Напитки",
+    dateBegin : "11.07.13",
+    dateEnd : "19.02.13",
+    location : "Екатеринбург, Россия Федерация",
+    description : "Самогон - в дополнительном представлении не нуждается.",
+    comments : [_comments[7], _comments[8]],
+    adds : [_users[7], _users[2]],
+    author : _users[1]
   }, {
-    offerImg : "img/velo-dog",
-    caption : "Новая 3-х комнатная квартира",
-    category : "Недвижимость",
-    location : "Москва",
-    description : "Вы спросите: \"А почему на картинке велосипед, продается же квартира?!\"." +
-                  "А мы ответим: \"А почему бы по такой охренененно большой квартире не раскатывать на велике?",
+    id : 11,
+    offerImg : "img/risotto",
+    caption : "Готовое чикен-ризотто",
+    category : "Еда",
+    location : "Москва, Российская Федерация",
+    description : "Ризотто - нормальная еда для четких пацанов." +
+                  "Ризотто - есть че?",
     comments : [_comments[0], _comments[1], _comments[2]],
     commentsCount: 3,
     author : _users[0]
   }, {
-    offerImg : "img/watch",
-    caption : "Крутые часы Bell&rose",
-    category : "Аксессуары",
-    dateBegin : "12.01.13",
-    dateEnd : "14.06.13",
-    location : "Екатеринбург",
-    description: "Счастливые часы не наблюдают, а еще их не наблюдают бедные и скупердяи, ибо нечего наблюдать."+ 
-                 "Чтобы вас случайно не приняли за скупердяя, приобретайте наши часы и не мучайте наш мозг. ",
+    id : 12,
+    offerImg : "img/chair",
+    caption : "Офисный стул",
+    category : "Мебель",
+    dateBegin : "21.03.13",
+    dateEnd : "22.07.13",
+    location : "Лондон, Великобритания",
+    description: "Офисный стул, для офисных нужд. Расставим все точки над нашими стульями.",
     likes: [_users[1], _users[5]],
-    author : _users[6]
-  }, {
-    offerImg : "img/ipad",
-    caption : "iPad 4th generation",
-    category : "Путешествия",
-    dateBegin : "12.06.12",
-    dateEnd : "14.06.12",
-    location : "Екатеринбург",
-    description: "Мы вам гарантируем, когда вы почувствуете разницу между айпадом и НЕайпадом - " + 
-                 "губы в трубочку у вас свернуться автоматически",
-    author : _users[2],
-    comments : [_comments[4], _comments[5]],
-    commentsCount: 2
-  }, {
-    offerImg : "img/orange-room",
-    caption : "Оформление интерьера",
-    category : "Недвижимость",
-    location : "Москва",
-    description : "Наши дизайнеры по интерьеру покрасят вашу квартиру в оранжевый цвет, " +
-                  "потому что они любят группу Чайф и у них оранжевое настроение и все такое прочее..."+
-                  " Сопротивленние бесполезно. Вы тоже полюбите группу Чайф.",
-    comments : [_comments[3]],
-    commentsCount: 1,
-    author : _users[5]
-  }, {
-    offerImg : "img/bag",
-    caption : "Стильная кожаная сумка",
-    category : "Одежда",
-    location : "Екатеринбург",
-    description : "Если вы хотите быть похожи на младшего сержанта, - эта сумка - ваш выбор.",
-    author : _users[7]
-  }, {
-    offerImg : "img/visiting-card",
-    caption : "Новые корпоративные визитки",
-    category : "Полиграфия",
-    dateBegin : "12.01.13",
-    dateEnd : "14.06.13",
-    location : "Екатеринбург",
-    description : "Визитки вам - чего же боле, что я могу еще сказать?",
-    author : _users[4]
-  }, {
-    offerImg : "img/jeep",
-    caption : "Стильная модная тачила",
-    category : "Авто",
-    location : "Ульяновск",
-    description : "Будь рыцарем, купи Knight б..я!",
     author : _users[6]
   }];
 
@@ -15033,6 +15054,56 @@ function demoData() {
     comments : _comments,
     offers : _offers,
     currentUser : _users[8]
+  }
+  return self;
+}
+function Offer() {
+  var _self;
+  self = this;
+  self.toggleVisibility = _toggleVisibility;
+  self.addFeedback = _addFeedback;
+
+  function _renderPopup() {
+    
+  }
+  function _toggleVisibility(whatToggle, offerId, isPopup) {
+    var selector;
+    if (isPopup) {
+      selector = whatToggle;
+    } else {
+      selector = whatToggle + '[data-offer-id='+ offerId +']';
+    }
+    $(selector).toggle();
+  }
+  function _addFeedback(whatAdd, offerArray, currentOffer, currentUser) {
+    var affectOn, triggerFieldName;
+    switch (whatAdd) {
+      case 'comment': ;
+      case 'mention': ;
+      case 'like': { 
+        affectOn = 'likes'; 
+        triggerFieldName = 'likedByCurrentUser';
+        break;
+      }
+      case 'add': {
+        affectOn = 'adds'; 
+        triggerFieldName = 'addedByCurrentUser';
+        break;
+      }
+    }
+    if (currentOffer[triggerFieldName] == true) {
+      return;
+    }
+    if (!currentOffer[affectOn]) {
+      currentOffer[affectOn] = [];
+    }
+    currentOffer[affectOn].splice(currentOffer[affectOn].length,0, currentUser)
+    currentOffer[triggerFieldName] = true;
+  }
+
+  function _saveOfferState(offerArray) {
+    sessionStorage.removeItem('offerArray');
+    sessionStorage.setItem('offerArray',  JSON.stringify(offerArray));
   }
   return self;
 }
@@ -15049,12 +15120,13 @@ function OfferCard() {
     _offerList = _offerList || offerList;
     _cardHbTemplate = _cardHbTemplate || hbTemplate.html();
     _cardHbObject = Handlebars.compile(_cardHbTemplate);
-    $('#js-popup-placeholder').on('click', '.close-link', _togglePopup);
-    $('#js-popup-placeholder').on('click', '.js-add', _addIt);
-    $('#js-popup-placeholder').on('click', '.js-like', _likeIt);
-    $('#js-popup-placeholder').on('click', '.js-mention', _toggleMention);
-    $('#js-popup-placeholder').on('keypress', '.js-mention-text', _addMention);
-    $('#js-popup-placeholder').on('click', '.js-delete-offer', _deleteOffer);
+    $('#js-popup-placeholder')
+      .on('click', '.js-close-link', _togglePopup)
+      .on('click', '.js-add', _addIt)
+      .on('click', '.js-like', _likeIt)
+      .on('click', '.js-mention', _toggleMention)
+      .on('keypress', '.js-mention-text', _addMention)
+      .on('click', '.js-delete-offer', _deleteOffer);
   }
 
   function _render(offer, destinationObj, currentUser) {
@@ -15078,8 +15150,7 @@ function OfferCard() {
         _offer.mentions = [];
       }
       _offer.mentions.splice(_offer.mentions.length,0,{ author: _currentUser, text: $(currentInput).val() });
-      $(currentInput).val('');
-      $(currentInput).blur();
+      $(currentInput).val('').blur();
       _offerList.offers[offerIndex] = _offer;
       _offerList.save();
       _render(_offer, undefined, _currentUser);
@@ -15167,13 +15238,14 @@ function OfferList() {
     _currentUser = currentUser;
     _offerHbTemplate = _offerHbTemplate || hbTemplate.html();
     _offerHbObject = Handlebars.compile(_offerHbTemplate);
-    $('#js-offer-list-placeholder').on('click', '.js-more-info', self.offerClick);
-    $('#js-offer-list-placeholder').on('click', '.js-comment-link', self.openComment);
-    $('#js-offer-list-placeholder').on('click', '.js-comments', self.openComment);
-    $('#js-offer-list-placeholder').on('click', '.js-like-link', self.likeIt);
-    $('#js-offer-list-placeholder').on('click', '.js-add-link', self.addIt);
-    $('#js-offer-list-placeholder').on('click', '.js-delete-comment', self.deleteComment);
-    $('#js-offer-list-placeholder').on('keypress', '.js-comment-input', self.createComment);
+    $('#js-offer-list-placeholder')
+      .on('click', '.js-more-info', self.offerClick)
+      .on('click', '.js-comment-link', self.openComment)
+      .on('click', '.js-comments', self.openComment)
+      .on('click', '.js-like-link', self.likeIt)
+      .on('click', '.js-add-link', self.addIt)
+      .on('click', '.js-delete-comment', self.deleteComment)
+      .on('keypress', '.js-comment-input', self.createComment);
   }
   function _render(destinationObj, currentUserParam) {
     _destinationObj = destinationObj || _destinationObj;
@@ -15188,9 +15260,9 @@ function OfferList() {
 
   function _createComment(e) {  
     if (e.keyCode == 13) {
-      var offerIndex, currentInput, currentOffer;
-      offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
-      currentOffer = self.offers[offerIndex];
+      var offerId, currentInput, currentOffer;
+      offerId = $(this).parents().closest('.js-offer').data('offer-id');
+      currentOffer = self.offers[offerId];
       currentInput = e.target;
       if (!currentOffer.comments) {
         currentOffer.comments = [];
@@ -15205,20 +15277,22 @@ function OfferList() {
   }
 
   function _deleteComment() {
-    var offerIndex;
-      offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
-      if (self.offers[offerIndex].commentsCount == 0)
+    var offerId, currentOffer, currentComment;
+      offerId = $(this).data('offer-id');
+      currentOffer = _getFirstItemById(self.offers, offerId);
+      if (currentOffer.commentsCount == 0)
         return;
-      commentIndex = $(this).data('comment-index');
-      self.offers[offerIndex].comments[commentIndex].deleted = true;
-      self.offers[offerIndex].commentsCount--;
+      commentId = $(this).data('comment-id');
+      currentComment = _getFirstItemById(currentOffer.comments, commentId);
+      currentComment.deleted = true;
+      currentOffer.commentsCount--;
       _save();
       _render();
   }
 
   function _offerClick() {
     var currentIndex, $cardTemplate, $cardPlaceHolder;
-    currentIndex = $(this).data('offer-index');
+    currentIndex = $(this).data('offer-id');
     $cardTemplate = $('#js-popup-template');
     $cardPlaceHolder =  $('#js-popup-placeholder');
     if (!offerCard) {
@@ -15231,9 +15305,9 @@ function OfferList() {
   }
 
   function _likeIt() {
-    var offerIndex, currentOffer;
-    offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
-    currentOffer = self.offers[offerIndex];
+    var offerId, currentOffer;
+    offerId = $(this).parents().closest('.js-offer').data('offer-id');
+    currentOffer = self.offers[offerId];
     if (_isAlreadyLiked(_currentUser, currentOffer)) {
       return;
     }
@@ -15247,9 +15321,9 @@ function OfferList() {
   }
 
   function _addIt() {
-    var offerIndex, currentOffer;
-    offerIndex = $(this).parents().closest('.js-offer').data('offer-index');
-    currentOffer = self.offers[offerIndex];
+    var offerId, currentOffer;
+    offerId = $(this).parents().closest('.js-offer').data('offer-id');
+    currentOffer = self.offers[offerId];
     if (_isAlreadyAdded(_currentUser, currentOffer)) {
       return;
     }
@@ -15275,10 +15349,34 @@ function OfferList() {
     }
     return true;
   }
-
+  function _getFirstItemById(arr, itemId) {
+    if (!arr) return;
+    var result;
+    result = $.grep(arr, function(item) {
+      return (item.id == itemId);
+    });
+    return result[0];
+  }
   function _save() {
     sessionStorage.removeItem('offerList');
     sessionStorage.setItem('offerList', JSON.stringify(self.offers));
+  }
+  return self;
+}
+function OfferListing() {
+  var self, _offers, _hbTemplateObject;
+  self = this;
+  self = {
+    init : _init,
+    render : _render
+  }
+  function _init(template) {
+  // Так как при первом рендере у нас исчезает handlebars шаблон, мы его сохраняем в _hbTemplateObject. Но если нам при вызове _init предоставляют шаблон, то мы используем его
+    _hbTemplateObject = Handlebars.compile($(template).html());
+  }
+  // Тут нам указывают, куда складывать сгенеренный шаблон
+  function _render(placeToPut, data, currentUser) {
+    $(placeToPut).html(_hbTemplateObject({ offers: data, currentUser: currentUser}));
   }
   return self;
 }

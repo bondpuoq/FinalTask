@@ -11,12 +11,13 @@ function OfferCard() {
     _offerList = _offerList || offerList;
     _cardHbTemplate = _cardHbTemplate || hbTemplate.html();
     _cardHbObject = Handlebars.compile(_cardHbTemplate);
-    $('#js-popup-placeholder').on('click', '.close-link', _togglePopup);
-    $('#js-popup-placeholder').on('click', '.js-add', _addIt);
-    $('#js-popup-placeholder').on('click', '.js-like', _likeIt);
-    $('#js-popup-placeholder').on('click', '.js-mention', _toggleMention);
-    $('#js-popup-placeholder').on('keypress', '.js-mention-text', _addMention);
-    $('#js-popup-placeholder').on('click', '.js-delete-offer', _deleteOffer);
+    $('#js-popup-placeholder')
+      .on('click', '.js-close-link', _togglePopup)
+      .on('click', '.js-add', _addIt)
+      .on('click', '.js-like', _likeIt)
+      .on('click', '.js-mention', _toggleMention)
+      .on('keypress', '.js-mention-text', _addMention)
+      .on('click', '.js-delete-offer', _deleteOffer);
   }
 
   function _render(offer, destinationObj, currentUser) {
@@ -40,8 +41,7 @@ function OfferCard() {
         _offer.mentions = [];
       }
       _offer.mentions.splice(_offer.mentions.length,0,{ author: _currentUser, text: $(currentInput).val() });
-      $(currentInput).val('');
-      $(currentInput).blur();
+      $(currentInput).val('').blur();
       _offerList.offers[offerIndex] = _offer;
       _offerList.save();
       _render(_offer, undefined, _currentUser);
