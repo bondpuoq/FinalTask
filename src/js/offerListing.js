@@ -1,5 +1,5 @@
 function OfferListing() {
-  var self, _offers, _hbTemplateObject;
+  var self, _hbTemplateObject;
   self = this;
   self = {
     init : _init,
@@ -10,8 +10,8 @@ function OfferListing() {
     _hbTemplateObject = Handlebars.compile($(template).html());
   }
   // Тут нам указывают, куда складывать сгенеренный шаблон
-  function _render(placeToPut, data, currentUser) {
-    $(placeToPut).html(_hbTemplateObject({ offers: data, currentUser: currentUser}));
+  function _render(placeToPut, offers, currentUser) {
+    $(placeToPut).html(_hbTemplateObject({ offers: offers, currentUser: currentUser}));
   }
   return self;
 }

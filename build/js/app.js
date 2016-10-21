@@ -14669,7 +14669,7 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 'use strict';
 (function () {
-  var offerArray, offer, currentUser, offerListing;
+  var offerArray, offer, currentUser, offerListing, isPopupReady, popupTemplate, popupPlaceholder, offerListTemplate, offerListPlaceholder;
 
   $(document).ready(function() { start(); initializeHandlers(); });
 
@@ -14717,52 +14717,101 @@ return /******/ (function(modules) { // webpackBootstrap
   //   sessionStorage.setItem('offerList', JSON.stringify(offerList.offers));
   // }
 
-  // !!!!!!!!!!!! Добавить сюда, чтобы он данные брал из SessionStorage, когда перезагружает страницу !!!!!!!!!!!!!!!!
   function start() {
-    var demo;
-    demo = new demoData();
-    // Задаем от лица кого мы сидим на сайте
-    currentUser = demo.currentUser;
-    offerArray = demo.offers;
+    offerArray = JSON.parse(sessionStorage.getItem('offerArray'));
+    offerListTemplate = '#js-offer-list-template';
+    offerListPlaceholder = '#js-offer-list-placeholder';
+    popupTemplate = '#js-popup-template';
+    popupPlaceholder = '#js-popup-placeholder';
+
+    if (!offerArray) {
+      var demo;
+      demo = new demoData();
+      // Задаем от лица кого мы сидим на сайте
+      offerArray = demo.offers;
+    }
+    currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    if (!currentUser) {
+      currentUser = demo.currentUser;
+    }
     // Начинаем генерировать плитку офферов
     offerListing = new OfferListing();
     offerListing.init('#js-offer-list-template');
     offerListing.render('#js-offer-list-placeholder', offerArray, currentUser);
-
     offer = new Offer();
+    sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
   }
 
   function initializeHandlers() {
     $('#js-popup-placeholder')
       .on('click', '.js-close-link', function() { toggleVisibility('.js-blind', true); })
-      //.on('click', '.js-add', _addIt)
-      //.on('click', '.js-like', _likeIt)
-      .on('click', '.js-mention', function() { toggleVisibility('.js-add-mention'); });
-      //.on('keypress', '.js-mention-text', _addMention)
-      //.on('click', '.js-delete-offer', _deleteOffer);
+      .on('click', '.js-add', function() { addFeedback('adds', true); })
+      .on('click', '.js-like', function() { addFeedback('likes', true); })
+      .on('click', '.js-mention', function() { toggleVisibility('.js-add-mention'); })
+      .on('keypress', '.js-mention-text', function() { addFeedback('mentions', true); })
+      .on('click', '.js-delete-offer', function() { deleteOffer(); toggleVisibility('.js-blind', true); });
     $('#js-offer-list-placeholder')
-      //.on('click', '.js-more-info', _renderPopup)
+      .on('click', '.js-more-info', function() { showPopup(); toggleVisibility('.js-blind', true); })
       .on('click', '.js-comment-link', function() { toggleVisibility('.js-comment'); })
-      //.on('click', '.js-comments', self.openComment)
-      .on('click', '.js-like-link', function() { addFeedback('like'); })
-      .on('click', '.js-add-link', function() { addFeedback('add'); });
-      //.on('click', '.js-delete-comment', self.deleteComment)
-      //.on('keypress', '.js-comment-input', self.createComment);
+      .on('click', '.js-comments', function() { toggleVisibility('.js-comment'); })
+      .on('click', '.js-like-link', function() { addFeedback('likes'); })
+      .on('click', '.js-add-link', function() { addFeedback('adds'); })
+      .on('click', '.js-delete-comment', function() { deleteFeedback('comments'); })
+      .on('keypress', '.js-comment-input', function() { addFeedback('comments'); });
   }
-
+  // ok
   function toggleVisibility(whatToggle, isPopup) {
-    var offerId = getOfferId(event);
+    var offerId = getEntityId(event, 'offer');
     offer.toggleVisibility(whatToggle, offerId, isPopup);
   }
-
-  function addFeedback(whatAdd) {
-    var currentOffer, offerId;
-    offerId = getOfferId(event);
+  // ok
+  function addFeedback(whatAdd, isPopup) {
+    var currentOffer, offerId, allowUpdate;
+    offerId = getEntityId(event, 'offer');
     currentOffer = getFirstItemById(offerArray, offerId);
-    offer.addFeedback(whatAdd, offerArray, currentOffer, currentUser);
-    offerListing.render('#js-offer-list-placeholder', offerArray, currentUser);
+    allowUpdate = offer.addFeedback(whatAdd, offerArray, currentOffer, currentUser, event);
+    if (allowUpdate) {
+      offerListing.render(offerListPlaceholder, offerArray, currentUser);
+      saveOfferArray();
+      if (isPopup) {
+        offer.renderPopup(popupPlaceholder, currentOffer, currentUser);
+        event.stopPropagation();
+      }
+    }
+  }
+  // ok
+  function deleteFeedback(whatDelete) {
+    var currentOffer, currentComment, offerId, commentId, affectOn;
+    affectOn = whatDelete;
+    offerId = getEntityId(event, 'offer');
+    currentOffer = getFirstItemById(offerArray, offerId);
+    commentId = getEntityId(event, 'comment');
+    currentComment = getFirstItemById(currentOffer[affectOn], commentId);
+
+    offer.deleteFeedback(whatDelete, offerArray, currentOffer, currentComment);
+
+    offerListing.render(offerListPlaceholder, offerArray, currentUser);
+    saveOfferArray();
+  }
+  // ok
+  function showPopup() {
+    var hbTemplate, placeToPut, offerId, currentOffer;
+    offerId = getEntityId(event, 'offer');
+    currentOffer = getFirstItemById(offerArray, offerId);
+    if (!isPopupReady) {
+      offer.initPopup(popupTemplate);
+      isPopupReady = true;
+    }
+    offer.renderPopup(popupPlaceholder, currentOffer, currentUser);
   }
 
+  function deleteOffer() {
+    offerId = getEntityId(event, 'offer');
+    currentOffer = getFirstItemById(offerArray, offerId);
+    offer.deleteOffer(currentOffer);
+    saveOfferArray();
+    offerListing.render(offerListPlaceholder, offerArray, currentUser);
+  }
   // Получаем определенный оффер по его id
   function getFirstItemById(arr, itemId) {
     if (!arr) return;
@@ -14773,10 +14822,12 @@ return /******/ (function(modules) { // webpackBootstrap
     return result[0];
   }
 
-  // Получаем id оффера с разметки через event
-  function getOfferId(event) {
-    return $(event.target).data('offer-id');
+  // Получаем id какой-либо сущности (не важно, оффера, коммента или чего либо еще)
+  function getEntityId(event, entityName) {
+    var dataName = entityName + '-id';
+    return $(event.target).data(dataName);
   }
+  
   function saveOfferArray() {
     sessionStorage.setItem('offerArray',  JSON.stringify(offerArray));
   }
@@ -14909,6 +14960,7 @@ function demoData() {
                   "more.radovici@gmail.com, maki-apartaments. com Zorica I Dragan Sestovic .",
     author : _users[1],
     mentions : [_mentions[0], _mentions[1], _mentions[2]],
+    mentionsCount : 3,
     comments: [_comments[6]],
     commentsCount: 1,
     adds: [_users[0], _users[3], _users[4], _users[5]],
@@ -14970,6 +15022,8 @@ function demoData() {
                   " Сопротивленние бесполезно. Вы тоже полюбите группу Чайф.",
     comments : [_comments[3]],
     commentsCount: 1,
+    mentions : [_mentions[4]],
+    mentionsCount : 1,
     author : _users[5]
   }, {
     id : 6,
@@ -14978,6 +15032,8 @@ function demoData() {
     category : "Одежда",
     location : "Екатеринбург",
     description : "Если вы хотите быть похожи на младшего сержанта, - эта сумка - ваш выбор.",
+    mentions : [_mentions[5]],
+    mentionsCount : 1,
     author : _users[7]
   }, {
     id : 7,
@@ -15009,6 +15065,7 @@ function demoData() {
                   "Хотя вообще сыр - он и в Африке сыр.",
     author : _users[1],
     mentions : [_mentions[0], _mentions[1], _mentions[2]],
+    mentionsCount : 3,
     comments: [_comments[6]],
     commentsCount: 1,
     adds: [_users[0], _users[3], _users[4], _users[5]],
@@ -15023,6 +15080,7 @@ function demoData() {
     location : "Екатеринбург, Россия Федерация",
     description : "Самогон - в дополнительном представлении не нуждается.",
     comments : [_comments[7], _comments[8]],
+    commentsCount : 2,
     adds : [_users[7], _users[2]],
     author : _users[1]
   }, {
@@ -15058,13 +15116,23 @@ function demoData() {
   return self;
 }
 function Offer() {
-  var _self;
+  var self, _hbTemplateObject;
   self = this;
   self.toggleVisibility = _toggleVisibility;
   self.addFeedback = _addFeedback;
-
-  function _renderPopup() {
-    
+  self.deleteFeedback = _deleteFeedback;
+  self.initPopup = _initPopup;
+  self.renderPopup = _renderPopup;
+  self.deleteOffer = _deleteOffer;
+  
+  function _initPopup(hbTemplate) {
+    var html;
+    html = $(hbTemplate).html();
+    _hbTemplateObject = Handlebars.compile(html);
+  }
+  function _renderPopup(placeToPut, currentOffer, currentUser) {
+    $(placeToPut).html(_hbTemplateObject({ offer: currentOffer, currentUser: currentUser}));
+    $(placeToPut).css({marginTop: 50 + $(document).scrollTop()});
   }
   function _toggleVisibility(whatToggle, offerId, isPopup) {
     var selector;
@@ -15075,36 +15143,73 @@ function Offer() {
     }
     $(selector).toggle();
   }
-  function _addFeedback(whatAdd, offerArray, currentOffer, currentUser) {
-    var affectOn, triggerFieldName;
+  function _addFeedback(whatAdd, offerArray, currentOffer, currentUser, event) {
+    var affectOn, triggerFieldName, isDone;
+    isDone = false;
     switch (whatAdd) {
-      case 'comment': ;
-      case 'mention': ;
-      case 'like': { 
-        affectOn = 'likes'; 
-        triggerFieldName = 'likedByCurrentUser';
+      case 'mentions': 
+      case 'comments': {
+        if (event.keyCode == 13) {
+          affectOn = whatAdd;
+          triggerFieldName = whatAdd + 'Count';
+          var currentInput, lastFeedbackId = 0;
+          currentInput = event.target;
+          // Если нет еще массива с отзывами, создаем его, иначе выдаст undefined
+          if (!currentOffer[affectOn]) {
+            currentOffer[affectOn] = [];
+            currentOffer[triggerFieldName] = 0;
+          }
+          // Так как мы добавили idшники к комментам - теперь нам надо еще и сохранять id, поэтому если в массиве уже есть комменты или отзывы, мы ищем максимальный idшник и прибавляем к нему 1
+          // чтобы получить id для нового коммента/отзыва  
+          else {
+            currentOffer[affectOn].forEach(function(item) {
+              itemId = parseInt(item.id)
+              if (itemId >= parseInt(lastFeedbackId)) {
+                lastFeedbackId = itemId + 1; 
+              }
+            });
+          }
+          currentOffer[affectOn].splice(currentOffer[affectOn].length,0,{ id: lastFeedbackId, author: currentUser, text: $(currentInput).val() });
+          currentOffer[triggerFieldName]++;
+          $(currentInput).val('');
+          // Триггер на обновление содержимого листинга, иначе обновляется при нажатии на каждую кнопку, из-за инпутов
+          isDone = true;
+        }
         break;
       }
-      case 'add': {
-        affectOn = 'adds'; 
-        triggerFieldName = 'addedByCurrentUser';
+      case 'likes':
+      case 'adds': { 
+        affectOn = whatAdd; 
+        triggerFieldName = whatAdd+'ByCurrentUser';
+        // Если уже поставили лайк или добавили к себе
+        if (currentOffer[triggerFieldName] == true) {
+          return;
+        }
+        if (!currentOffer[affectOn]) {
+          currentOffer[affectOn] = [];
+        }
+        currentOffer[affectOn].splice(currentOffer[affectOn].length, 0, currentUser)
+        currentOffer[triggerFieldName] = true;
+        isDone = true;
         break;
       }
     }
-    if (currentOffer[triggerFieldName] == true) {
-      return;
-    }
-    if (!currentOffer[affectOn]) {
-      currentOffer[affectOn] = [];
-    }
-    currentOffer[affectOn].splice(currentOffer[affectOn].length,0, currentUser)
-    currentOffer[triggerFieldName] = true;
+    return isDone;
   }
 
-  function _saveOfferState(offerArray) {
-    sessionStorage.removeItem('offerArray');
-    sessionStorage.setItem('offerArray',  JSON.stringify(offerArray));
+  function _deleteFeedback(whatDelete, offerArray, currentOffer, currentComment) {
+    var triggerFieldName;
+    triggerFieldName = whatDelete + 'Count';
+    if (currentOffer[triggerFieldName] == 0)
+      return;
+    currentComment.deleted = true;
+    currentOffer[triggerFieldName]--;
   }
+
+  function _deleteOffer(currentOffer) {
+    currentOffer.deleted = true;
+  }
+
   return self;
 }
 function OfferCard() {
@@ -15304,51 +15409,6 @@ function OfferList() {
     $('.popup').css({marginTop: 50 + $(document).scrollTop()});
   }
 
-  function _likeIt() {
-    var offerId, currentOffer;
-    offerId = $(this).parents().closest('.js-offer').data('offer-id');
-    currentOffer = self.offers[offerId];
-    if (_isAlreadyLiked(_currentUser, currentOffer)) {
-      return;
-    }
-    if (!currentOffer.likes) {
-      currentOffer.likes = [];
-    }
-    currentOffer.likes.splice(currentOffer.likes.length,0, _currentUser);
-    currentOffer.likedByCurrentUser = true;
-    _save();
-    _render();
-  }
-
-  function _addIt() {
-    var offerId, currentOffer;
-    offerId = $(this).parents().closest('.js-offer').data('offer-id');
-    currentOffer = self.offers[offerId];
-    if (_isAlreadyAdded(_currentUser, currentOffer)) {
-      return;
-    }
-    if (!currentOffer.adds) {
-      currentOffer.adds = [];
-    }
-    currentOffer.adds.splice(currentOffer.adds.length,0, _currentUser);
-    currentOffer.addedByCurrentUser = true;
-    _save();
-    _render();
-  }
-
-  function _isAlreadyLiked(user, currentOffer) {
-    if (!currentOffer.likes || !currentOffer.likedByCurrentUser) {
-      return false;
-    }
-    return true;
-  }
-
-  function _isAlreadyAdded(user, currentOffer) {
-    if (!currentOffer.adds || !currentOffer.addedByCurrentUser) {
-      return false;
-    }
-    return true;
-  }
   function _getFirstItemById(arr, itemId) {
     if (!arr) return;
     var result;
@@ -15364,7 +15424,7 @@ function OfferList() {
   return self;
 }
 function OfferListing() {
-  var self, _offers, _hbTemplateObject;
+  var self, _hbTemplateObject;
   self = this;
   self = {
     init : _init,
@@ -15375,8 +15435,8 @@ function OfferListing() {
     _hbTemplateObject = Handlebars.compile($(template).html());
   }
   // Тут нам указывают, куда складывать сгенеренный шаблон
-  function _render(placeToPut, data, currentUser) {
-    $(placeToPut).html(_hbTemplateObject({ offers: data, currentUser: currentUser}));
+  function _render(placeToPut, offers, currentUser) {
+    $(placeToPut).html(_hbTemplateObject({ offers: offers, currentUser: currentUser}));
   }
   return self;
 }

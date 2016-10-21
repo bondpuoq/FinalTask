@@ -125,6 +125,7 @@ function demoData() {
                   "more.radovici@gmail.com, maki-apartaments. com Zorica I Dragan Sestovic .",
     author : _users[1],
     mentions : [_mentions[0], _mentions[1], _mentions[2]],
+    mentionsCount : 3,
     comments: [_comments[6]],
     commentsCount: 1,
     adds: [_users[0], _users[3], _users[4], _users[5]],
@@ -186,6 +187,8 @@ function demoData() {
                   " Сопротивленние бесполезно. Вы тоже полюбите группу Чайф.",
     comments : [_comments[3]],
     commentsCount: 1,
+    mentions : [_mentions[4]],
+    mentionsCount : 1,
     author : _users[5]
   }, {
     id : 6,
@@ -194,6 +197,8 @@ function demoData() {
     category : "Одежда",
     location : "Екатеринбург",
     description : "Если вы хотите быть похожи на младшего сержанта, - эта сумка - ваш выбор.",
+    mentions : [_mentions[5]],
+    mentionsCount : 1,
     author : _users[7]
   }, {
     id : 7,
@@ -225,6 +230,7 @@ function demoData() {
                   "Хотя вообще сыр - он и в Африке сыр.",
     author : _users[1],
     mentions : [_mentions[0], _mentions[1], _mentions[2]],
+    mentionsCount : 3,
     comments: [_comments[6]],
     commentsCount: 1,
     adds: [_users[0], _users[3], _users[4], _users[5]],
@@ -239,6 +245,7 @@ function demoData() {
     location : "Екатеринбург, Россия Федерация",
     description : "Самогон - в дополнительном представлении не нуждается.",
     comments : [_comments[7], _comments[8]],
+    commentsCount : 2,
     adds : [_users[7], _users[2]],
     author : _users[1]
   }, {
