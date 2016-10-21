@@ -13,7 +13,6 @@
       return;
     }
     if (visibleOnly) {
-      // Считаем сдвиг
       arr = $.grep(context, function(item) {
         return !item.deleted;
       })
@@ -26,27 +25,6 @@
     
     return ret;
   });
-
-  // function createOfferList() {
-  //   var offerListCache, _target;
-  //   _demo = new demoData();
-  //   offerListCache = sessionStorage.getItem('offerList');
-  //   if (offerListCache && !offerList) {
-  //     offers = JSON.parse(offerListCache);
-  //   }
-  //   else {
-  //     offers = _demo.offers;
-  //   }
-  //   _currentUser = _demo.currentUser;
-  //   _hbOfferTemplate = $('#js-offer-list-template');
-  //   _target = $('#js-offer-list-placeholder');
-  //   if (!offerList) {
-  //     offerList = new OfferList();
-  //     offerList.init(offers, _hbOfferTemplate, _currentUser);
-  //   }
-  //   offerList.render(_target, _currentUser);
-  //   sessionStorage.setItem('offerList', JSON.stringify(offerList.offers));
-  // }
 
   function start() {
     offerArray = JSON.parse(sessionStorage.getItem('offerArray'));
@@ -90,12 +68,12 @@
       .on('click', '.js-delete-comment', function() { deleteFeedback('comments'); })
       .on('keypress', '.js-comment-input', function() { addFeedback('comments'); });
   }
-  // ok
+
   function toggleVisibility(whatToggle, isPopup) {
     var offerId = getEntityId(event, 'offer');
     offer.toggleVisibility(whatToggle, offerId, isPopup);
   }
-  // ok
+
   function addFeedback(whatAdd, isPopup) {
     var currentOffer, offerId, allowUpdate;
     offerId = getEntityId(event, 'offer');
@@ -110,7 +88,7 @@
       }
     }
   }
-  // ok
+
   function deleteFeedback(whatDelete) {
     var currentOffer, currentComment, offerId, commentId, affectOn;
     affectOn = whatDelete;
@@ -124,7 +102,7 @@
     offerListing.render(offerListPlaceholder, offerArray, currentUser);
     saveOfferArray();
   }
-  // ok
+
   function showPopup() {
     var hbTemplate, placeToPut, offerId, currentOffer;
     offerId = getEntityId(event, 'offer');

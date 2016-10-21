@@ -14682,7 +14682,6 @@ return /******/ (function(modules) { // webpackBootstrap
       return;
     }
     if (visibleOnly) {
-      // Считаем сдвиг
       arr = $.grep(context, function(item) {
         return !item.deleted;
       })
@@ -14695,27 +14694,6 @@ return /******/ (function(modules) { // webpackBootstrap
     
     return ret;
   });
-
-  // function createOfferList() {
-  //   var offerListCache, _target;
-  //   _demo = new demoData();
-  //   offerListCache = sessionStorage.getItem('offerList');
-  //   if (offerListCache && !offerList) {
-  //     offers = JSON.parse(offerListCache);
-  //   }
-  //   else {
-  //     offers = _demo.offers;
-  //   }
-  //   _currentUser = _demo.currentUser;
-  //   _hbOfferTemplate = $('#js-offer-list-template');
-  //   _target = $('#js-offer-list-placeholder');
-  //   if (!offerList) {
-  //     offerList = new OfferList();
-  //     offerList.init(offers, _hbOfferTemplate, _currentUser);
-  //   }
-  //   offerList.render(_target, _currentUser);
-  //   sessionStorage.setItem('offerList', JSON.stringify(offerList.offers));
-  // }
 
   function start() {
     offerArray = JSON.parse(sessionStorage.getItem('offerArray'));
@@ -14759,12 +14737,12 @@ return /******/ (function(modules) { // webpackBootstrap
       .on('click', '.js-delete-comment', function() { deleteFeedback('comments'); })
       .on('keypress', '.js-comment-input', function() { addFeedback('comments'); });
   }
-  // ok
+
   function toggleVisibility(whatToggle, isPopup) {
     var offerId = getEntityId(event, 'offer');
     offer.toggleVisibility(whatToggle, offerId, isPopup);
   }
-  // ok
+
   function addFeedback(whatAdd, isPopup) {
     var currentOffer, offerId, allowUpdate;
     offerId = getEntityId(event, 'offer');
@@ -14779,7 +14757,7 @@ return /******/ (function(modules) { // webpackBootstrap
       }
     }
   }
-  // ok
+
   function deleteFeedback(whatDelete) {
     var currentOffer, currentComment, offerId, commentId, affectOn;
     affectOn = whatDelete;
@@ -14793,7 +14771,7 @@ return /******/ (function(modules) { // webpackBootstrap
     offerListing.render(offerListPlaceholder, offerArray, currentUser);
     saveOfferArray();
   }
-  // ok
+
   function showPopup() {
     var hbTemplate, placeToPut, offerId, currentOffer;
     offerId = getEntityId(event, 'offer');
@@ -15212,217 +15190,6 @@ function Offer() {
 
   return self;
 }
-function OfferCard() {
-  var self, _cardHbTemplate, _cardHbObject, _currentUser, _offer, _destinationObject, _offerList;
-  self = this;
-  self = {
-    init : _init,
-    render : _render,
-    addMention : _addMention
-  }
-
-  function _init(hbTemplate, offerList) {
-    _offerList = _offerList || offerList;
-    _cardHbTemplate = _cardHbTemplate || hbTemplate.html();
-    _cardHbObject = Handlebars.compile(_cardHbTemplate);
-    $('#js-popup-placeholder')
-      .on('click', '.js-close-link', _togglePopup)
-      .on('click', '.js-add', _addIt)
-      .on('click', '.js-like', _likeIt)
-      .on('click', '.js-mention', _toggleMention)
-      .on('keypress', '.js-mention-text', _addMention)
-      .on('click', '.js-delete-offer', _deleteOffer);
-  }
-
-  function _render(offer, destinationObj, currentUser) {
-    _offer = offer || _offer;
-    _currentUser = _currentUser || currentUser;
-    _destinationObject = _destinationObject || destinationObj;
-    $(_destinationObject).html(_cardHbObject( { data: _offer, currentUser: _currentUser }));
-  }
-
-  function _toggleMention() {
-    $(this).parents('#js-popup-placeholder').children('.js-add-mention').toggle();
-    $(this).parents('#js-popup-placeholder').children('.js-add-mention').find('.js-mention-text').focus();
-  }
-
-  function _addMention(e) { 
-    if (e.keyCode == 13) {
-      var currentInput, offerIndex;
-      offerIndex = $.inArray(_offer, _offerList.offers);
-      currentInput = e.target;
-      if (!_offer.mentions) {
-        _offer.mentions = [];
-      }
-      _offer.mentions.splice(_offer.mentions.length,0,{ author: _currentUser, text: $(currentInput).val() });
-      $(currentInput).val('').blur();
-      _offerList.offers[offerIndex] = _offer;
-      _offerList.save();
-      _render(_offer, undefined, _currentUser);
-      _offerList.render();
-    }
-  }
-  
-  function _togglePopup() {
-    $('.blind').toggle();
-  }
-
-  function _addIt() {
-    var offerIndex;
-    offerIndex = $.inArray(_offer, _offerList.offers);
-    if (_isAlreadyAdded()) {
-      return;
-    }
-    if (!_offer.adds) {
-      _offer.adds = [];
-    }
-    _offer.addedByCurrentUser = true;
-    _offer.adds.splice(_offer.adds.length, 0, _currentUser);
-    _offerList.offers.splice(offerIndex, 1, _offer);
-    _offerList.save();
-    _render();
-    _offerList.render();
-  }
-
-  function _likeIt() {
-    var offerIndex;
-    offerIndex = $.inArray(_offer, _offerList.offers);
-    if (_isAlreadyLiked()) {
-      return;
-    }
-    if (!_offer.likes) {
-      _offer.likes = [];
-    }
-    _offer.likedByCurrentUser = true;
-    _offer.likes.splice(_offer.likes.length, 0, _currentUser);
-    _offerList.offers.splice(offerIndex, 1, _offer);
-    _offerList.save();
-    _render();
-    _offerList.render();
-  }
-
-   function _isAlreadyLiked() {
-    if (!_offer.likes || !_offer.likedByCurrentUser) {  
-      return false;
-    }
-    return true;
-  }
-
-  function _isAlreadyAdded() {
-    if (!_offer.adds || !_offer.addedByCurrentUser) {
-      return false;
-    }
-    return true;
-  }
-
-  function _deleteOffer() {
-    _offer.deleted = true;
-    _offerList.save();
-    _togglePopup();
-    _offerList.render();
-  }
-  return self;
-}
-function OfferList() {
-  var self, _offerHbTemplate, _offerHbObject, _currentUser, _destinationObj, offerCard;
-  self = this;
-  self = {
-    init: _init,
-    render: _render,
-    offerClick : _offerClick,
-    openComment : _openComment,
-    createComment : _createComment,
-    deleteComment : _deleteComment,
-    save: _save,
-    likeIt : _likeIt,
-    addIt : _addIt,
-    offers : []
-  }
-  function _init(offerData, hbTemplate, currentUser) {
-    self.offers = offerData;
-    _currentUser = currentUser;
-    _offerHbTemplate = _offerHbTemplate || hbTemplate.html();
-    _offerHbObject = Handlebars.compile(_offerHbTemplate);
-    $('#js-offer-list-placeholder')
-      .on('click', '.js-more-info', self.offerClick)
-      .on('click', '.js-comment-link', self.openComment)
-      .on('click', '.js-comments', self.openComment)
-      .on('click', '.js-like-link', self.likeIt)
-      .on('click', '.js-add-link', self.addIt)
-      .on('click', '.js-delete-comment', self.deleteComment)
-      .on('keypress', '.js-comment-input', self.createComment);
-  }
-  function _render(destinationObj, currentUserParam) {
-    _destinationObj = destinationObj || _destinationObj;
-    _currentUser = currentUserParam || _currentUser;
-    $(_destinationObj).html(_offerHbObject({offers: self.offers, currentUser: _currentUser }));
-  }
-
-  function _openComment() {
-    $(this).parents().closest('.js-offer').find('.js-comment').toggle();
-    $(this).parents().closest('.js-offer').find('.js-comment-input').focus();
-  }
-
-  function _createComment(e) {  
-    if (e.keyCode == 13) {
-      var offerId, currentInput, currentOffer;
-      offerId = $(this).parents().closest('.js-offer').data('offer-id');
-      currentOffer = self.offers[offerId];
-      currentInput = e.target;
-      if (!currentOffer.comments) {
-        currentOffer.comments = [];
-        currentOffer.commentsCount = 0;
-      }
-      currentOffer.comments.splice(currentOffer.comments.length,0,{ author: _currentUser, text: $(currentInput).val() });
-      currentOffer.commentsCount++;
-      $(currentInput).val('');
-      _save();
-      _render();
-    }
-  }
-
-  function _deleteComment() {
-    var offerId, currentOffer, currentComment;
-      offerId = $(this).data('offer-id');
-      currentOffer = _getFirstItemById(self.offers, offerId);
-      if (currentOffer.commentsCount == 0)
-        return;
-      commentId = $(this).data('comment-id');
-      currentComment = _getFirstItemById(currentOffer.comments, commentId);
-      currentComment.deleted = true;
-      currentOffer.commentsCount--;
-      _save();
-      _render();
-  }
-
-  function _offerClick() {
-    var currentIndex, $cardTemplate, $cardPlaceHolder;
-    currentIndex = $(this).data('offer-id');
-    $cardTemplate = $('#js-popup-template');
-    $cardPlaceHolder =  $('#js-popup-placeholder');
-    if (!offerCard) {
-      offerCard = new OfferCard();
-      offerCard.init($cardTemplate, self); 
-    }
-    offerCard.render(self.offers[currentIndex],  $cardPlaceHolder, _currentUser);
-    $('.js-blind').toggle();
-    $('.popup').css({marginTop: 50 + $(document).scrollTop()});
-  }
-
-  function _getFirstItemById(arr, itemId) {
-    if (!arr) return;
-    var result;
-    result = $.grep(arr, function(item) {
-      return (item.id == itemId);
-    });
-    return result[0];
-  }
-  function _save() {
-    sessionStorage.removeItem('offerList');
-    sessionStorage.setItem('offerList', JSON.stringify(self.offers));
-  }
-  return self;
-}
 function OfferListing() {
   var self, _hbTemplateObject;
   self = this;
@@ -15437,23 +15204,6 @@ function OfferListing() {
   // Тут нам указывают, куда складывать сгенеренный шаблон
   function _render(placeToPut, offers, currentUser) {
     $(placeToPut).html(_hbTemplateObject({ offers: offers, currentUser: currentUser}));
-  }
-  return self;
-}
-function User() {
-  var self;
-  self = this;
-  self = {
-    init: _init,
-    render: _render
-  }
-  function _init(userData) {
-    self.id = userData.id;
-    self.name = userData.name;
-    self.avatar = userData.avatarImg;
-  }
-  function _render() {
-
   }
   return self;
 }
