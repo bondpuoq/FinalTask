@@ -6,7 +6,8 @@ function Offer() {
     addFeedback : _addFeedback,
     deleteFeedback : _deleteFeedback,
     renderPopup : _renderPopup,
-    deleteOffer : _deleteOffer
+    deleteOffer : _deleteOffer,
+    saveInputState : _saveInputState
   }
   function _renderPopup(template, $placeholder, currentOffer, currentUser) {
     var hbTemplateObject = Handlebars.compile(template);
@@ -16,35 +17,16 @@ function Offer() {
   function _toggleVisibility(selector) {
     $(selector).toggle();
   }
-  function _addFeedback(whatAdd, offerArray, currentOffer, currentUser, event) {
+  function _addFeedback(feedbackType, offerArray, currentOffer, currentUser, event) {
     var affectOn, triggerFieldName, isDone;
     isDone = false;
-    switch (whatAdd) {
+    switch (feedbackType) {
       case 'mentions': 
       case 'comments': {
         if (event.keyCode == 13) {
-          affectOn = whatAdd;
-          triggerFieldName = whatAdd + 'Count';
-          var currentInput, lastFeedbackId = 0;
+          var currentInput;
           currentInput = event.target;
-          // Если нет еще массива с отзывами, создаем его, иначе выдаст undefined
-          if (!currentOffer[affectOn]) {
-            currentOffer[affectOn] = [];
-            currentOffer[triggerFieldName] = 0;
-          }
-          // Так как мы добавили idшники к комментам - теперь нам надо еще и сохранять id, поэтому если в массиве уже есть комменты или отзывы, мы ищем максимальный idшник и прибавляем к нему 1
-          // чтобы получить id для нового коммента/отзыва  
-          else {
-            currentOffer[affectOn].forEach(function(item) {
-              itemId = parseInt(item.id)
-              if (itemId >= parseInt(lastFeedbackId)) {
-                lastFeedbackId = itemId + 1; 
-              }
-            });
-          }
-          currentOffer[affectOn].splice(currentOffer[affectOn].length,0,{ id: lastFeedbackId, author: currentUser, text: $(currentInput).val() });
-          currentOffer[triggerFieldName]++;
-          $(currentInput).val('');
+          _createTextFeedback(feedbackType, currentInput, currentOffer, currentUser);
           // Триггер на обновление содержимого листинга, иначе обновляется при нажатии на каждую кнопку, из-за инпутов
           isDone = true;
         }
@@ -52,24 +34,20 @@ function Offer() {
       }
       case 'likes':
       case 'adds': { 
-        affectOn = whatAdd; 
-        triggerFieldName = whatAdd+'ByCurrentUser';
-        // Если уже поставили лайк или добавили к себе
-        if (currentOffer[triggerFieldName] == true) {
-          return;
-        }
-        if (!currentOffer[affectOn]) {
-          currentOffer[affectOn] = [];
-        }
-        currentOffer[affectOn].splice(currentOffer[affectOn].length, 0, currentUser)
-        currentOffer[triggerFieldName] = true;
+        _createCounterFeedback(feedbackType, currentOffer, currentUser);
         isDone = true;
         break;
       }
     }
     return isDone;
   }
-
+  function _saveInputState(event, currentOffer) {
+    var inputValue, currentInput = event.target;
+    inputValue = $(currentInput).val();
+    if (inputValue) {
+      currentOffer['commentText'] = inputValue;
+    }
+  }
   function _deleteFeedback(whatDelete, offerArray, currentOffer, currentComment) {
     var triggerFieldName;
     triggerFieldName = whatDelete + 'Count';
@@ -83,6 +61,27 @@ function Offer() {
   function _deleteOffer(currentOffer) {
     currentOffer.deleted = true;
   }
-
+  function _createTextFeedback(affectOn, currentInput, currentOffer, currentUser) {
+    var newFeedback;
+    triggerFieldName = affectOn + 'Count';
+    nextId = (Math.random().toString(16)+"000000000").substr(2,8).toString();
+    newFeedback = {
+      id : nextId,
+      author : currentUser,
+      text : $(currentInput).val()
+    };
+    currentOffer[affectOn].splice(currentOffer[affectOn].length, 0, newFeedback);
+    currentOffer[triggerFieldName]++;
+    $(currentInput).val('');
+  }
+  function _createCounterFeedback(affectOn, currentOffer, currentUser) {
+    triggerFieldName = affectOn+'ByCurrentUser';
+    // Если уже поставили лайк или добавили к себе
+    if (currentOffer[triggerFieldName] == true) {
+      return;
+    }
+    currentOffer[affectOn].splice(currentOffer[affectOn].length, 0, currentUser)
+    currentOffer[triggerFieldName] = true;
+  }
   return self;
 }

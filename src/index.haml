@@ -85,11 +85,20 @@
                   %div.text
                     {{text}}
               {{/take}}
-                %div.container.js-comment.hidden{data-offer-id: "{{id}}"}
+              {{#if commentText}}
+                %div.container.js-comment{data-offer-id: "{{id}}"}
                   %div.avatar
                     %img{src:"{{../currentUser.avatar}}.png"}
                   %div.textinput
-                    %textarea.comment-input.js-comment-input{placeholder:"Комментировать", maxlength: "500", data-offer-id:"{{id}}"}
+                    %textarea.comment-input.js-comment-input{placeholder:"Комментировать", maxlength: "500", data-offer-id:"{{id}}"}{{commentText}}
+              {{else}}
+                %div.container.js-comment.hidden{data-offer-id: "{{id}}"}
+                  %div.avatar
+                      %img{src:"{{../currentUser.avatar}}.png"}
+                    %div.textinput
+                      %textarea.comment-input.js-comment-input{placeholder:"Комментировать", maxlength: "500", data-offer-id:"{{id}}"}
+              {{/if}}
+                  
           {{/if}}
         {{/each}}
     %div.blind.hidden.js-blind

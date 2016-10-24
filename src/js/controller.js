@@ -9,6 +9,7 @@
   $(document).ready(function() { 
     init(); 
     initializeHandlers(); 
+    clearUndoneText();
   });
 
   // Хелпер берет нужное нам количество элементов из массива, 
@@ -100,24 +101,32 @@
       })
       .on('keypress', '.js-comment-input', function() { 
         addFeedback('comments'); 
+      })
+      .on('blur', '.js-comment-input', function() {
+        saveInputState();
       });
   }
+  function clearUndoneText() {
+    for (var i = 0, length = offerArray.length; i<length; i++) {
+      console.log(offerArray[i].commentText);
+      delete offerArray[i].commentText;
+    }
+  }
 
-  function toggleVisibility(whatToggle) {
-    var offerId, selector;
+  function toggleVisibility(selector) {
+    var offerId;
     offerId = $(event.target).data('offer-id');
-    selector = whatToggle;
     if ($(event.target).hasClass('js-comment-link')) {
       selector += '[data-offer-id='+ offerId +']'
     }
     offer.toggleVisibility(selector);
   }
 
-  function addFeedback(whatAdd, isPopup) {
+  function addFeedback(feedbackType, isPopup) {
     var currentOffer, offerId, allowUpdate;
     offerId = $(event.target).data('offer-id');
     currentOffer = getFirstItemById(offerArray, offerId);
-    allowUpdate = offer.addFeedback(whatAdd, offerArray, currentOffer, currentUser, event);
+    allowUpdate = offer.addFeedback(feedbackType, offerArray, currentOffer, currentUser, event);
     if (allowUpdate) {
       offerListing.render(OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, offerArray, currentUser);
       saveOfferArray();
@@ -126,6 +135,13 @@
         event.stopPropagation();
       }
     }
+  }
+
+  function saveInputState() {
+    offerId = $(event.target).data('offer-id');
+    currentOffer = getFirstItemById(offerArray, offerId);
+    offer.saveInputState(event, currentOffer);
+    saveOfferArray();
   }
 
   function deleteFeedback(whatDelete) {
