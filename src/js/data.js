@@ -139,6 +139,12 @@ function demoData() {
     dateEnd : "14.06.13",
     location : "Екатеринбург",
     description : "Мелкий дурацкий сайт с хреновым дизайном за гроши, - вы же такое любите, да?",
+    comments : [],
+    commentsCount: 0,
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
+    adds: [],
     author : _users[7]
   }, {
     id : 2, 
@@ -150,6 +156,10 @@ function demoData() {
                   "А мы ответим: \"А почему бы по такой охренененно большой квартире не раскатывать на велике?",
     comments : [_comments[0], _comments[1], _comments[2]],
     commentsCount: 3,
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
+    adds: [],
     author : _users[0]
   }, {
     id :  3,
@@ -162,6 +172,11 @@ function demoData() {
     description: "Счастливые часы не наблюдают, а еще их не наблюдают бедные и скупердяи, ибо нечего наблюдать."+ 
                  "Чтобы вас случайно не приняли за скупердяя, приобретайте наши часы и не мучайте наш мозг. ",
     likes: [_users[1], _users[5]],
+    comments : [],
+    commentsCount: 0,
+    mentions: [],
+    mentionsCount: 0,
+    adds: [],
     author : _users[6]
   }, {
     id : 4,
@@ -175,6 +190,10 @@ function demoData() {
                  "губы в трубочку у вас свернуться автоматически",
     author : _users[2],
     comments : [_comments[4], _comments[5]],
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
+    adds: [],
     commentsCount: 2
   }, {
     id : 5,
@@ -189,6 +208,8 @@ function demoData() {
     commentsCount: 1,
     mentions : [_mentions[4]],
     mentionsCount : 1,
+    likes: [],
+    adds: [],
     author : _users[5]
   }, {
     id : 6,
@@ -199,6 +220,10 @@ function demoData() {
     description : "Если вы хотите быть похожи на младшего сержанта, - эта сумка - ваш выбор.",
     mentions : [_mentions[5]],
     mentionsCount : 1,
+    comments : [],
+    commentsCount: 0,
+    likes: [],
+    adds: [],
     author : _users[7]
   }, {
     id : 7,
@@ -209,6 +234,12 @@ function demoData() {
     dateEnd : "14.06.13",
     location : "Екатеринбург",
     description : "Визитки вам - чего же боле, что я могу еще сказать?",
+    comments : [],
+    commentsCount: 0,
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
+    adds: [],
     author : _users[4]
   }, {
     id : 8,
@@ -217,6 +248,12 @@ function demoData() {
     category : "Авто",
     location : "Ульяновск",
     description : "Будь рыцарем, купи Knight б..я!",
+    comments : [],
+    commentsCount: 0,
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
+    adds: [],
     author : _users[6]
   }, { 
     id : 9,
@@ -247,6 +284,9 @@ function demoData() {
     comments : [_comments[7], _comments[8]],
     commentsCount : 2,
     adds : [_users[7], _users[2]],
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
     author : _users[1]
   }, {
     id : 11,
@@ -258,6 +298,10 @@ function demoData() {
                   "Ризотто - есть че?",
     comments : [_comments[0], _comments[1], _comments[2]],
     commentsCount: 3,
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
+    adds: [],
     author : _users[0]
   }, {
     id : 12,
@@ -269,6 +313,11 @@ function demoData() {
     location : "Лондон, Великобритания",
     description: "Офисный стул, для офисных нужд. Расставим все точки над нашими стульями.",
     likes: [_users[1], _users[5]],
+    comments : [],
+    commentsCount: 0,
+    mentions: [],
+    mentionsCount: 0,
+    adds: [],
     author : _users[6]
   }];
 

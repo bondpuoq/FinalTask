@@ -14669,13 +14669,20 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 'use strict';
 (function () {
-  var offerArray, offer, currentUser, offerListing, isPopupReady, popupTemplate, popupPlaceholder, offerListTemplate, offerListPlaceholder;
+  var demo, offerArray, offer, currentUser, offerListing, POPUP_TEMPLATE, $POPUP_PLACEHOLDER, OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER;
+  OFFER_LIST_TEMPLATE = $('#js-offer-list-template').html();
+  $OFFER_LIST_PLACEHOLDER = $('#js-offer-list-placeholder');
+  POPUP_TEMPLATE = $('#js-popup-template').html();
+  $POPUP_PLACEHOLDER = $('#js-popup-placeholder');
 
-  $(document).ready(function() { start(); initializeHandlers(); });
+  $(document).ready(function() { 
+    init(); 
+    initializeHandlers(); 
+  });
 
   // Хелпер берет нужное нам количество элементов из массива, 
   // Если в массиве меньше элементов, чем мы указали взять, берет соответственно только имеющиеся
-  Handlebars.registerHelper('take', function(num, visibleOnly, context, options){
+  Handlebars.registerHelper('take', function(num, visibleOnly, context, options) {
     var ret = '';
     // Если нет массива для отображения - выходим из хелпера
     if (!context) {
@@ -14684,26 +14691,26 @@ return /******/ (function(modules) { // webpackBootstrap
     if (visibleOnly) {
       arr = $.grep(context, function(item) {
         return !item.deleted;
-      })
-      arr.reverse().slice(0,num);
-      $.each(arr,function() { ret+= options.fn(this)});
+      });
+      //arr.reverse().slice(0,num);
+      arr.slice(0,num);
+      $.each(arr,function() { 
+        ret+= options.fn(this)
+      });
     }
     else {
-      $.each(context,function(){ ret+= options.fn(this)});
+      $.each(context,function() { 
+        ret+= options.fn(this)
+      });
     }
     
     return ret;
   });
 
-  function start() {
+  function init() {
     offerArray = JSON.parse(sessionStorage.getItem('offerArray'));
-    offerListTemplate = '#js-offer-list-template';
-    offerListPlaceholder = '#js-offer-list-placeholder';
-    popupTemplate = '#js-popup-template';
-    popupPlaceholder = '#js-popup-placeholder';
 
     if (!offerArray) {
-      var demo;
       demo = new demoData();
       // Задаем от лица кого мы сидим на сайте
       offerArray = demo.offers;
@@ -14714,45 +14721,77 @@ return /******/ (function(modules) { // webpackBootstrap
     }
     // Начинаем генерировать плитку офферов
     offerListing = new OfferListing();
-    offerListing.init('#js-offer-list-template');
-    offerListing.render('#js-offer-list-placeholder', offerArray, currentUser);
+    offerListing.render(OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, offerArray, currentUser);
     offer = new Offer();
     sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
   }
 
   function initializeHandlers() {
-    $('#js-popup-placeholder')
-      .on('click', '.js-close-link', function() { toggleVisibility('.js-blind', true); })
-      .on('click', '.js-add', function() { addFeedback('adds', true); })
-      .on('click', '.js-like', function() { addFeedback('likes', true); })
-      .on('click', '.js-mention', function() { toggleVisibility('.js-add-mention'); })
-      .on('keypress', '.js-mention-text', function() { addFeedback('mentions', true); })
-      .on('click', '.js-delete-offer', function() { deleteOffer(); toggleVisibility('.js-blind', true); });
-    $('#js-offer-list-placeholder')
-      .on('click', '.js-more-info', function() { showPopup(); toggleVisibility('.js-blind', true); })
-      .on('click', '.js-comment-link', function() { toggleVisibility('.js-comment'); })
-      .on('click', '.js-comments', function() { toggleVisibility('.js-comment'); })
-      .on('click', '.js-like-link', function() { addFeedback('likes'); })
-      .on('click', '.js-add-link', function() { addFeedback('adds'); })
-      .on('click', '.js-delete-comment', function() { deleteFeedback('comments'); })
-      .on('keypress', '.js-comment-input', function() { addFeedback('comments'); });
+    $POPUP_PLACEHOLDER
+      .on('click', '.js-close-link', function() { 
+        toggleVisibility('.js-blind', true); 
+      })
+      .on('click', '.js-add', function() { 
+        addFeedback('adds', true); 
+      })
+      .on('click', '.js-like', function() { 
+        addFeedback('likes', true); 
+      })
+      .on('click', '.js-mention', function() { 
+        toggleVisibility('.js-add-mention'); 
+      })
+      .on('keypress', '.js-mention-text', function() { 
+        addFeedback('mentions', true); 
+      })
+      .on('click', '.js-delete-offer', function() { 
+        deleteOffer(); 
+        toggleVisibility('.js-blind'); 
+      });
+    $OFFER_LIST_PLACEHOLDER
+      .on('click', '.js-more-info', function() { 
+        showPopup(); 
+        toggleVisibility('.js-blind'); 
+      })
+      .on('click', '.js-comment-link', function() { 
+        toggleVisibility('.js-comment'); 
+      })
+      .on('click', '.js-comments', function() { 
+        toggleVisibility('.js-comment'); 
+      })
+      .on('click', '.js-like-link', function() { 
+        addFeedback('likes'); 
+      })
+      .on('click', '.js-add-link', function() { 
+        addFeedback('adds'); 
+      })
+      .on('click', '.js-delete-comment', function() { 
+        deleteFeedback('comments'); 
+      })
+      .on('keypress', '.js-comment-input', function() { 
+        addFeedback('comments'); 
+      });
   }
 
-  function toggleVisibility(whatToggle, isPopup) {
-    var offerId = getEntityId(event, 'offer');
-    offer.toggleVisibility(whatToggle, offerId, isPopup);
+  function toggleVisibility(whatToggle) {
+    var offerId, selector;
+    offerId = $(event.target).data('offer-id');
+    selector = whatToggle;
+    if ($(event.target).hasClass('js-comment-link')) {
+      selector += '[data-offer-id='+ offerId +']'
+    }
+    offer.toggleVisibility(selector);
   }
 
   function addFeedback(whatAdd, isPopup) {
     var currentOffer, offerId, allowUpdate;
-    offerId = getEntityId(event, 'offer');
+    offerId = $(event.target).data('offer-id');
     currentOffer = getFirstItemById(offerArray, offerId);
     allowUpdate = offer.addFeedback(whatAdd, offerArray, currentOffer, currentUser, event);
     if (allowUpdate) {
-      offerListing.render(offerListPlaceholder, offerArray, currentUser);
+      offerListing.render(OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, offerArray, currentUser);
       saveOfferArray();
       if (isPopup) {
-        offer.renderPopup(popupPlaceholder, currentOffer, currentUser);
+        offer.renderPopup(POPUP_TEMPLATE, $POPUP_PLACEHOLDER, currentOffer, currentUser);
         event.stopPropagation();
       }
     }
@@ -14761,49 +14800,42 @@ return /******/ (function(modules) { // webpackBootstrap
   function deleteFeedback(whatDelete) {
     var currentOffer, currentComment, offerId, commentId, affectOn;
     affectOn = whatDelete;
-    offerId = getEntityId(event, 'offer');
+    offerId = $(event.target).data('offer-id');
+    var offerId2 = $(event.target).data('offer-id');
     currentOffer = getFirstItemById(offerArray, offerId);
-    commentId = getEntityId(event, 'comment');
+    commentId = $(event.target).data('comment-id');
     currentComment = getFirstItemById(currentOffer[affectOn], commentId);
 
     offer.deleteFeedback(whatDelete, offerArray, currentOffer, currentComment);
 
-    offerListing.render(offerListPlaceholder, offerArray, currentUser);
+    offerListing.render(OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, offerArray, currentUser);
     saveOfferArray();
   }
 
   function showPopup() {
     var hbTemplate, placeToPut, offerId, currentOffer;
-    offerId = getEntityId(event, 'offer');
+    offerId = $(event.target).data('offer-id');
     currentOffer = getFirstItemById(offerArray, offerId);
-    if (!isPopupReady) {
-      offer.initPopup(popupTemplate);
-      isPopupReady = true;
-    }
-    offer.renderPopup(popupPlaceholder, currentOffer, currentUser);
+    offer.renderPopup(POPUP_TEMPLATE, $POPUP_PLACEHOLDER, currentOffer, currentUser);
   }
 
   function deleteOffer() {
-    offerId = getEntityId(event, 'offer');
+    offerId = $(event.target).data('offer-id');
     currentOffer = getFirstItemById(offerArray, offerId);
     offer.deleteOffer(currentOffer);
     saveOfferArray();
-    offerListing.render(offerListPlaceholder, offerArray, currentUser);
+    offerListing.render(OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, offerArray, currentUser);
   }
   // Получаем определенный оффер по его id
   function getFirstItemById(arr, itemId) {
-    if (!arr) return;
+    if (!arr) {
+      return;
+    }
     var result;
     result = $.grep(arr, function(item) {
       return (item.id == itemId);
     });
     return result[0];
-  }
-
-  // Получаем id какой-либо сущности (не важно, оффера, коммента или чего либо еще)
-  function getEntityId(event, entityName) {
-    var dataName = entityName + '-id';
-    return $(event.target).data(dataName);
   }
   
   function saveOfferArray() {
@@ -14952,6 +14984,12 @@ function demoData() {
     dateEnd : "14.06.13",
     location : "Екатеринбург",
     description : "Мелкий дурацкий сайт с хреновым дизайном за гроши, - вы же такое любите, да?",
+    comments : [],
+    commentsCount: 0,
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
+    adds: [],
     author : _users[7]
   }, {
     id : 2, 
@@ -14963,6 +15001,10 @@ function demoData() {
                   "А мы ответим: \"А почему бы по такой охренененно большой квартире не раскатывать на велике?",
     comments : [_comments[0], _comments[1], _comments[2]],
     commentsCount: 3,
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
+    adds: [],
     author : _users[0]
   }, {
     id :  3,
@@ -14975,6 +15017,11 @@ function demoData() {
     description: "Счастливые часы не наблюдают, а еще их не наблюдают бедные и скупердяи, ибо нечего наблюдать."+ 
                  "Чтобы вас случайно не приняли за скупердяя, приобретайте наши часы и не мучайте наш мозг. ",
     likes: [_users[1], _users[5]],
+    comments : [],
+    commentsCount: 0,
+    mentions: [],
+    mentionsCount: 0,
+    adds: [],
     author : _users[6]
   }, {
     id : 4,
@@ -14988,6 +15035,10 @@ function demoData() {
                  "губы в трубочку у вас свернуться автоматически",
     author : _users[2],
     comments : [_comments[4], _comments[5]],
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
+    adds: [],
     commentsCount: 2
   }, {
     id : 5,
@@ -15002,6 +15053,8 @@ function demoData() {
     commentsCount: 1,
     mentions : [_mentions[4]],
     mentionsCount : 1,
+    likes: [],
+    adds: [],
     author : _users[5]
   }, {
     id : 6,
@@ -15012,6 +15065,10 @@ function demoData() {
     description : "Если вы хотите быть похожи на младшего сержанта, - эта сумка - ваш выбор.",
     mentions : [_mentions[5]],
     mentionsCount : 1,
+    comments : [],
+    commentsCount: 0,
+    likes: [],
+    adds: [],
     author : _users[7]
   }, {
     id : 7,
@@ -15022,6 +15079,12 @@ function demoData() {
     dateEnd : "14.06.13",
     location : "Екатеринбург",
     description : "Визитки вам - чего же боле, что я могу еще сказать?",
+    comments : [],
+    commentsCount: 0,
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
+    adds: [],
     author : _users[4]
   }, {
     id : 8,
@@ -15030,6 +15093,12 @@ function demoData() {
     category : "Авто",
     location : "Ульяновск",
     description : "Будь рыцарем, купи Knight б..я!",
+    comments : [],
+    commentsCount: 0,
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
+    adds: [],
     author : _users[6]
   }, { 
     id : 9,
@@ -15060,6 +15129,9 @@ function demoData() {
     comments : [_comments[7], _comments[8]],
     commentsCount : 2,
     adds : [_users[7], _users[2]],
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
     author : _users[1]
   }, {
     id : 11,
@@ -15071,6 +15143,10 @@ function demoData() {
                   "Ризотто - есть че?",
     comments : [_comments[0], _comments[1], _comments[2]],
     commentsCount: 3,
+    mentions: [],
+    mentionsCount: 0,
+    likes: [],
+    adds: [],
     author : _users[0]
   }, {
     id : 12,
@@ -15082,6 +15158,11 @@ function demoData() {
     location : "Лондон, Великобритания",
     description: "Офисный стул, для офисных нужд. Расставим все точки над нашими стульями.",
     likes: [_users[1], _users[5]],
+    comments : [],
+    commentsCount: 0,
+    mentions: [],
+    mentionsCount: 0,
+    adds: [],
     author : _users[6]
   }];
 
@@ -15094,31 +15175,21 @@ function demoData() {
   return self;
 }
 function Offer() {
-  var self, _hbTemplateObject;
+  var self;
   self = this;
-  self.toggleVisibility = _toggleVisibility;
-  self.addFeedback = _addFeedback;
-  self.deleteFeedback = _deleteFeedback;
-  self.initPopup = _initPopup;
-  self.renderPopup = _renderPopup;
-  self.deleteOffer = _deleteOffer;
-  
-  function _initPopup(hbTemplate) {
-    var html;
-    html = $(hbTemplate).html();
-    _hbTemplateObject = Handlebars.compile(html);
+  self = {
+    toggleVisibility : _toggleVisibility,
+    addFeedback : _addFeedback,
+    deleteFeedback : _deleteFeedback,
+    renderPopup : _renderPopup,
+    deleteOffer : _deleteOffer
   }
-  function _renderPopup(placeToPut, currentOffer, currentUser) {
-    $(placeToPut).html(_hbTemplateObject({ offer: currentOffer, currentUser: currentUser}));
-    $(placeToPut).css({marginTop: 50 + $(document).scrollTop()});
+  function _renderPopup(template, $placeholder, currentOffer, currentUser) {
+    var hbTemplateObject = Handlebars.compile(template);
+    $placeholder.html(hbTemplateObject({ offer: currentOffer, currentUser: currentUser}));
+    $placeholder.css({marginTop: 50 + $(document).scrollTop()});
   }
-  function _toggleVisibility(whatToggle, offerId, isPopup) {
-    var selector;
-    if (isPopup) {
-      selector = whatToggle;
-    } else {
-      selector = whatToggle + '[data-offer-id='+ offerId +']';
-    }
+  function _toggleVisibility(selector) {
     $(selector).toggle();
   }
   function _addFeedback(whatAdd, offerArray, currentOffer, currentUser, event) {
@@ -15178,8 +15249,9 @@ function Offer() {
   function _deleteFeedback(whatDelete, offerArray, currentOffer, currentComment) {
     var triggerFieldName;
     triggerFieldName = whatDelete + 'Count';
-    if (currentOffer[triggerFieldName] == 0)
+    if (currentOffer[triggerFieldName] == 0) {
       return;
+    }
     currentComment.deleted = true;
     currentOffer[triggerFieldName]--;
   }
@@ -15191,19 +15263,15 @@ function Offer() {
   return self;
 }
 function OfferListing() {
-  var self, _hbTemplateObject;
+  var self;
   self = this;
   self = {
-    init : _init,
     render : _render
   }
-  function _init(template) {
-  // Так как при первом рендере у нас исчезает handlebars шаблон, мы его сохраняем в _hbTemplateObject. Но если нам при вызове _init предоставляют шаблон, то мы используем его
-    _hbTemplateObject = Handlebars.compile($(template).html());
-  }
   // Тут нам указывают, куда складывать сгенеренный шаблон
-  function _render(placeToPut, offers, currentUser) {
-    $(placeToPut).html(_hbTemplateObject({ offers: offers, currentUser: currentUser}));
+  function _render(template, $placeholder, offers, currentUser) {
+    var hbTemplateObject = Handlebars.compile(template);
+    $placeholder.html(hbTemplateObject({ offers: offers, currentUser: currentUser}));
   }
   return self;
 }

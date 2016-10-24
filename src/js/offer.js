@@ -1,29 +1,19 @@
 function Offer() {
-  var self, _hbTemplateObject;
+  var self;
   self = this;
-  self.toggleVisibility = _toggleVisibility;
-  self.addFeedback = _addFeedback;
-  self.deleteFeedback = _deleteFeedback;
-  self.initPopup = _initPopup;
-  self.renderPopup = _renderPopup;
-  self.deleteOffer = _deleteOffer;
-  
-  function _initPopup(hbTemplate) {
-    var html;
-    html = $(hbTemplate).html();
-    _hbTemplateObject = Handlebars.compile(html);
+  self = {
+    toggleVisibility : _toggleVisibility,
+    addFeedback : _addFeedback,
+    deleteFeedback : _deleteFeedback,
+    renderPopup : _renderPopup,
+    deleteOffer : _deleteOffer
   }
-  function _renderPopup(placeToPut, currentOffer, currentUser) {
-    $(placeToPut).html(_hbTemplateObject({ offer: currentOffer, currentUser: currentUser}));
-    $(placeToPut).css({marginTop: 50 + $(document).scrollTop()});
+  function _renderPopup(template, $placeholder, currentOffer, currentUser) {
+    var hbTemplateObject = Handlebars.compile(template);
+    $placeholder.html(hbTemplateObject({ offer: currentOffer, currentUser: currentUser}));
+    $placeholder.css({marginTop: 50 + $(document).scrollTop()});
   }
-  function _toggleVisibility(whatToggle, offerId, isPopup) {
-    var selector;
-    if (isPopup) {
-      selector = whatToggle;
-    } else {
-      selector = whatToggle + '[data-offer-id='+ offerId +']';
-    }
+  function _toggleVisibility(selector) {
     $(selector).toggle();
   }
   function _addFeedback(whatAdd, offerArray, currentOffer, currentUser, event) {
@@ -83,8 +73,9 @@ function Offer() {
   function _deleteFeedback(whatDelete, offerArray, currentOffer, currentComment) {
     var triggerFieldName;
     triggerFieldName = whatDelete + 'Count';
-    if (currentOffer[triggerFieldName] == 0)
+    if (currentOffer[triggerFieldName] == 0) {
       return;
+    }
     currentComment.deleted = true;
     currentOffer[triggerFieldName]--;
   }
