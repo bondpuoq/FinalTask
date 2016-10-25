@@ -15255,8 +15255,7 @@ return ImagesLoaded;
         toggleVisibility('.js-comment'); 
       })
       .on('click', '.js-comments', function() { 
-        toggleVisibility('.js-comment'); 
-        stopPropagation();
+        toggleVisibility('.js-comment');
       })
       .on('click', '.js-like-link', function() { 
         addFeedback('likes'); 
