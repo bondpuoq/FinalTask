@@ -90,6 +90,7 @@
       })
       .on('click', '.js-comments', function() { 
         toggleVisibility('.js-comment'); 
+        stopPropagation();
       })
       .on('click', '.js-like-link', function() { 
         addFeedback('likes'); 
@@ -119,7 +120,7 @@
   function toggleVisibility(selector) {
     var offerId;
     offerId = $(event.target).data('offer-id');
-    if ($(event.target).hasClass('js-comment-link')) {
+    if ($(event.target).hasClass('js-comment-link') || $(event.target).hasClass('js-comments')) {
       selector += '[data-offer-id='+ offerId +']'
     }
     offer.toggleVisibility(selector);
