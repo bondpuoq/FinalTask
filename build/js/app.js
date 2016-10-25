@@ -14678,7 +14678,6 @@ return /******/ (function(modules) { // webpackBootstrap
   $(document).ready(function() { 
     init(); 
     initializeHandlers(); 
-    clearUndoneText();
   });
 
   // Хелпер берет нужное нам количество элементов из массива, 
@@ -14720,6 +14719,8 @@ return /******/ (function(modules) { // webpackBootstrap
     if (!currentUser) {
       currentUser = demo.currentUser;
     }
+    // Очищаем текст недозаполненного коммента, если он там есть
+    clearUndoneText();
     // Начинаем генерировать плитку офферов
     offerListing = new OfferListing();
     offerListing.render(OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, offerArray, currentUser);
@@ -14776,9 +14777,12 @@ return /******/ (function(modules) { // webpackBootstrap
       });
   }
   function clearUndoneText() {
-    for (var i = 0, length = offerArray.length; i<length; i++) {
-      console.log(offerArray[i].commentText);
-      delete offerArray[i].commentText;
+    if (offerArray) {
+      for (var i = 0, length = offerArray.length; i<length; i++) {
+        console.log(offerArray[i].commentText);
+        delete offerArray[i].commentText;
+      }
+      saveOfferArray();
     }
   }
 
