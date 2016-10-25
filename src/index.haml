@@ -4,7 +4,7 @@
     %meta{ charset: "utf8" }
     %link{ rel: "stylesheet", href: "css/style.css" }
   %body
-    %div#js-offer-list-placeholder.offer-list
+    %div#js-offer-list-placeholder.offer-list.js-offer-list
       %script#js-offer-list-template{type: "text/x-handlebars-template"}
         {{#each offers}}
           {{#if deleted}}

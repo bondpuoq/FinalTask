@@ -54,7 +54,7 @@ gulp.task('fontmin', function() {
 
 // Js copying
 gulp.task('js', function() {
-  gulp.src(['./src/js/jquery.js', './src/js/handlebars.js', './src/js/*.js'])
+  gulp.src(['./src/js/jquery.js', './src/js/handlebars.js', './src/js/masonry.pkgd.min.js', './src/js/imagesloaded.pkgd.js',  './src/js/*.js'])
   .pipe(concat('app.js'))
   .pipe(gulp.dest('./build/js/'))
   .pipe(connect.reload())

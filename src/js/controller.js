@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var demo, offerArray, offer, currentUser, offerListing, POPUP_TEMPLATE, $POPUP_PLACEHOLDER, OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER;
+  var demo, offerArray, offer, currentUser, offerListing, POPUP_TEMPLATE, $POPUP_PLACEHOLDER, OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, $grid;
   OFFER_LIST_TEMPLATE = $('#js-offer-list-template').html();
   $OFFER_LIST_PLACEHOLDER = $('#js-offer-list-placeholder');
   POPUP_TEMPLATE = $('#js-popup-template').html();
@@ -54,7 +54,8 @@
     clearUndoneText();
     // Начинаем генерировать плитку офферов
     offerListing = new OfferListing();
-    offerListing.render(OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, offerArray, currentUser);
+
+    $grid = offerListing.render(OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, offerArray, currentUser);
     offer = new Offer();
     sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
   }
@@ -124,6 +125,7 @@
       selector += '[data-offer-id='+ offerId +']'
     }
     offer.toggleVisibility(selector);
+    $grid.masonry();
   }
 
   function addFeedback(feedbackType, isPopup) {
@@ -132,12 +134,13 @@
     currentOffer = getFirstItemById(offerArray, offerId);
     allowUpdate = offer.addFeedback(feedbackType, offerArray, currentOffer, currentUser, event);
     if (allowUpdate) {
-      offerListing.render(OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, offerArray, currentUser);
+      offerListing.render(OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, offerArray, currentUser).masonry('layout');
       saveOfferArray();
       if (isPopup) {
-        offer.renderPopup(POPUP_TEMPLATE, $POPUP_PLACEHOLDER, currentOffer, currentUser);
+        offer.renderPopup(POPUP_TEMPLATE, $POPUP_PLACEHOLDER, currentOffer, currentUser).masonry('layout');
         event.stopPropagation();
       }
+      event.stopPropagation();
     }
   }
 
@@ -160,6 +163,7 @@
     offer.deleteFeedback(whatDelete, offerArray, currentOffer, currentComment);
 
     offerListing.render(OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, offerArray, currentUser);
+    event.preventDefault();
     saveOfferArray();
   }
 
