@@ -134,14 +134,15 @@
     currentOffer = getFirstItemById(offerArray, offerId);
     allowUpdate = offer.addFeedback(feedbackType, offerArray, currentOffer, currentUser, event);
     if (allowUpdate) {
-      offerListing.render(OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, offerArray, currentUser).masonry('layout');
+      offerListing.render(OFFER_LIST_TEMPLATE, $OFFER_LIST_PLACEHOLDER, offerArray, currentUser);
       saveOfferArray();
       if (isPopup) {
-        offer.renderPopup(POPUP_TEMPLATE, $POPUP_PLACEHOLDER, currentOffer, currentUser).masonry('layout');
+        offer.renderPopup(POPUP_TEMPLATE, $POPUP_PLACEHOLDER, currentOffer, currentUser);
         event.stopPropagation();
       }
       event.stopPropagation();
     }
+    clearUndoneText();
   }
 
   function saveInputState() {
