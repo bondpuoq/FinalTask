@@ -12,7 +12,7 @@ function Offer() {
   function _renderPopup(template, $placeholder, currentOffer, currentUser) {
     var hbTemplateObject = Handlebars.compile(template);
     $placeholder.html(hbTemplateObject({ offer: currentOffer, currentUser: currentUser}));
-    $placeholder.css({marginTop: 50 + $(document).scrollTop()});
+    $placeholder.css({marginTop: $(document).scrollTop()});
   }
   function _toggleVisibility(selector) {
     $(selector).toggle();

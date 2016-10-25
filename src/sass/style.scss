@@ -8,7 +8,6 @@ $popup-width: 810px;
 body {
   font-size: $base-font-size;
   font-family: Arial, Tahoma;
-  position: relative;
   padding: 0;
   margin: 0;
 }
@@ -257,155 +256,166 @@ body {
   }
 }
 
+.popup-container {
+  position: absolute; 
+  z-index: 15; 
+  width: 100%; 
+  height: 100%;
+}
 .blind {
-  position: absolute;
-  left:0;
-  right:0;
+  position: fixed; 
+  z-index: 20; 
+  left:0; 
   top:0;
-  margin: 0;
-  padding: 0;
-  z-index: 1000;
-  min-height: 100%;
+  width: 100%; 
+  height: 100%;
   background-color: rgba(0,0,0,0.5);
-  .popup {
-    top: 50px;
-    border: 1px solid black;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    width: $popup-width;
-    margin: 50px auto;
-    .close-link {
-      text-align: right;
-      margin-right: 10px;
-      margin-top: 10px;
-      color: rgba(141,141,141,1);
-      cursor: pointer;
-      display: block;
+}
+
+.popup {
+  position: relative; 
+  z-index: 30;   
+  top: 1%;
+    left: 1%;
+    right: 1%;
+    bottom: 1%;
+
+  border: 1px solid black;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+  width: $popup-width;
+  margin: 0 auto;
+  .close-link {
+    text-align: right;
+    margin-right: 10px;
+    margin-top: 10px;
+    color: rgba(141,141,141,1);
+    cursor: pointer;
+    display: block;
+  }
+  .header {
+    padding: 10px 40px;
+    margin-top: -10px;
+    line-height: 10px;
+    .img {
+      display: inline-block;
+      vertical-align: middle;
     }
-    .header {
-      padding: 10px 40px;
-      margin-top: -10px;
-      line-height: 10px;
-      .img {
-        display: inline-block;
-        vertical-align: middle;
+    .author {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1em;
+      padding-left: 5px;
+      .fio {
+        font-family: PFAgoraSansPro-xthin;
+        font-size: 22px;
+        display: block;
+        color: rgba(84,115,172,1);
       }
-      .author {
-        display: inline-block;
-        vertical-align: middle;
-        line-height: 1em;
-        padding-left: 5px;
-        .fio {
-          font-family: PFAgoraSansPro-xthin;
-          font-size: 22px;
-          display: block;
-          color: rgba(84,115,172,1);
-        }
-        .label {
-          color: rgba(163,163,163,1);
-          font-style: italic;
-          font-size: 14px;
-          display: block;
-        }
+      .label {
+        color: rgba(163,163,163,1);
+        font-style: italic;
+        font-size: 14px;
+        display: block;
       }
     }
-    .container {
-      padding: 0 0 0 40px;
+  }
+  .container {
+    padding: 0 0 0 40px;
+    margin: 0;
+    box-sizing: border-box;
+    border-top: 1px solid rgba(230,230,230, 1);
+    .info {
+      padding: 0;
+      padding-top: 20px;
+      padding-right: 15px;
       margin: 0;
-      box-sizing: border-box;
-      border-top: 1px solid rgba(230,230,230, 1);
-      .info {
+      float: left;
+      width: 75%;
+      border-right: 1px solid rgba(230,230,230, 1);
+      h1 {
+        font-family: "PFAgoraSansPro-regular";
+        font-size: 24px;
+        font-weight: normal;
         padding: 0;
-        padding-top: 20px;
-        padding-right: 15px;
         margin: 0;
-        float: left;
-        width: 75%;
-        border-right: 1px solid rgba(230,230,230, 1);
-        h1 {
-          font-family: "PFAgoraSansPro-regular";
-          font-size: 24px;
-          font-weight: normal;
-          padding: 0;
-          margin: 0;
-        }
-        h3 {
-          font-family: "PFAgoraSansPro-regular";
-          font-size: 16px;
-          font-weight: normal;
-          color: rgba(163,163,163,1);
-          padding: 0;
-          margin: 0;
-          padding-bottom: 7px;
-        }
-        img {
-          display: block;
-          max-width: 570px;
-        }
-        .description {
-          font-size: 14px;
-          padding-top: 27px;
-        }
       }
-      .actions {
-        float: right;
-        width: 170px;
-        text-align:center;
-        padding-top: 70px;
-        button {
-          display: block;
-        }
+      h3 {
+        font-family: "PFAgoraSansPro-regular";
+        font-size: 16px;
+        font-weight: normal;
+        color: rgba(163,163,163,1);
+        padding: 0;
+        margin: 0;
+        padding-bottom: 7px;
       }
-      &:after {
-        display:table;
-        width: 100%;
-        clear:both;
-        content: "";
-      }
-    }
-    .feedbacks {
-      margin-top: 34px;
-      .fb-item {
-        background-color: rgba(241,241,241,1);
-        border: 1px solid rgba(217,217,217,1);
-        padding: 17px 40px;
-        overflow: auto;
-      }
-    }
-    .add-feedback {
-      padding-top:20px;
-      background-color: rgba(241,241,241,1);
-      overflow: hidden;
-      padding-left: 40px;
-      padding-bottom: 20px;
-    }
-    .fb-image {
-      float: left;
-    }
-    .fb-text {
-      float: left;
-      margin-left: 32px;
-      font-size: 12px;
-      display: block;
-      width: 76%;
-      color: rgba(109,109,109,1);
-      textarea {
-        height: 54px;
-        width: 100%;
-        vertical-align: top;
-        resize: none;
-      }
-    }
-    .counter-block {
-      font-size: 16px;
-      font-family: "PFAgoraSansPro-regular";
-      display: block;
-      padding: 10px 40px;
-      border-bottom: 2px solid rgba(217,217,217,1);
       img {
-        padding: 5px 5px;
+        display: block;
+        max-width: 570px;
       }
+      .description {
+        font-size: 14px;
+        padding-top: 27px;
+      }
+    }
+    .actions {
+      float: right;
+      width: 170px;
+      text-align:center;
+      padding-top: 70px;
+      button {
+        display: block;
+      }
+    }
+    &:after {
+      display:table;
+      width: 100%;
+      clear:both;
+      content: "";
+    }
+  }
+  .feedbacks {
+    margin-top: 34px;
+    .fb-item {
+      background-color: rgba(241,241,241,1);
+      border: 1px solid rgba(217,217,217,1);
+      padding: 17px 40px;
+      overflow: auto;
+    }
+  }
+  .add-feedback {
+    padding-top:20px;
+    background-color: rgba(241,241,241,1);
+    overflow: hidden;
+    padding-left: 40px;
+    padding-bottom: 20px;
+  }
+  .fb-image {
+    float: left;
+  }
+  .fb-text {
+    float: left;
+    margin-left: 32px;
+    font-size: 12px;
+    display: block;
+    width: 76%;
+    color: rgba(109,109,109,1);
+    textarea {
+      height: 54px;
+      width: 100%;
+      vertical-align: top;
+      resize: none;
+    }
+  }
+  .counter-block {
+    font-size: 16px;
+    font-family: "PFAgoraSansPro-regular";
+    display: block;
+    padding: 10px 40px;
+    border-bottom: 2px solid rgba(217,217,217,1);
+    img {
+      padding: 5px 5px;
     }
   }
 }

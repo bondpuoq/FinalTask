@@ -4,6 +4,78 @@
     %meta{ charset: "utf8" }
     %link{ rel: "stylesheet", href: "css/style.css" }
   %body
+    %div.popup-container.js-blind.hidden
+        %div.blind
+        %div#js-popup-placeholder.popup
+          %script#js-popup-template{type: "text/x-handlebars-template"}
+            %div.close-link.js-close-link{data-offer-id:"{{id}}"}
+              Закрыть X
+            %div.header
+              %div.img
+                %img{src: "{{offer.author.avatar}}-big.png"}
+              %div.author
+                %div.fio
+                  {{offer.author.fio}}
+                %br/
+                %div.label
+                  нуждается в этом
+              %div.button.violet.js-delete-offer{data-offer-id: "{{offer.id}}"}
+                удалить предложение
+            %div.container
+              %div.info
+                %h1
+                  {{offer.caption}}
+                %h3
+                  {{offer.category}}
+                %img{src:"{{offer.offerImg}}-big.png"}
+                %div.description
+                  {{offer.description}}
+              %div.actions
+                {{#if offer.addsByCurrentUser}}
+                %div.button.gray.added.js-add{data-offer-id: "{{offer.id}}"}
+                  Добавить к себе
+                {{else}}
+                %div.button.gray.add.js-add{data-offer-id: "{{offer.id}}"}
+                  Добавить к себе
+                {{/if}}
+
+                {{#if offer.likesByCurrentUser}}
+                %div.button.gray.liked.js-like{data-offer-id: "{{offer.id}}"}
+                  Мне нравится
+                {{else}}
+                %div.button.gray.like.js-like{data-offer-id: "{{offer.id}}"}
+                  Мне нравится
+                {{/if}}  
+                %div.button.gray.mention.js-mention{data-offer-id: "{{offer.id}}"}
+                  Добавить отзыв
+            %div.feedbacks
+              {{#take 3 1 offer.mentions}}
+                %div.fb-item
+                  %div.fb-image
+                    %img{src: "{{author.avatar}}-big.png"}
+                  %div.fb-text
+                    %span
+                      {{text}}
+              {{/take}}
+            %div.add-feedback.js-add-mention.hidden{data-offer-id: "{{offer.id}}"}
+              %div.fb-image
+                %img{src:"{{currentUser.avatar}}-big.png"}
+              %div.fb-text
+                %textarea.js-mention-text{placeholder:"Оставить отзыв", maxlength: "500", data-offer-id: "{{offer.id}}"}
+            %div.counter-block
+              %div 
+                {{offer.adds.length}} добавили к себе
+                %br/
+                {{#each offer.adds}}
+                %img{src:"{{avatar}}-big.png"}
+                {{/each}}
+            %div.counter-block
+              %div 
+                {{offer.likes.length}} нравится
+                %br/
+                {{#each offer.likes}}
+                %img{src:"{{avatar}}-big.png"}
+                {{/each}}
     %div#js-offer-list-placeholder.offer-list.js-offer-list
       %script#js-offer-list-template{type: "text/x-handlebars-template"}
         {{#each offers}}
@@ -101,75 +173,4 @@
                   
           {{/if}}
         {{/each}}
-    %div.blind.hidden.js-blind
-      %div#js-popup-placeholder.popup
-        %script#js-popup-template{type: "text/x-handlebars-template"}
-          %div.close-link.js-close-link{data-offer-id:"{{id}}"}
-            Закрыть X
-          %div.header
-            %div.img
-              %img{src: "{{offer.author.avatar}}-big.png"}
-            %div.author
-              %div.fio
-                {{offer.author.fio}}
-              %br/
-              %div.label
-                нуждается в этом
-            %div.button.violet.js-delete-offer{data-offer-id: "{{offer.id}}"}
-              удалить предложение
-          %div.container
-            %div.info
-              %h1
-                {{offer.caption}}
-              %h3
-                {{offer.category}}
-              %img{src:"{{offer.offerImg}}-big.png"}
-              %div.description
-                {{offer.description}}
-            %div.actions
-              {{#if offer.addsByCurrentUser}}
-              %div.button.gray.added.js-add{data-offer-id: "{{offer.id}}"}
-                Добавить к себе
-              {{else}}
-              %div.button.gray.add.js-add{data-offer-id: "{{offer.id}}"}
-                Добавить к себе
-              {{/if}}
-
-              {{#if offer.likesByCurrentUser}}
-              %div.button.gray.liked.js-like{data-offer-id: "{{offer.id}}"}
-                Мне нравится
-              {{else}}
-              %div.button.gray.like.js-like{data-offer-id: "{{offer.id}}"}
-                Мне нравится
-              {{/if}}  
-              %div.button.gray.mention.js-mention{data-offer-id: "{{offer.id}}"}
-                Добавить отзыв
-          %div.feedbacks
-            {{#take 3 1 offer.mentions}}
-              %div.fb-item
-                %div.fb-image
-                  %img{src: "{{author.avatar}}-big.png"}
-                %div.fb-text
-                  %span
-                    {{text}}
-            {{/take}}
-          %div.add-feedback.js-add-mention.hidden{data-offer-id: "{{offer.id}}"}
-            %div.fb-image
-              %img{src:"{{currentUser.avatar}}-big.png"}
-            %div.fb-text
-              %textarea.js-mention-text{placeholder:"Оставить отзыв", maxlength: "500", data-offer-id: "{{offer.id}}"}
-          %div.counter-block
-            %div 
-              {{offer.adds.length}} добавили к себе
-              %br/
-              {{#each offer.adds}}
-              %img{src:"{{avatar}}-big.png"}
-              {{/each}}
-          %div.counter-block
-            %div 
-              {{offer.likes.length}} нравится
-              %br/
-              {{#each offer.likes}}
-              %img{src:"{{avatar}}-big.png"}
-              {{/each}}
     %script{src:"js/app.js"}

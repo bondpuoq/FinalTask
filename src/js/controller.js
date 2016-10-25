@@ -6,7 +6,7 @@
   POPUP_TEMPLATE = $('#js-popup-template').html();
   $POPUP_PLACEHOLDER = $('#js-popup-placeholder');
 
-  $(document).ready(function() { 
+  $(document).ready(function() {
     init(); 
     initializeHandlers(); 
   });
@@ -14,7 +14,7 @@
   // Хелпер берет нужное нам количество элементов из массива, 
   // Если в массиве меньше элементов, чем мы указали взять, берет соответственно только имеющиеся
   Handlebars.registerHelper('take', function(num, visibleOnly, context, options) {
-    var ret = '';
+    var arr, ret = '';
     // Если нет массива для отображения - выходим из хелпера
     if (!context) {
       return;
@@ -26,12 +26,11 @@
       //arr.reverse().slice(0,num);
       arr.slice(0,num);
       $.each(arr,function() { 
-        ret+= options.fn(this)
+        ret+= options.fn(this);
       });
-    }
-    else {
+    } else {
       $.each(context,function() { 
-        ret+= options.fn(this)
+        ret+= options.fn(this);
       });
     }
     
@@ -63,7 +62,7 @@
   function initializeHandlers() {
     $POPUP_PLACEHOLDER
       .on('click', '.js-close-link', function() { 
-        toggleVisibility('.js-blind', true); 
+        toggleVisibility('.js-blind'); 
       })
       .on('click', '.js-add', function() { 
         addFeedback('adds', true); 
@@ -111,7 +110,6 @@
   function clearUndoneText() {
     if (offerArray) {
       for (var i = 0, length = offerArray.length; i<length; i++) {
-        console.log(offerArray[i].commentText);
         delete offerArray[i].commentText;
       }
       saveOfferArray();
@@ -156,7 +154,6 @@
     var currentOffer, currentComment, offerId, commentId, affectOn;
     affectOn = whatDelete;
     offerId = $(event.target).data('offer-id');
-    var offerId2 = $(event.target).data('offer-id');
     currentOffer = getFirstItemById(offerArray, offerId);
     commentId = $(event.target).data('comment-id');
     currentComment = getFirstItemById(currentOffer[affectOn], commentId);
@@ -169,7 +166,7 @@
   }
 
   function showPopup() {
-    var hbTemplate, placeToPut, offerId, currentOffer;
+    var offerId, currentOffer;
     offerId = $(event.target).data('offer-id');
     currentOffer = getFirstItemById(offerArray, offerId);
     offer.renderPopup(POPUP_TEMPLATE, $POPUP_PLACEHOLDER, currentOffer, currentUser);
