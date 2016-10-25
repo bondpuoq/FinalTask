@@ -15713,7 +15713,7 @@ function Offer() {
     $(selector).toggle();
   }
   function _addFeedback(feedbackType, offerArray, currentOffer, currentUser, event) {
-    var affectOn, triggerFieldName, isDone;
+    var isDone;
     isDone = false;
     switch (feedbackType) {
       case 'mentions': 
@@ -15737,7 +15737,8 @@ function Offer() {
     return isDone;
   }
   function _saveInputState(event, currentOffer) {
-    var inputValue, currentInput = event.target;
+    var inputValue, currentInput;
+    currentInput = event.target;
     inputValue = $(currentInput).val();
     if (inputValue) {
       currentOffer['commentText'] = inputValue;
